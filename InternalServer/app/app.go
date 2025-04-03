@@ -1,28 +1,29 @@
 package app
 
 import (
-	"DAJ/pkg/config"
+	http_v1 "DAJ/InternalServer/controllers/http/v1"
 	"context"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/gin-gonic/gin"
 )
 
-func Run(cfg config.Config){
-mux := http.NewServeMux()
+func Run(addr ...string){
+r:= gin.Default()
+r.Use(http_v1.LoggerMiddleware())
 ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
 // Usecase
+r.GET("/", func(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"addres": addr,
+	})
+})
 
-// 
+r.Run(addr...)
 
-go func() {
-	log.Println("Listening on localhost:8080")
-	if err := http.ListenAndServe("localhost:8080", mux); err != nil {
-		log.Fatal(err)
-	}
-}()
 <-ctx.Done()
 log.Println("Server is closed")
 }

@@ -5,9 +5,21 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+
+	"github.com/gin-gonic/gin"
 )
 
-type Handler struct{}
+type handler struct {
+
+}
+
+func getBooks(c *gin.Context){
+	bookID := c.Param("id") // Extracting parameter from URL
+    c.JSON(200, gin.H{"book_id": bookID}) // Sending JSON response
+	
+}
+type Handler struct{
+}
 
 func NewHandler() *Handler {
 	return &Handler{}

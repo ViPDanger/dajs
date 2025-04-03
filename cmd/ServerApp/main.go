@@ -1,6 +1,7 @@
 package main
 
 import (
+	"DAJ/InternalServer/app"
 	"DAJ/pkg/config"
 	"DAJ/pkg/logger"
 	"time"
@@ -17,16 +18,6 @@ func main() {
 	if err != nil{
 		panic(err)
 	}
-	log.Print("WRITE!")
-
-	_ = cfg.Set("User", "User")
-	log.Println(cfg.String("User"))
-	
-		// set value
-		_ = cfg.Set("User", "User2")
-		name := cfg.String("User")
-		log.Print("- set string\n val: ", name,"\n")
-		log.Println(cfg.String("User"))
-	log.Close()
+	go app.Run("localhost:8080")
 }
 
