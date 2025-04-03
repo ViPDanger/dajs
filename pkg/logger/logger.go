@@ -1,16 +1,17 @@
 package logger
 
-import "fmt"
+import (
+	logger_v1 "DAJ/pkg/logger/v1"
+)
 
-
-func Printf(format string,v ...any) (int, error){
-	return fmt.Printf(format,v...)
+type Logger interface{
+	Print(n ...any) (int,error)
+	Println(n ...any) (int, error)
+	Erase() (error)
+	Close() (error)
 }
 
-func Println(v ...any) (int, error){
-	return fmt.Println(v...)
+func NewLog(name string) (Logger, error){
+	return logger_v1.NewTimeLogger(name)
 }
 
-func Print(v ...any) (int, error){
-	return fmt.Print(v...)
-}

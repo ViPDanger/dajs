@@ -1,7 +1,7 @@
 package app
 
 import (
-	"DAJ/Server/pkg/config"
+	"DAJ/pkg/config"
 	"context"
 	"log"
 	"net/http"

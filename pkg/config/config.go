@@ -5,10 +5,10 @@ import (
 	"github.com/gookit/config/v2/ini"
 )
 
-func NewConfig() Config{
+func NewConfig(name string) Config{
 c := config.Default().WithOptions()
 c.AddDriver(ini.Driver)
-err := c.LoadFiles("..\\..\\pkg\\config\\config.ini")
+err := c.LoadFiles(name)
 	if err != nil {
 		panic(err)
 	}
@@ -18,5 +18,4 @@ err := c.LoadFiles("..\\..\\pkg\\config\\config.ini")
 type Config interface{
 	Set(key string, val any, setByPath ...bool) (err error)
 	String(key string, defVal ...string) string
-
 }

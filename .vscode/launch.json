@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "main.go",
+            "name": "Server/main.go",
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": ".\\Server\\cmd\\app\\main.go"
+            "program": ".\\cmd\\Serverapp\\main.go"
         },
         {
             "name": "Launch Package",
