@@ -20,7 +20,7 @@ func NewDefaultLogger(name string) (*Logger, error) {
 	}
 
 	newLog := Logger{
-		printer: newTimePrinter(newDefaultPrinter(nil), ""),
+		printer: NewDefaultPrinter(nil),
 		file:    file,
 		mutex:   &sync.Mutex{},
 	}
@@ -28,20 +28,11 @@ func NewDefaultLogger(name string) (*Logger, error) {
 
 }
 
-func (l *Logger) Print(a ...any) (int, error) {
+
+func (l *Logger) Log(a ...any) (error) {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
 	return l.printer.Fprint(l.file, a...)
-}
-func (l *Logger) Println(a ...any) (int, error) {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
-	return l.printer.Fprint(l.file, a...)
-}
-func (l *Logger) Printf(format string, a ...any) (int, error) {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
-	return l.printer.Fprintf(l.file, format, a...)
 }
 func (l *Logger) Close() error {
 	l.mutex.Lock()

@@ -6,33 +6,20 @@ import (
 )
 
 type fPrinter interface {
-	Fprint(w io.Writer, a ...any) (int, error)
-	Fprintln(w io.Writer, a ...any) (int, error)
-	Fprintf(w io.Writer, format string, a ...any) (n int, err error)
+	Fprint(w io.Writer, a ...any) (error)
 }
 
 type defaultPrinter struct {
 	fPrinter fPrinter
 }
 
-func newDefaultPrinter(fPrinter fPrinter) *defaultPrinter {
+func NewDefaultPrinter(fPrinter fPrinter) fPrinter {
 	return &defaultPrinter{fPrinter: fPrinter}
 }
-func (p *defaultPrinter) Fprint(w io.Writer, a ...any) (int, error) {
+func (p *defaultPrinter) Fprint(w io.Writer, a ...any) (err error) {
 	if p.fPrinter == nil {
-		return fmt.Fprint(w, a...)
+		_,err = fmt.Fprint(w, a...)
+		return 
 	}
 	return p.fPrinter.Fprint(w, a...)
-}
-func (p *defaultPrinter) Fprintln(w io.Writer, a ...any) (int, error) {
-	if p.fPrinter == nil {
-		return fmt.Fprintln(w, a...)
-	}
-	return p.fPrinter.Fprint(w, a...)
-}
-func (p *defaultPrinter) Fprintf(w io.Writer, format string, a ...any) (int, error) {
-	if p.fPrinter == nil {
-		return fmt.Fprintf(w, format, a...)
-	}
-	return fmt.Fprintf(w, format, a...)
 }

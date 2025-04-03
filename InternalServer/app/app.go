@@ -2,8 +2,8 @@ package app
 
 import (
 	http_v1 "DAJ/InternalServer/controllers/http/v1"
+	"DAJ/pkg/logger"
 	"context"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Run(addr ...string){
+func Run(log logger.Ilogger,addr ...string){
 r:= gin.Default()
 r.Use(http_v1.LoggerMiddleware())
 ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
@@ -22,9 +22,9 @@ r.GET("/", func(c *gin.Context) {
 	})
 })
 
-r.Run(addr...)
+go r.Run(addr...)
 
 <-ctx.Done()
-log.Println("Server is closed")
+log.Log("Server is closed")
 }
 
