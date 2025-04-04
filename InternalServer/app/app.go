@@ -10,19 +10,23 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+type AppConfig struct{
+	Addres string
+	Port string
+}
 
-func Run(log logger.Ilogger,addr ...string){
+func Run(log logger.Ilogger,conf AppConfig){
 r:= gin.Default()
 r.Use(http_v1.LoggerMiddleware())
 ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
 // Usecase
 r.GET("/", func(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"addres": addr,
+	c.JSON(390, gin.H{
+		"AppConfig": conf,
 	})
 })
 
-go r.Run(addr...)
+go r.Run(conf.Addres+":"+conf.Port)
 
 <-ctx.Done()
 log.Log("Server is closed")

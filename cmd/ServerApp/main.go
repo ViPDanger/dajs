@@ -18,8 +18,11 @@ func main() {
 	if err != nil{
 		panic(err)
 	}
-	serverIp:= cfg.String("server.ip","")
-	serverPort:=cfg.String("server.port","")
-	app.Run(log,serverIp,serverPort)
+	
+	appConf := app.AppConfig{
+	Addres: cfg.String("server.ip",""),
+	Port: cfg.String("server.port",""),
+	}
+	app.Run(log,appConf)
 }
 
