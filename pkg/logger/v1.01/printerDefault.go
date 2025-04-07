@@ -6,7 +6,7 @@ import (
 )
 
 type fPrinter interface {
-	Fprint(w io.Writer, a ...any) (error)
+	Fprint(w io.Writer, a ...any) error
 }
 
 type defaultPrinter struct {
@@ -18,8 +18,8 @@ func NewDefaultPrinter(fPrinter fPrinter) fPrinter {
 }
 func (p *defaultPrinter) Fprint(w io.Writer, a ...any) (err error) {
 	if p.fPrinter == nil {
-		_,err = fmt.Fprint(w, a...)
-		return 
+		_, err = fmt.Fprint(w, a...)
+		return
 	}
 	return p.fPrinter.Fprint(w, a...)
 }

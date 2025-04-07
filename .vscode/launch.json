@@ -9,9 +9,15 @@
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": ".\\cmd\\Serverapp\\main.go"
+            "program": ".\\cmd\\ServerApp\\main.go"
+        },
+        {
+            "name": "main.go",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/ServerApp/main.go"
         }
-        
         
 
 

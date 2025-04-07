@@ -7,6 +7,7 @@ import (
 )
 
 type Logger struct {
+	logLvl  int
 	printer fPrinter
 	file    *os.File
 	mutex   *sync.Mutex
@@ -27,12 +28,22 @@ func NewDefaultLogger(name string) (*Logger, error) {
 	return &newLog, nil
 
 }
+func (l *Logger) Copy(p fPrinter) Logger {
+	return &Logger{
+		logLvl:  l.logLvl,
+		printer: p,
+		file:    l.file,
+		mutex:   l.mutex,
+	}
+}
 
-
-func (l *Logger) Log(a ...any) (error) {
+func (l *Logger) Log(logLvl int, a ...any) error {
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
-	return l.printer.Fprint(l.file, a...)
+	if logLvl >= l.logLvl {
+		return l.printer.Fprint(l.file, a...)
+	}
+	return nil
 }
 func (l *Logger) Close() error {
 	l.mutex.Lock()
