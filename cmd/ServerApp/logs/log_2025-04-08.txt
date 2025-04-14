@@ -1,0 +1,6 @@
+[0m[DEBUG]	Starting the app...[0m
+[37m	Starting the app...[0m
+[0m[DEBUG]	{localhost 8080}[0m
+[0m[DEBUG]	Server is closed[0m | 390 |     353.044µs |       127.0.0.1 | GET      "/"
+[0m"
+[0m

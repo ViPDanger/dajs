@@ -1,0 +1,6 @@
+[0m[DEBUG]	Starting the app...[0m
+[37m	Starting the app...[0m
+[0m[DEBUG]	{localhost 8080}[0m
+[32m[GIN]	2025/04/09 - 01:00:56 | 404 |         320ns |       127.0.0.1 | GET      "/account/"
+[0m[32m[GIN]	2025/04/09 - 01:00:57 | 404 |         381ns |       127.0.0.1 | GET      "/favicon.ico"
+[0m

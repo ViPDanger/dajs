@@ -1,29 +1,59 @@
 package logger
 
-import loggerversion "DAJ/pkg/logger/v1.01"
+import log "DAJ/pkg/logger/v01"
 
-type Ilogger interface {
-	Log(l LogLevel, n ...any) error
-}
-
-type LogLevel int
+const ErrorLog = "./logs/Error.txt"
 
 const (
-	Debug   LogLevel = 0
-	Lvl1             = 1
-	Lvl2             = 2
-	Lvl3             = 3
-	Release          = 4
-	Error            = 5
+	Debug int = iota
+	Warning
+	GIN
+	Release
+	Error
 )
 
-func NewLog(name string) (Ilogger, error) {
-	r, err := loggerversion.NewDefaultLogger(name)
-	if err == nil {
-		printer := loggerversion.NewDefaultPrinter(nil)
-		printer = loggerversion.NewTimePrinter(printer, "")
-		r.NewPrinter(printer)
-	}
+type Ilogger interface {
+	Log(logLvl int, n ...any) error
+	Logln(logLvl int, n ...any) error
+}
 
-	return r, err
+func NewLog(name string) (Ilogger, error) {
+
+	// Debug Logger
+	debugLogger, err := log.NewDefaultLogger(name)
+	if err != nil {
+		return nil, err
+	}
+	debugLogger.SetLvl(Debug)
+	debugLogger.SetColor(log.None)
+	debugLogger.SetFormat("[DEBUG]	%v")
+
+	// Release Loggerter)
+	releaseLogger := debugLogger.Copy()
+	releaseLogger.SetLvl(Release)
+	releaseLogger.SetColor(log.White)
+	releaseLogger.SetFormat("	%v")
+	// Release Loggerter)
+	ginLogger := debugLogger.Copy()
+	ginLogger.SetLvl(GIN)
+	ginLogger.SetColor(log.Green)
+	ginLogger.SetFormat("[GIN]	%v")
+	// Error
+	errorLogger, err := log.NewDefaultLogger(ErrorLog)
+	if err != nil {
+		return nil, err
+	}
+	errorLogger.SetLvl(Error)
+	errorLogger.SetColor(log.Red)
+	errorLogger.SetFormat("[ERROR]	%v")
+	warningLogger := errorLogger.Copy()
+
+	warningLogger.SetLvl(Warning)
+	warningLogger.SetColor(log.Yellow)
+	warningLogger.SetFormat("[WARNING]	%v")
+
+	// MultyLogger
+	m := multyLogger{}
+	m.AddLogger(debugLogger, releaseLogger, errorLogger, warningLogger, ginLogger)
+	return &m, err
 }

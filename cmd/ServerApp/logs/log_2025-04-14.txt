@@ -1,0 +1,7 @@
+[0m[DEBUG]	Starting the app...[0m
+[37m	Starting the app...[0m
+[0m[DEBUG]	{localhost 8080}[0m
+[0m[DEBUG]	{POST /login/ HTTP/1.1 1 1 map[Accept:[*/*] Content-Length:[30] Content-Type:[application/x-www-form-urlencoded] User-Agent:[curl/8.5.0]] 0xc000044180 <nil> 30 [] false localhost:8080 map[] map[] <nil> map[] 127.0.0.1:34990 /login/ <nil> <nil> <nil>  0xc0000a84b0 <nil> [] map[]}[0m
+[32m[GIN]	2025/04/14 - 19:03:26 | 401 |     661.139µs |       127.0.0.1 | POST     "/login/"
+Error #01: Username or password is incorrect
+[0m
