@@ -1,7 +1,7 @@
 package main
 
 import (
-	"DAJ/InternalServer/app"
+	"DAJ/Internal_Server/app"
 	"DAJ/pkg/config"
 	"DAJ/pkg/logger"
 	"time"
@@ -28,5 +28,4 @@ func main() {
 	}
 	log.Logln(logger.Debug, appConf)
 	app.Run(log, appConf)
-
 }

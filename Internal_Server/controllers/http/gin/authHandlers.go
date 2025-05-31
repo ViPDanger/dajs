@@ -1,16 +1,17 @@
-package v1_01
+package gin
 
 import (
 	"DAJ/Internal_Server/models"
 	"DAJ/Internal_Server/usecase"
 	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var accessTokenExpireTime = usecase.AccessTokenTime
+var refreshTokenExpireTime = usecase.RefreshTokenTime
 
 func Register(c *gin.Context) {
 	var user models.User
@@ -52,31 +53,40 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := usecase.NewAccesToken(user.Username)
+	access_token, err := usecase.NewAccessToken(user.Username)
+	if err != nil {
+		_ = c.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось создать токен"})
+		return
+	}
+	refresh_token, err := usecase.NewRefreshToken(user.Username)
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось создать токен"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{"access_token": access_token, "access_exp": accessTokenExpireTime, "refresh_token": refresh_token, "refresh_exp": refreshTokenExpireTime})
 }
 
-func Protected(c *gin.Context) {
-	authHeader := c.GetHeader("Authorization")
-	if authHeader == "" {
-		_ = c.Error(errors.New("No token in protected request"))
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Токен отсутствует"})
+func Refresh(c *gin.Context) {
+	var refreshToken models.RefreshToken
+	if err := c.ShouldBindJSON(&refreshToken); err != nil {
+		_ = c.Error(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректный JSON"})
 		return
 	}
-	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-	token, err := usecase.ParseToken(tokenString)
+	token, err := usecase.ParseRefreshToken(refreshToken.RefreshToken)
 	if err != nil || !token.Valid {
 		_ = c.Error(errors.New("Invalid token"))
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Невалидный токен"})
 		return
 	}
-	claims := token.Claims.(jwt.MapClaims)
-	username := claims["username"].(string)
-	c.JSON(http.StatusOK, gin.H{"message": "Добро пожаловать, " + username})
+	access_token, err := usecase.RefreshAccessToken(refreshToken.RefreshToken)
+	if err != nil {
+		_ = c.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Не удалось создать токен"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"access_token": access_token, "expires_in": accessTokenExpireTime})
 }

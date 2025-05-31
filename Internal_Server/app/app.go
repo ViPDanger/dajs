@@ -1,9 +1,10 @@
 package app
 
 import (
-	controllers "DAJ/InternalServer/controllers/http/v1_01"
+	controllers "DAJ/Internal_Server/controllers/http/gin"
 	"DAJ/pkg/logger"
 	"context"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -26,16 +27,23 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	r.Use(ginLogAdapter.HandlerFunc)
 	// SETUP HANDLERS ----------------
 	r.GET("/", func(c *gin.Context) {
-		c.Status(200)
+		c.Status(http.StatusOK)
 	})
-	r.POST("/login/", controllers.Login)
-	r.POST("/register/", controllers.Register)
-	r.GET("/protected/", controllers.Protected)
+
+	// AUTH HANDLERS
+	auth := r.Group("/auth")
+	auth.POST("/login", controllers.Login)
+	auth.POST("/register", controllers.Register)
+	auth.POST("/refresh", controllers.Refresh)
+	// PROTECTED HANDLERS
+	protected := r.Group("/protected", controllers.ProtectedHandleFunc)
+	protected.GET("/", func(c *gin.Context) {
+		c.Status(http.StatusOK)
+	})
 
 	// GRACEFULL SHUTDOWN CTX
 	ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
 	go r.Run(conf.Addres + ":" + conf.Port)
-
 	<-ctx.Done()
 	log.Log(logger.Debug, "Server is closed")
 }

@@ -1,35 +1,32 @@
 package app
 
 import (
-	http "DAJ/Internal_Client/controllers/http/v1_01"
+	http "DAJ/Internal_Client/controllers/http/v1"
 	"DAJ/pkg/logger"
-	"fmt"
 	"time"
 )
 
 var (
-	logPath   = "./logs/log_"
-	logFormat = "txt"
-	baseURL   = "http://localhost:8080"
+	retry     = 10
+	sleepTime = 500 * time.Millisecond
 )
 
-func Run() {
-	m := make(map[string]string)
-	m["1"] = "1"
-	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
+func Run(log logger.Ilogger, login string, password string, baseURL string) (*http.HttpRepository, error) {
+	var err error
+	var HttpRepository *http.HttpRepository
+	for i := 0; i < retry; i++ {
+		HttpRepository = http.NewHttpRepository(log, baseURL)
+		if err = HttpRepository.Login(login, password); err != nil {
+			err = HttpRepository.Register(login, password)
+			err = HttpRepository.Login(login, password)
+		}
+		if err == nil {
+			break
+		}
+		time.Sleep(sleepTime)
+	}
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-
-	HttpRepository := http.NewHttpRepository(log, baseURL)
-	if err := HttpRepository.Login("test@example.com", "password123"); err != nil {
-		fmt.Println("Ошибка логина:", err)
-		return
-	}
-
-	time.Sleep(2 * time.Second)
-
-	if err := HttpRepository.GetProtectedResource(); err != nil {
-		fmt.Println("Ошибка получения ресурса:", err)
-	}
+	return HttpRepository, nil
 }
