@@ -16,14 +16,14 @@
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "${workspaceFolder}/cmd/Server_App/main.go"
+            "program": "${workspaceFolder}/cmd/api/main.go"
         },
         {
             "name": "Client",
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "${workspaceFolder}/cmd/Client_App/main.go"
+            "program": "${workspaceFolder}/cmd/worker/main.go"
         },
 
 

@@ -1,0 +1,57 @@
+[32m[GIN]	2025/06/01 - 15:49:11 | 401 |     411.516µs |       127.0.0.1 | POST     "/auth/login"
+Error #01: Username or password is incorrect
+[0m
+[32m[GIN]	2025/06/01 - 15:49:11 | 201 |  152.726582ms |       127.0.0.1 | POST     "/auth/register"
+[0m
+[0m[DEBUG]	{{Регистрация прошла успешно}}[0m
+[32m[GIN]	2025/06/01 - 15:49:11 | 200 |   133.76425ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[0m[DEBUG]	Успешная Авторизация. Access и Refresh токены сохранены.[0m
+[32m[GIN]	2025/06/01 - 15:49:11 | 200 |     133.843µs |       127.0.0.1 | GET      "/protected/"
+[0m
+[32m[GIN]	2025/06/01 - 15:49:13 | 401 |     175.551µs |       127.0.0.1 | GET      "/protected/"
+Error #01: Invalid token
+[0m
+[37m	Access token истёк. Обновляем...[0m
+[32m[GIN]	2025/06/01 - 15:49:13 | 200 |     753.422µs |       127.0.0.1 | POST     "/auth/refresh"
+[0m
+[0m[DEBUG]	Acces Token is refreshed[0m
+[32m[GIN]	2025/06/01 - 15:49:13 | 200 |     136.878µs |       127.0.0.1 | GET      "/protected/"
+[0m
+       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:03 | 200 |   88.340912ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:03 | 409 |      41.058µs |       127.0.0.1 | POST     "/auth/register"
+Error #01: user currently existing
+[0m
+[32m[GIN]	2025/06/01 - 13:27:03 | 200 |  128.157637ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:04 | 200 |  156.946673ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:04 | 409 |      69.532µs |       127.0.0.1 | POST     "/auth/register"
+Error #01: user currently existing
+[0m
+[32m[GIN]	2025/06/01 - 13:27:04 | 200 |  124.239167ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:04 | 200 |  101.800293ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:04 | 409 |      39.185µs |       127.0.0.1 | POST     "/auth/register"
+Error #01: user currently existing
+[0m
+[32m[GIN]	2025/06/01 - 13:27:04 | 200 |   85.499359ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:05 | 200 |  107.261912ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:05 | 409 |      40.798µs |       127.0.0.1 | POST     "/auth/register"
+Error #01: user currently existing
+[0m
+[32m[GIN]	2025/06/01 - 13:27:05 | 200 |   88.794163ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:06 | 200 |  118.117405ms |       127.0.0.1 | POST     "/auth/login"
+[0m
+[32m[GIN]	2025/06/01 - 13:27:06 | 409 |      71.516µs |       127.0.0.1 | POST     "/auth/register"
+Error #01: user currently existing
+[0m
+[32m[GIN]	2025/06/01 - 13:27:06 | 200 |   88.429245ms |       127.0.0.1 | POST     "/auth/login"
+[0m
