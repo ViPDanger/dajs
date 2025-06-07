@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"DAJ/Internal/domain/entity"
 	"errors"
 	"time"
 
@@ -13,30 +14,41 @@ var RefreshTokenTime = time.Hour * 24 * 7
 var AccessKey = []byte("ACCESSKEY")
 var RefreshKey = []byte("REFRESHKEY")
 
-func NewAccessToken(username string) (accessToken string, exp time.Time, err error) {
+func NewAccessToken(username string) (accessToken entity.AccessToken, err error) {
+
 	claims := jwt.MapClaims{
 		"username": username,
 		"exp":      time.Now().Add(AccessTokenTime).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	accessToken, err = token.SignedString(AccessKey)
+	accessString, err := token.SignedString(AccessKey)
+	var expTime time.Time
 	if err != nil {
-		exp = time.Now().Add(AccessTokenTime)
+		expTime = time.Now().Add(AccessTokenTime)
 	}
-	return
+
+	return entity.AccessToken{
+		Str:        accessString,
+		ExpireTime: expTime,
+	}, err
 }
 
-func NewRefreshToken(username string) (refreshToken string, exp time.Time, err error) {
+func NewRefreshToken(username string) (refreshToken entity.RefreshToken, err error) {
 	claims := jwt.MapClaims{
 		"username": username,
 		"exp":      time.Now().Add(RefreshTokenTime).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	refreshToken, err = token.SignedString(RefreshKey)
+	refreshString, err := token.SignedString(AccessKey)
+	var expTime time.Time
 	if err != nil {
-		exp = time.Now().Add(RefreshTokenTime)
+		expTime = time.Now().Add(AccessTokenTime)
 	}
-	return
+
+	return entity.RefreshToken{
+		Str:        refreshString,
+		ExpireTime: expTime,
+	}, err
 }
 
 func ParseAccessToken(tokenString string) (*jwt.Token, error) {
@@ -50,7 +62,7 @@ func ParseRefreshToken(tokenString string) (*jwt.Token, error) {
 	})
 }
 
-func RefreshAccessToken(refreshTokenString string) (accessToken string, exp time.Time, err error) {
+func RefreshAccessToken(refreshTokenString string) (accessToken entity.AccessToken, err error) {
 	c := make(jwt.MapClaims)
 	token, err := jwt.ParseWithClaims(refreshTokenString, c, func(token *jwt.Token) (interface{}, error) {
 		return RefreshKey, nil
@@ -68,9 +80,14 @@ func RefreshAccessToken(refreshTokenString string) (accessToken string, exp time
 		"exp":      time.Now().Add(AccessTokenTime).Unix(),
 	}
 	token = jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	accessToken, err = token.SignedString(AccessKey)
+	accessString, err := token.SignedString(AccessKey)
+	var expTime time.Time
 	if err != nil {
-		exp = time.Now().Add(AccessTokenTime)
+		expTime = time.Now().Add(AccessTokenTime)
 	}
-	return
+
+	return entity.AccessToken{
+		Str:        accessString,
+		ExpireTime: expTime,
+	}, err
 }

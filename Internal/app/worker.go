@@ -17,12 +17,15 @@ func RunWorker(log logger.Ilogger, login string, password string, baseURL string
 	for i := 0; i < retry; i++ {
 		HttpRepository = http.NewHttpRepository(log, baseURL)
 		if err = HttpRepository.Login(login, password); err != nil {
-			err = HttpRepository.Register(login, password)
+			_ = HttpRepository.Register(login, password)
 			err = HttpRepository.Login(login, password)
 		}
 		if err == nil {
 			break
+		} else {
+			_ = log.Logln(logger.Error, err)
 		}
+
 		time.Sleep(sleepTime)
 	}
 	if err != nil {

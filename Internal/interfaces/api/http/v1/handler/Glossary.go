@@ -10,16 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CharacterHandler struct {
-	characterUC usecase.CharacterUseCase
+type GlossaryHandler struct {
+	GlossaryUC usecase.GlossaryUseCase
 }
 
-func NewCharacterHandler(characterUC usecase.CharacterUseCase) CharacterHandler {
-	return CharacterHandler{characterUC: characterUC}
+func NewGlossaryHandler(GlossaryUC usecase.GlossaryUseCase) GlossaryHandler {
+	return GlossaryHandler{GlossaryUC: GlossaryUC}
 }
 
-// GET character
-func (ch *CharacterHandler) GetCharacter(c *gin.Context) {
+// GET Glossary
+func (ch *GlossaryHandler) GetGlossary(c *gin.Context) {
 	id := c.GetHeader("id")
 	if id == "" {
 		err := errors.New("Нет ID в запросе")
@@ -27,51 +27,51 @@ func (ch *CharacterHandler) GetCharacter(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	char, err := ch.characterUC.Get(id)
+	char, err := ch.GlossaryUC.Get(id)
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, mapper.ToCharacterDTO(char))
+	c.JSON(http.StatusOK, mapper.ToGlossaryDTO(char))
 }
 
-// POST character
-func (ch *CharacterHandler) NewCharacter(c *gin.Context) {
-	var DTO dto.CharacterDTO
+// POST Glossary
+func (ch *GlossaryHandler) NewGlossary(c *gin.Context) {
+	var DTO dto.GlossaryDTO
 	if err := c.ShouldBindJSON(&DTO); err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, dto.Error{Error: "Некорректный JSON"})
 		return
 	}
-	err := ch.characterUC.New(mapper.ToCharacterEntity(DTO))
+	err := ch.GlossaryUC.New(mapper.ToGlossaryEntity(DTO))
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, dto.Message{
-		Message: "Character with id " + DTO.ID + " created",
+		Message: "Glossary with id " + DTO.ID + " created",
 	})
 }
 
 // GET all chatacter
-func (ch *CharacterHandler) GetAllCharacters(c *gin.Context) {
-	Characters, err := ch.characterUC.GetAll()
+func (ch *GlossaryHandler) GetAllGlossarys(c *gin.Context) {
+	Glossarys, err := ch.GlossaryUC.GetAll()
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
 		return
 	}
-	CharactersDTO := make([]dto.CharacterDTO, len(Characters))
-	for i := range Characters {
-		CharactersDTO = append(CharactersDTO, mapper.ToCharacterDTO(Characters[i]))
+	GlossarysDTO := make([]dto.GlossaryDTO, len(Glossarys))
+	for i := range Glossarys {
+		GlossarysDTO = append(GlossarysDTO, mapper.ToGlossaryDTO(Glossarys[i]))
 	}
-	c.JSON(http.StatusOK, CharactersDTO)
+	c.JSON(http.StatusOK, GlossarysDTO)
 }
 
-// DELETE character
-func (ch *CharacterHandler) DeleteCharacter(c *gin.Context) {
+// DELETE Glossary
+func (ch *GlossaryHandler) DeleteGlossary(c *gin.Context) {
 	id := c.GetHeader("id")
 	if id == "" {
 		err := errors.New("Нет ID в запросе")
@@ -79,24 +79,24 @@ func (ch *CharacterHandler) DeleteCharacter(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	err := ch.characterUC.Delete(id)
+	err := ch.GlossaryUC.Delete(id)
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, dto.Message{Message: "Character with id " + id + "deleted"})
+	c.JSON(http.StatusOK, dto.Message{Message: "Glossary with id " + id + "deleted"})
 }
 
-// PUT character
-func (ch *CharacterHandler) SetCharacter(c *gin.Context) {
-	var DTO dto.CharacterDTO
+// PUT Glossary
+func (ch *GlossaryHandler) SetGlossary(c *gin.Context) {
+	var DTO dto.GlossaryDTO
 	if err := c.ShouldBindJSON(&DTO); err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, dto.Error{Error: "Некорректный JSON"})
 		return
 	}
-	err := ch.characterUC.Set(mapper.ToCharacterEntity(DTO))
+	err := ch.GlossaryUC.Set(mapper.ToGlossaryEntity(DTO))
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})

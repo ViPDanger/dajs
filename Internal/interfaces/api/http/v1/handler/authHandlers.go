@@ -2,104 +2,112 @@ package handler
 
 import (
 	dto "DAJ/Internal/interfaces/api/dto"
-	"DAJ/Internal/usecase/jwt"
+	"DAJ/Internal/interfaces/api/http/v1/jwt"
+	"DAJ/Internal/interfaces/api/mapper"
+	"DAJ/Internal/usecase"
 	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // ИСПРАВИТЬ!!!
-var users = map[string]string{} // Имитация БД: username -> hashedPassword
+type UserHandler struct {
+	userUC usecase.UserUseCase
+}
 
 // REGISTER USER -----------
-func Register(c *gin.Context) {
-	var request dto.RegisterRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
+func (userHandler *UserHandler) Register(c *gin.Context) {
+	var userDTO dto.UserDTO
+	if err := c.ShouldBindJSON(&userDTO); err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, dto.Error{Error: "Некорректный JSON"})
 		return
 	}
-	//	ИСПРАВИИИИИИИИИИТЬ
-	if _, exists := users[request.Username]; exists {
-		_ = c.Error(errors.New("user currently existing"))
-		c.JSON(http.StatusConflict, dto.Error{Error: "Пользователь уже существует"})
-		return
-	}
-
-	hash, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
-	if err != nil {
+	if err := userHandler.userUC.Register(mapper.UserDTOtoUser(userDTO)); err != nil {
 		_ = c.Error(err)
-		c.JSON(http.StatusInternalServerError, dto.Error{Error: "Ошибка шифрования"})
-		return
+		c.JSON(http.StatusBadRequest, err)
 	}
-
-	users[request.Username] = string(hash)
 	c.JSON(http.StatusCreated, dto.Message{
 		Message: "Регистрация прошла успешно",
 	})
 }
 
 // LOGIN USER	--------
-func Login(c *gin.Context) {
-	var request dto.LoginRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
+func (userHandler *UserHandler) Login(c *gin.Context) {
+	var userDTO dto.UserDTO
+	if err := c.ShouldBindJSON(&userDTO); err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, dto.Error{Error: "Некорректный JSON"})
 		return
 	}
-	// АААААААААААААААААААААААААААААААА МЕНЯЙ ТВАРЬ
-	storedPassword, exists := users[request.Username]
-	if !exists || bcrypt.CompareHashAndPassword([]byte(storedPassword), []byte(request.Password)) != nil {
-		_ = c.Error(errors.New("Username or password is incorrect"))
-		c.JSON(http.StatusUnauthorized, dto.Error{Error: "Неверные имя пользователя или пароль"})
+	user := mapper.UserDTOtoUser(userDTO)
+	err := userHandler.userUC.Login(user)
+	if err != nil {
+		_ = c.Error(err)
+		c.JSON(http.StatusUnauthorized, err)
+		return
+	}
+	accessToken, err := jwt.NewAccessToken(user.Name)
+	if err != nil {
+		_ = c.Error(err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	refreshToken, err := jwt.NewRefreshToken(user.Name)
+	if err != nil {
+		_ = c.Error(err)
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	accessToken, accessTokenExpireTime, err := jwt.NewAccessToken(request.Username)
-	if err != nil {
-		_ = c.Error(err)
-		c.JSON(http.StatusInternalServerError, dto.Error{Error: "Не удалось создать токен"})
-		return
-	}
-	refreshToken, refreshTokenExpireTime, err := jwt.NewRefreshToken(request.Username)
-	if err != nil {
-		_ = c.Error(err)
-		c.JSON(http.StatusInternalServerError, dto.Error{Error: "Не удалось создать токен"})
-		return
-	}
-
-	c.JSON(http.StatusOK, dto.LoginResponse{
-		AccessToken:    accessToken,
-		AccessExpTime:  accessTokenExpireTime,
-		RefreshToken:   refreshToken,
-		RefreshExpTime: refreshTokenExpireTime,
+	c.JSON(http.StatusOK, dto.TokensDTO{
+		Access:  mapper.AccessTokenToDTO(accessToken),
+		Refresh: mapper.RefreshTokenToDTO(refreshToken),
 	})
 }
 
 // REFRESH ACCESS TOKEN by REFRESH TOKEN
-func Refresh(c *gin.Context) {
-	var request dto.RefreshRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
+func (userHandler *UserHandler) Refresh(c *gin.Context) {
+	var refreshDTO dto.RefreshTokenDTO
+	if err := c.ShouldBindJSON(&refreshDTO); err != nil {
 		_ = c.Error(err)
-		c.JSON(http.StatusBadRequest, dto.Error{Error: "Некорректный JSON"})
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	token, err := jwt.ParseRefreshToken(request.RefreshToken)
+	refreshToken := mapper.DTOtoRefreshToken(refreshDTO)
+	token, err := jwt.ParseRefreshToken(refreshToken.Str)
 	if err != nil || !token.Valid {
-		_ = c.Error(errors.New("Invalid token"))
-		c.JSON(http.StatusUnauthorized, dto.Error{Error: "Невалидный токен"})
+		err = errors.New("Невалидный токен")
+		_ = c.Error(err)
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	accessToken, accessTokenExpireTime, err := jwt.RefreshAccessToken(request.RefreshToken)
+	accessToken, err := jwt.RefreshAccessToken(refreshToken.Str)
 	if err != nil {
 		_ = c.Error(err)
-		c.JSON(http.StatusInternalServerError, dto.Error{Error: "Не удалось создать токен"})
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, dto.RefreshResponse{
-		AccessToken:   accessToken,
-		AccessExpTime: accessTokenExpireTime,
-	})
+	c.JSON(http.StatusOK, mapper.AccessTokenToDTO(accessToken))
+}
+
+// MiddleWare access token check
+func Protected(c *gin.Context) {
+	accessHeader := c.GetHeader("Authorization")
+	if accessHeader == "" {
+		_ = c.Error(errors.New("No token in protected request"))
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Токен отсутствует"})
+		return
+	}
+	tokenString := strings.TrimPrefix(accessHeader, "Bearer ")
+	token, err := jwt.ParseAccessToken(tokenString)
+	if err != nil || !token.Valid {
+		_ = c.Error(errors.New("Invalid token"))
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Невалидный токен"})
+		return
+
+	}
+	c.Next()
 }

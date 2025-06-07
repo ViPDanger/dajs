@@ -2,7 +2,9 @@ package main
 
 import (
 	"DAJ/Internal/app"
+	"DAJ/Internal/domain/entity"
 	"DAJ/pkg/logger"
+	"fmt"
 	"time"
 )
 
@@ -30,13 +32,50 @@ func main() {
 
 	//
 	go func() {
-		worker, err := app.RunWorker(log, Login, Password, host)
+		client, err := app.RunWorker(log, Login, Password, host)
 		if err != nil {
 			log.Logln(logger.Error, err)
 			return
 		}
-		worker.GetCharacter()
+		client.NewCharacter(entity.Character{
+			ID:   "01",
+			Name: "Ivan Volodkin",
+		})
+		client.NewCharacter(entity.Character{
+			ID:   "02",
+			Name: "Vitalya",
+			Parameters: []entity.Parameter{
+				{
+					Name:  "Strenght",
+					Value: 10,
+				},
+				{
+					Name:  "Dexterity",
+					Value: 10,
+				},
+			},
+		})
+		fmt.Println(client.GetCharacter("02"))
+		fmt.Println(client.AllCharacter())
+		fmt.Println(client.SetCharacter(entity.Character{
+			ID:   "02",
+			Name: "Ivan Vitalya",
+		}))
+		fmt.Println(client.DeleteCharacter("01"))
+		fmt.Println(client.AllCharacter())
+		fmt.Println(client.NewGlossary(entity.Glossary{
+			ID:   "01GLOSS",
+			Text: "TEXTGLOSSARY",
+		}))
+		fmt.Println(client.AllGlossary())
+		fmt.Println(client.GetGlossary("01GLOSS"))
+		fmt.Println(client.SetGlossary(entity.Glossary{
+			ID:   "01GLOSS",
+			Text: "NOTEXT",
+		}))
+
 	}()
+
 	time.Sleep(1 * time.Second)
 	app.Run(log, appConf)
 }
