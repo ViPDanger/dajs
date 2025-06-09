@@ -1,7 +1,7 @@
 package main
 
 import (
-	"DAJ/Internal/app"
+	"DAJ/internal/app"
 	"DAJ/pkg/config"
 	"DAJ/pkg/logger"
 	"time"

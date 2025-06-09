@@ -1,39 +1,39 @@
-[32m[GIN]	2025/06/09 - 20:01:35 | 401 |            0s |       127.0.0.1 | POST     "/auth/login"
+[32m[GIN]	2025/06/09 - 21:11:02 | 401 |     501.322µs |       127.0.0.1 | POST     "/auth/login"
 Error #01: Неверные имя пользователя или пароль
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 201 |     72.2239ms |       127.0.0.1 | POST     "/auth/register"
+[32m[GIN]	2025/06/09 - 21:11:02 | 201 |   97.143595ms |       127.0.0.1 | POST     "/auth/register"
 [0m
 [0m[DEBUG]	{Регистрация прошла успешно}[0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |     69.8204ms |       127.0.0.1 | POST     "/auth/login"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |   86.574438ms |       127.0.0.1 | POST     "/auth/login"
 [0m
 [0m[DEBUG]	Успешная Авторизация. Access и Refresh токены сохранены.[0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | POST     "/protected/character/new"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |     224.767µs |       127.0.0.1 | POST     "/protected/character/new"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |      1.0034ms |       127.0.0.1 | POST     "/protected/character/new"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |     134.648µs |       127.0.0.1 | POST     "/protected/character/new"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | GET      "/protected/character/get"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |      86.443µs |       127.0.0.1 | GET      "/protected/character/get"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | GET      "/protected/character/"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |     138.133µs |       127.0.0.1 | GET      "/protected/character/"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | PUT      "/protected/character/set"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |     194.149µs |       127.0.0.1 | PUT      "/protected/character/set"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | DELETE   "/protected/character/delete"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |     151.704µs |       127.0.0.1 | DELETE   "/protected/character/delete"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | GET      "/protected/character/"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |     218.697µs |       127.0.0.1 | GET      "/protected/character/"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | POST     "/protected/glossary/new"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |      96.859µs |       127.0.0.1 | POST     "/protected/glossary/new"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | GET      "/protected/glossary/"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |     141.719µs |       127.0.0.1 | GET      "/protected/glossary/"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |            0s |       127.0.0.1 | GET      "/protected/glossary/get"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |     149.911µs |       127.0.0.1 | GET      "/protected/glossary/get"
 [0m
-[32m[GIN]	2025/06/09 - 20:01:35 | 200 |       1.506ms |       127.0.0.1 | PUT      "/protected/glossary/set"
+[32m[GIN]	2025/06/09 - 21:11:02 | 200 |      94.085µs |       127.0.0.1 | PUT      "/protected/glossary/set"
 [0m
-0.1 | PUT      "/protected/glossary/set"
+tected/glossary/get"
 [0m
-=======
-[32m[GIN]	2025/06/09 - 12:31:22 | 401 |     561.594µs |       127.0.0.1 | POST     "/auth/login"
-Error #01: Неверные имя пользователя или пароль
+[32m[GIN]	2025/06/09 - 21:10:04 | 200 |     193.886µs |       127.0.0.1 | PUT      "/protected/glossary/set"
+[0m
+rror #01: Неверные имя пользователя или пароль
 [0m
 [32m[GIN]	2025/06/09 - 12:31:22 | 201 |  179.393181ms |       127.0.0.1 | POST     "/auth/register"
 [0m

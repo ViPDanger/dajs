@@ -1,13 +1,13 @@
 package main
 
 import (
-	"DAJ/Internal/app"
-	"DAJ/Internal/db"
-	"DAJ/Internal/domain/entity"
-	"DAJ/Internal/interfaces/api/dto"
+	"DAJ/internal/app"
+	"DAJ/internal/db"
+	"DAJ/internal/domain/entity"
+	"DAJ/internal/interfaces/api/dto"
+	"DAJ/internal/interfaces/api/mapper"
 	"DAJ/pkg/logger"
 	"fmt"
-
 	"time"
 )
 
@@ -21,7 +21,6 @@ const (
 )
 
 func main() {
-	fmt.Println(db.Compile[dto.CharacterDTO]("../../Internal/db/Characters/Грим Жаропив.json"))
 	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
 	if err != nil {
 		log.Logln(logger.Error, err)
@@ -40,31 +39,17 @@ func main() {
 			log.Logln(logger.Error, err)
 			return
 		}
-		client.NewCharacter(entity.Character{
-			ID:   "01",
-			Name: "Ivan Volodkin",
-		})
-		client.NewCharacter(entity.Character{
-			ID:   "02",
-			Name: "Vitalya",
-			Parameters: []entity.Parameter{
-				{
-					Name:  "Strenght",
-					Value: 10,
-				},
-				{
-					Name:  "Dexterity",
-					Value: 10,
-				},
-			},
-		})
-		fmt.Println(client.GetCharacter("02"))
+		characterDTO, _ := db.Compile[dto.CharacterDTO]("../../internal/db/files/Characters/Грим Жаропив.json")
+		client.NewCharacter(mapper.ToCharacterEntity(characterDTO))
+		characterDTO, _ = db.Compile[dto.CharacterDTO]("../../internal/db/files/Characters/Урист Ламрот.json")
+		client.NewCharacter(mapper.ToCharacterEntity(characterDTO))
+		fmt.Println(client.GetCharacter(characterDTO.ID))
 		fmt.Println(client.AllCharacter())
 		fmt.Println(client.SetCharacter(entity.Character{
-			ID:   "02",
+			ID:   characterDTO.ID,
 			Name: "Ivan Vitalya",
 		}))
-		fmt.Println(client.DeleteCharacter("01"))
+		fmt.Println(client.DeleteCharacter(characterDTO.ID))
 		fmt.Println(client.AllCharacter())
 		fmt.Println(client.NewGlossary(entity.Glossary{
 			ID:   "01GLOSS",
