@@ -68,8 +68,8 @@ func (r *HttpRepository) Login(user, password string) error {
 	if err := json.NewDecoder(resp.Body).Decode(&tokensDTO); err != nil {
 		return err
 	}
-	r.accessToken = mapper.DTOtoAccessToken(tokensDTO.Access)
-	r.refreshToken = mapper.DTOtoRefreshToken(tokensDTO.Refresh)
+	r.accessToken = mapper.ToAccessTokenEntity(tokensDTO.Access)
+	r.refreshToken = mapper.ToRefreshTokenEntity(tokensDTO.Refresh)
 	_ = r.Log.Logln(logger.Debug, "Успешная Авторизация. Access и Refresh токены сохранены.")
 	return nil
 
@@ -77,7 +77,7 @@ func (r *HttpRepository) Login(user, password string) error {
 
 func (r *HttpRepository) RefreshAccessToken() error {
 
-	body, err := json.Marshal(mapper.RefreshTokenToDTO(r.refreshToken))
+	body, err := json.Marshal(mapper.ToRefreshTokenDTO(r.refreshToken))
 	if err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ func (r *HttpRepository) RefreshAccessToken() error {
 		return err
 	}
 
-	r.accessToken = mapper.DTOtoAccessToken(accessTokenDTO)
+	r.accessToken = mapper.ToAccessTokenEntity(accessTokenDTO)
 	_ = r.Log.Logln(logger.Debug, "Acces Token is refreshed")
 	return nil
 }

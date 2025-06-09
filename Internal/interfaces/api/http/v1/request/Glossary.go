@@ -95,6 +95,6 @@ func (r *HttpRepository) DeleteGlossary(id string) (Glossary entity.Glossary, er
 	if err = json.NewDecoder(resp.Body).Decode(&GlossaryDTO); err != nil {
 		return
 	}
-	Glossary = mapper.ToGlossaryEntity(GlossaryDTO)
+	Glossary = (mapper.ToGlossaryEntity(GlossaryDTO))
 	return
 }
