@@ -5,6 +5,7 @@ import (
 	"DAJ/Internal/domain/entity"
 	"DAJ/pkg/logger"
 	"fmt"
+
 	"time"
 )
 
@@ -18,7 +19,6 @@ const (
 )
 
 func main() {
-
 	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
 	if err != nil {
 		log.Logln(logger.Error, err)

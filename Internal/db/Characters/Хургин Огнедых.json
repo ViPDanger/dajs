@@ -1,0 +1,211 @@
+{
+  "Id": "13907517-b9f5-417e-ae43-45f8a270ac6d",
+  "MyRaceId": "2",
+  "UserRace": "Дварф",
+  "TokenColor": "122|49|200|255",
+  "Speed": 25,
+  "IHaveLight": false,
+  "TorchValue": 0,
+  "TorchValueSecond": 0,
+  "CellEyeValue": 60,
+  "EyeEnabled": true,
+  "SeeInTheDark": false,
+  "Gold": 0,
+  "Silver": 0,
+  "Copper": 0,
+  "HitPoints": 38,
+  "CurrentHitPoints": 38,
+  "TempHitPoints": 0,
+  "TempCurrentHitPoints": 0,
+  "HasInspiration": false,
+  "Alignment": 5,
+  "HitDice": 0,
+  "HitDiceCount": 0,
+  "IsArmorTakeOf": false,
+  "TwoHanded": false,
+  "SelectedSaveThrowKey": 4,
+  "SizeIndex": 2,
+  "TagString": null,
+  "Languages": "14|12",
+  "Multiplier": 1.0,
+  "Inspiration": 0,
+  "Armor": 14,
+  "Bditelnost": 12,
+  "IniBonus": 0,
+  "IsPlaying": false,
+  "Note": "",
+  "FirstSpellText": null,
+  "SecondSpellText": null,
+  "Spells": [],
+  "HandsCapacity": 1,
+  "HandsItems": [],
+  "MainHandsItems": [],
+  "ArrowItems": [],
+  "InventoryItems": [],
+  "Parameters": [
+    {
+      "Name": "STR",
+      "Value": 15,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Атлетика*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    },
+    {
+      "Name": "DEX",
+      "Value": 10,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Акробатика*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Ловкость рук*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Скрытность*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    },
+    {
+      "Name": "CON",
+      "Value": 15,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": []
+    },
+    {
+      "Name": "INT",
+      "Value": 18,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Анализ*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": true
+        },
+        {/*История*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": true
+        },
+        {/*Магия*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": true
+        },
+        {/*Природа*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": true
+        },
+        {/*Религия*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    },
+    {
+      "Name": "WIS",
+      "Value": 14,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Внимание*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Проницание*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Выживание*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Медицина*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Дрессировка*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    },
+    {
+      "Name": "CHA",
+      "Value": 10,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Выступление*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Запугивание*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Обман*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Убеждение*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    }
+  ],
+  "Classes": [
+    {
+      "Id": "23",
+      "Level": 5,
+      "SpellCells": [
+        {
+          "Level": 0,
+          "Left": 2,
+          "Max": 2
+        },
+        {
+          "Level": 1,
+          "Left": 4,
+          "Max": 4
+        },
+        {
+          "Level": 2,
+          "Left": 2,
+          "Max": 2
+        }
+      ]
+    }
+  ],
+  "DamageResist": "",
+  "DamageImmun": "",
+  "DamageVulner": "",
+  "CustomStatuses": []
+}

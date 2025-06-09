@@ -1,0 +1,226 @@
+{
+  "Id": "af5e9ad5-9916-49ad-b3e3-d4f9a7aff684",
+  "MyRaceId": null,
+  "UserRace": "",
+  "Hold": true,
+  "HoldTime": "2024-08-03T17:00:48.7887021+03:00",
+  "TokenColor": "143|163|76|255",
+  "Speed": 30,
+  "IHaveLight": false,
+  "TorchValue": 0,
+  "TorchValueSecond": 0,
+  "CellEyeValue": 60,
+  "EyeEnabled": true,
+  "SeeInTheDark": false,
+  "Gold": 0,
+  "Silver": 0,
+  "Copper": 0,
+  "HitPoints": 45,
+  "CurrentHitPoints": 45,
+  "TempHitPoints": 0,
+  "TempCurrentHitPoints": 0,
+  "HasInspiration": false,
+  "Alignment": 2,
+  "HitDice": 0,
+  "HitDiceCount": 0,
+  "IsArmorTakeOf": false,
+  "TwoHanded": false,
+  "SelectedSaveThrowKey": 1,
+  "SizeIndex": 2,
+  "TagString": null,
+  "Languages": "12",
+  "Multiplier": 1.0,
+  "Inspiration": 0,
+  "Armor": 10,
+  "Bditelnost": 12,
+  "IniBonus": -2,
+  "IsPlaying": true,
+  "Note": "",
+  "FirstSpellText": null,
+  "SecondSpellText": null,
+  "Spells": [],
+  "HandsCapacity": 1,
+  "HandsItems": [],
+  "MainHandsItems": [],
+  "ArrowItems": [],
+  "InventoryItems": [],
+  "Parameters": [
+    {
+      "Name": "STR",
+      "Value": 14,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Атлетика*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    },
+    {
+      "Name": "DEX",
+      "Value": 8,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Акробатика*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Ловкость рук*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Скрытность*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    },
+    {
+      "Name": "CON",
+      "Value": 14,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": []
+    },
+    {
+      "Name": "INT",
+      "Value": 10,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Анализ*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*История*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Магия*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Природа*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Религия*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    },
+    {
+      "Name": "WIS",
+      "Value": 14,
+      "UserSpasValue": 0,
+      "Proficiency": false,
+      "Abilities": [
+        {/*Внимание*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Проницание*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": true
+        },
+        {/*Выживание*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Медицина*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Дрессировка*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        }
+      ]
+    },
+    {
+      "Name": "CHA",
+      "Value": 16,
+      "UserSpasValue": 0,
+      "Proficiency": true,
+      "Abilities": [
+        {/*Выступление*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Запугивание*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": false
+        },
+        {/*Обман*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": true
+        },
+        {/*Убеждение*/
+          "UserValue": 0,
+          "MinValue": 0,
+          "Proficiency": true
+        }
+      ]
+    }
+  ],
+  "Classes": [
+    {
+      "Id": "20",
+      "Level": 5,
+      "SpellCells": [
+        {
+          "Level": 0,
+          "Left": 3,
+          "Max": 3
+        },
+        {
+          "Level": 3,
+          "Left": 2,
+          "Max": 2
+        }
+      ]
+    }
+  ],
+  "DamageResist": "",
+  "DamageImmun": "",
+  "DamageVulner": "",
+  "CustomStatuses": [
+    {
+      "IsHided": true,
+      "InnerStatusCollection": [],
+      "SelectedModes": [
+        {
+          "Name": "Помеха",
+          "Mode": 5,
+          "RunTimeType": 1,
+          "Ability": "a13"
+        }
+      ],
+      "Description": "Существо находится в тусклом свете.\r\n<zag size=\"14\" s=1 >Тусклый свет</zag>, также называемый тенью, создаёт слабо заслонённую местность. Область тусклого света обычно находится между источником яркого света, таким как факел, и окружающей тьмой. На рассвете и закате свет тоже тусклый. Яркая луна в полнолуние освещает землю тусклым светом.",
+      "TokenPicPath": "",
+      "IconPath": ".\\Data\\UserStatus\\Images\\Плохая видимость.png",
+      "Id": "light_dis",
+      "Name": "Плохая видимость"
+    }
+  ]
+}

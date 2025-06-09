@@ -4,9 +4,9 @@ type CharacterDTO struct {
 	ID               string             `json:"id"`
 	Name             string             `json:"name"`
 	Race             string             `json:"race"`
-	Classes          []ClassDTO         `json:"class"`
+	Classes          []ClassDTO         `json:"classes"`
 	Parameters       []ParameterDTO     `json:"parameters"`
-	InventoryItem    []InventoryItemDTO `json:"inventory_item"`
+	InventoryItem    []InventoryItemDTO `json:"inventoryitems"`
 	HitPoints        int                `json:"hitPoints"`
 	CurrentHitPoints int                `json:"currentHitPoints"`
 	Armor            int                `json:"armor"`
