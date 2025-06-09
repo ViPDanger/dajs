@@ -2,7 +2,9 @@ package main
 
 import (
 	"DAJ/Internal/app"
+	"DAJ/Internal/db"
 	"DAJ/Internal/domain/entity"
+	"DAJ/Internal/interfaces/api/dto"
 	"DAJ/pkg/logger"
 	"fmt"
 
@@ -19,6 +21,7 @@ const (
 )
 
 func main() {
+	fmt.Println(db.Compile[dto.CharacterDTO]("../../Internal/db/Characters/Грим Жаропив.json"))
 	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
 	if err != nil {
 		log.Logln(logger.Error, err)
