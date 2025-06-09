@@ -1,7 +1,10 @@
 package app
 
 import (
+	"DAJ/Internal/domain/entity"
+	"DAJ/Internal/interfaces/api/dto"
 	"DAJ/Internal/interfaces/api/http/v1/handler"
+	"DAJ/Internal/interfaces/api/mapper"
 	"DAJ/Internal/usecase"
 	"DAJ/pkg/logger"
 	"context"
@@ -44,21 +47,39 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	})
 
 	//		CHARACTER HANDLER
-	characterHandler := handler.NewCharacterHandler(usecase.CharacterUseCase{})
+	/*
+		characterHandler := handler.NewCharacterHandler(usecase.CharacterUseCase{})
+		character := protected.Group("/character")
+		character.GET("/get", characterHandler.GetCharacter)
+		character.GET("/", characterHandler.GetAllCharacters)
+		character.POST("/new", characterHandler.NewCharacter)
+		character.DELETE("/delete", characterHandler.DeleteCharacter)
+		character.PUT("/set", characterHandler.SetCharacter)
+	*/
+
+	characterHandler := handler.DefaultHandler[entity.Character, dto.CharacterDTO]{
+		UC:       &usecase.CharacterUseCase{},
+		ToEntity: mapper.ToCharacterEntity,
+		ToDTO:    mapper.ToCharacterDTO,
+	}
 	character := protected.Group("/character")
-	character.GET("/get", characterHandler.GetCharacter)
-	character.GET("/", characterHandler.GetAllCharacters)
-	character.POST("/new", characterHandler.NewCharacter)
+	character.GET("/get", characterHandler.Get)
+	character.GET("/", characterHandler.GetAll)
+	character.POST("/new", characterHandler.New)
 	character.DELETE("/delete", characterHandler.DeleteCharacter)
-	character.PUT("/set", characterHandler.SetCharacter)
+	character.PUT("/set", characterHandler.Set)
 	//		GlOSSARY HANDLER
-	glossaryHandler := handler.NewGlossaryHandler(usecase.GlossaryUseCase{})
+	glossaryHandler := handler.DefaultHandler[entity.Glossary, dto.GlossaryDTO]{
+		UC:       &usecase.GlossaryUseCase{},
+		ToEntity: mapper.ToGlossaryEntity,
+		ToDTO:    mapper.ToGlossaryDTO,
+	}
 	glossary := protected.Group("/glossary")
-	glossary.GET("/get", glossaryHandler.GetGlossary)
-	glossary.GET("/", glossaryHandler.GetAllGlossarys)
-	glossary.POST("/new", glossaryHandler.NewGlossary)
-	glossary.DELETE("/delete", glossaryHandler.DeleteGlossary)
-	glossary.PUT("/set", glossaryHandler.SetGlossary)
+	glossary.GET("/get", glossaryHandler.Get)
+	glossary.GET("/", glossaryHandler.GetAll)
+	glossary.POST("/new", glossaryHandler.New)
+	glossary.DELETE("/delete", glossaryHandler.DeleteCharacter)
+	glossary.PUT("/set", glossaryHandler.Set)
 	// GRACEFULL SHUTDOWN CTX---------
 	ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
 	go func() {
