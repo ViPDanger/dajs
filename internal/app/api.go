@@ -47,19 +47,9 @@ func Run(log logger.Ilogger, conf AppConfig) {
 		c.Status(http.StatusOK)
 	})
 
-	//		CHARACTER HANDLER
-	/*
-		characterHandler := handler.NewCharacterHandler(usecase.CharacterUseCase{})
-		character := protected.Group("/character")
-		character.GET("/get", characterHandler.GetCharacter)
-		character.GET("/", characterHandler.GetAllCharacters)
-		character.POST("/new", characterHandler.NewCharacter)
-		character.DELETE("/delete", characterHandler.DeleteCharacter)
-		character.PUT("/set", characterHandler.SetCharacter)
-	*/
 	characterHandler := handler.DefaultHandler[entity.Character, dto.CharacterDTO]{
 		UC: &usecase.CharacterUseCase{
-			CharRepository: repository.NewTestRepository[entity.Character](),
+			CharRepository: repository.NewFileRepository[entity.Character]("../../internal/db/files/Characters/"),
 		},
 		ToEntity: mapper.ToCharacterEntity,
 		ToDTO:    mapper.ToCharacterDTO,
@@ -68,12 +58,12 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	character.GET("/get", characterHandler.Get)
 	character.GET("/", characterHandler.GetAll)
 	character.POST("/new", characterHandler.New)
-	character.DELETE("/delete", characterHandler.DeleteCharacter)
+	character.DELETE("/delete", characterHandler.Delete)
 	character.PUT("/set", characterHandler.Set)
 	//		GlOSSARY HANDLER
 	glossaryHandler := handler.DefaultHandler[entity.Glossary, dto.GlossaryDTO]{
 		UC: &usecase.GlossaryUseCase{
-			GlossaryRepository: repository.NewTestRepository[entity.Glossary](),
+			GlossaryRepository: repository.NewFileRepository[entity.Glossary]("../../internal/db/files/Glossarys/"),
 		},
 		ToEntity: mapper.ToGlossaryEntity,
 		ToDTO:    mapper.ToGlossaryDTO,
@@ -82,7 +72,7 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	glossary.GET("/get", glossaryHandler.Get)
 	glossary.GET("/", glossaryHandler.GetAll)
 	glossary.POST("/new", glossaryHandler.New)
-	glossary.DELETE("/delete", glossaryHandler.DeleteCharacter)
+	glossary.DELETE("/delete", glossaryHandler.Delete)
 	glossary.PUT("/set", glossaryHandler.Set)
 	// GRACEFULL SHUTDOWN CTX---------
 	ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)

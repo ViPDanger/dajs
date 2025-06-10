@@ -69,7 +69,7 @@ func (h *DefaultHandler[T, Tdto]) GetAll(c *gin.Context) {
 }
 
 // DELETE character
-func (h *DefaultHandler[T, Tdto]) DeleteCharacter(c *gin.Context) {
+func (h *DefaultHandler[T, Tdto]) Delete(c *gin.Context) {
 	id := c.GetHeader("id")
 	if id == "" {
 		err := errors.New("Нет ID в запросе")

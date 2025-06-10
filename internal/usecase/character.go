@@ -10,10 +10,10 @@ type CharacterUseCase struct {
 }
 
 func (uc *CharacterUseCase) New(character *entity.Character) error {
-	return uc.CharRepository.New(character.ID, character)
+	return uc.CharRepository.New(character.Name, character)
 }
 func (uc *CharacterUseCase) Set(character *entity.Character) error {
-	return uc.CharRepository.Set(character.ID, character)
+	return uc.CharRepository.Set(character.Name, character)
 }
 func (uc *CharacterUseCase) GetByID(id string) (r *entity.Character, err error) {
 	return uc.CharRepository.GetByID(id)
