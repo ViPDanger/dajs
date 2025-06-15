@@ -6,21 +6,21 @@ import (
 )
 
 type GlossaryUseCase struct {
-	GlossaryRepository repository.Repository[entity.Glossary]
+	Repo repository.Repository[entity.Glossary]
 }
 
 func (uc *GlossaryUseCase) New(glossary *entity.Glossary) error {
-	return uc.GlossaryRepository.New(glossary.ID, glossary)
+	return uc.Repo.Insert(glossary)
 }
 func (uc *GlossaryUseCase) Set(glossary *entity.Glossary) error {
-	return uc.GlossaryRepository.Set(glossary.ID, glossary)
+	return uc.Repo.Update(glossary)
 }
 func (uc *GlossaryUseCase) GetByID(id string) (r *entity.Glossary, err error) {
-	return uc.GlossaryRepository.GetByID(id)
+	return uc.Repo.GetByID(id)
 }
-func (uc *GlossaryUseCase) GetAll() (r *[]entity.Glossary, err error) {
-	return uc.GlossaryRepository.GetAll()
+func (uc *GlossaryUseCase) GetAll() (r []entity.Glossary, err error) {
+	return uc.Repo.GetAll()
 }
 func (uc *GlossaryUseCase) Delete(id string) (err error) {
-	return uc.GlossaryRepository.Delete(id)
+	return uc.Repo.Delete(id)
 }

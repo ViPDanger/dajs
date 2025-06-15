@@ -10,10 +10,10 @@ import (
 	"regexp"
 )
 
-type File[T any] struct {
+type FileDB[T any] struct {
 }
 
-func (f *File[T]) read(filepath string) ([]byte, error) {
+func (f *FileDB[T]) read(filepath string) ([]byte, error) {
 	data, err := os.ReadFile(filepath) // Замените на ваш путь
 	if err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func (f *File[T]) read(filepath string) ([]byte, error) {
 	re := regexp.MustCompile(`(?s)/\*.*?\*/`)
 	return re.ReplaceAll(data, []byte("")), nil
 }
-func (f *File[T]) Compile(filepath string) (object *T, err error) {
+func (f *FileDB[T]) Compile(filepath string) (object *T, err error) {
 	data, err := f.read(filepath)
 	if err != nil {
 		return
@@ -30,7 +30,22 @@ func (f *File[T]) Compile(filepath string) (object *T, err error) {
 	return
 }
 
-func (f *File[T]) Patch(filename string, patch *T) error {
+func (f *FileDB[T]) CompileArray(filepaths []string) (objects []T, err error) {
+	objects = make([]T, len(filepaths))
+	for i, filepath := range filepaths {
+		data, err := f.read(filepath)
+		if err != nil {
+			return nil, err
+		}
+		err = json.Unmarshal(data, &objects[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return
+}
+
+func (f *FileDB[T]) Patch(filename string, patch *T) error {
 	// Читаем оригинальный файл
 	data, err := os.ReadFile(filename)
 	if err != nil {
@@ -51,13 +66,13 @@ func (f *File[T]) Patch(filename string, patch *T) error {
 	return os.WriteFile(filename, updated, 0644)
 }
 
-func (f *File[T]) Add(filename string, patch *T) error {
+func (f *FileDB[T]) Add(filename string, item *T) error {
 	// Проверяем отсутствие наличия файла
 	if _, err := os.Stat(filename); err == nil {
 		return errors.New("file already exists")
 	}
 	// Сохраняем обратно
-	updated, err := json.MarshalIndent(*patch, "", "  ")
+	updated, err := json.MarshalIndent(*item, "", "  ")
 	if err != nil {
 		return err
 	}
@@ -108,7 +123,7 @@ func recursivePatch(origVal, patchVal reflect.Value) error {
 	return nil
 }
 
-func (f *File[T]) CompileDir(dir string) (*[]T, error) {
+func (f *FileDB[T]) CompileDir(dir string) ([]T, error) {
 	var result []T
 
 	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
@@ -133,11 +148,10 @@ func (f *File[T]) CompileDir(dir string) (*[]T, error) {
 		result = append(result, *obj)
 		return nil
 	})
-
-	return &result, err
+	return result, err
 }
 
-func (f *File[T]) Delete(filename string) error {
+func (f *FileDB[T]) Delete(filename string) error {
 	if err := os.Remove(filename); err != nil {
 		return err
 	}

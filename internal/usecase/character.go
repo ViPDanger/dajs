@@ -6,21 +6,22 @@ import (
 )
 
 type CharacterUseCase struct {
-	CharRepository repository.Repository[entity.Character]
+	Repo repository.Repository[entity.Character]
 }
 
 func (uc *CharacterUseCase) New(character *entity.Character) error {
-	return uc.CharRepository.New(character.Name, character)
+	err := uc.Repo.Insert(character)
+	return err
 }
 func (uc *CharacterUseCase) Set(character *entity.Character) error {
-	return uc.CharRepository.Set(character.Name, character)
+	return uc.Repo.Update(character)
 }
 func (uc *CharacterUseCase) GetByID(id string) (r *entity.Character, err error) {
-	return uc.CharRepository.GetByID(id)
+	return uc.Repo.GetByID(id)
 }
-func (uc *CharacterUseCase) GetAll() (r *[]entity.Character, err error) {
-	return uc.CharRepository.GetAll()
+func (uc *CharacterUseCase) GetAll() (r []entity.Character, err error) {
+	return uc.Repo.GetAll()
 }
 func (uc *CharacterUseCase) Delete(id string) (err error) {
-	return uc.CharRepository.Delete(id)
+	return uc.Repo.Delete(id)
 }

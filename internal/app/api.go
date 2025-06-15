@@ -2,7 +2,7 @@ package app
 
 import (
 	"DAJ/internal/domain/entity"
-	"DAJ/internal/domain/repository"
+	"DAJ/internal/domain/repository/fileRepository"
 	"DAJ/internal/interfaces/api/dto"
 	"DAJ/internal/interfaces/api/http/v1/handler"
 	"DAJ/internal/interfaces/api/mapper"
@@ -36,7 +36,12 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	})
 	//		AUTH HANDLERS
 	auth := r.Group("/auth")
-	userHandler := handler.UserHandler{UserUC: usecase.UserUseCase{Repo: repository.NewTestRepository[entity.User]()}}
+
+	userRepository, err := fileRepository.NewFileRepository[entity.User]("../../internal/db/files/Users/")
+	if err != nil {
+		panic("NO REPOSITORY SEGGS")
+	}
+	userHandler := handler.UserHandler{UserUC: usecase.UserUseCase{Repo: userRepository}}
 	auth.POST("/login", userHandler.Login)
 	auth.POST("/register", userHandler.Register)
 	auth.POST("/refresh", userHandler.Refresh)
@@ -47,9 +52,25 @@ func Run(log logger.Ilogger, conf AppConfig) {
 		c.Status(http.StatusOK)
 	})
 
+	//		ITEM HANDLER
+	itemHandler := handler.DefaultHandler[entity.Item, dto.ItemDTO]{
+		UC: &usecase.DefaultUseCase[entity.Item]{},
+	}
+
+	item := protected.Group("/item")
+	item.GET("/get", itemHandler.Get)
+	item.GET("/", itemHandler.GetAll)
+	item.POST("/new", itemHandler.New)
+	item.DELETE("/delete", itemHandler.Delete)
+	item.PUT("/set", itemHandler.Set)
+	//		CHARACTER HANDLER
+	characterRepository, err := fileRepository.NewFileRepository[entity.Character]("../../internal/db/files/Characters/")
+	if err != nil {
+		panic("NO REPOSITORY SEGGS")
+	}
 	characterHandler := handler.DefaultHandler[entity.Character, dto.CharacterDTO]{
 		UC: &usecase.CharacterUseCase{
-			CharRepository: repository.NewFileRepository[entity.Character]("../../internal/db/files/Characters/"),
+			Repo: characterRepository,
 		},
 		ToEntity: mapper.ToCharacterEntity,
 		ToDTO:    mapper.ToCharacterDTO,
@@ -61,9 +82,14 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	character.DELETE("/delete", characterHandler.Delete)
 	character.PUT("/set", characterHandler.Set)
 	//		GlOSSARY HANDLER
+	glossaryRepository, err := fileRepository.NewFileRepository[entity.Glossary]("../../internal/db/files/Glossarys/")
+	if err != nil {
+		panic("NO REPOSITORY SEGGS")
+	}
+
 	glossaryHandler := handler.DefaultHandler[entity.Glossary, dto.GlossaryDTO]{
 		UC: &usecase.GlossaryUseCase{
-			GlossaryRepository: repository.NewFileRepository[entity.Glossary]("../../internal/db/files/Glossarys/"),
+			Repo: glossaryRepository,
 		},
 		ToEntity: mapper.ToGlossaryEntity,
 		ToDTO:    mapper.ToGlossaryDTO,

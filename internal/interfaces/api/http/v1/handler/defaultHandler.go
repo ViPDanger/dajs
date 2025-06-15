@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"DAJ/internal/domain/entity"
 	"DAJ/internal/interfaces/api/dto"
 	"DAJ/internal/usecase"
 	"errors"
@@ -9,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DefaultHandler[T any, Tdto any] struct {
+type DefaultHandler[T entity.Identifiable, Tdto any] struct {
 	UC       usecase.UseCase[T]
 	ToEntity func(Tdto) T
 	ToDTO    func(T) Tdto
@@ -61,9 +62,9 @@ func (h *DefaultHandler[T, Tdto]) GetAll(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, dto.Error{Error: err.Error()})
 		return
 	}
-	ObjectsDTO := make([]Tdto, len(*Objects))
-	for i := range *Objects {
-		ObjectsDTO[i] = h.ToDTO((*Objects)[i])
+	ObjectsDTO := make([]Tdto, len(Objects))
+	for i := range Objects {
+		ObjectsDTO[i] = h.ToDTO(Objects[i])
 	}
 	c.JSON(http.StatusOK, ObjectsDTO)
 }

@@ -2,9 +2,9 @@ package main
 
 import (
 	"DAJ/internal/app"
-	"DAJ/internal/db"
 	"DAJ/internal/domain/entity"
 	"DAJ/internal/interfaces/api/dto"
+	"DAJ/internal/interfaces/api/http/v1/request"
 	"DAJ/internal/interfaces/api/mapper"
 	"DAJ/pkg/logger"
 	"fmt"
@@ -35,30 +35,29 @@ func main() {
 	go func() {
 		app.Run(log, appConf)
 	}()
+
 	client, err := app.RunWorker(log, Login, Password, host)
+
 	if err != nil {
 		log.Logln(logger.Error, err)
 		return
 	}
-	file := db.File[dto.CharacterDTO]{}
-
-	characterDTO, _ := file.Compile("../../internal/db/files/Characters/Грим Жаропив.json")
-	client.NewCharacter(mapper.ToCharacterEntity(*characterDTO))
-	characterDTO, _ = file.Compile("../../internal/db/files/Characters/Урист Ламрот.json")
-	client.NewCharacter(mapper.ToCharacterEntity(*characterDTO))
-	fmt.Println(client.GetCharacter(characterDTO.ID))
-	fmt.Println(client.AllCharacter())
-	fmt.Println(client.SetCharacter(entity.Character{
-		ID:   characterDTO.ID,
-		Name: "Ivan Vitalya",
-	}))
-	fmt.Println(client.DeleteCharacter(characterDTO.ID))
-	fmt.Println(client.AllCharacter())
+	itemFetcher := request.DefaultFetcher[entity.Item, dto.ItemDTO]{
+		ToDTO:      mapper.ToItemDTO,
+		ToEntity:   mapper.ToItemEntity,
+		Client:     client,
+		GetPath:    "/protected/character/get",
+		NewPath:    "/protected/character/new",
+		AllPath:    "/protected/character/",
+		SetPath:    "/protected/character/set",
+		DeletePath: "/protected/character/delete",
+	}
+	x, err := itemFetcher.All()
+	fmt.Println(x, err)
 	fmt.Println(client.NewGlossary(entity.Glossary{
 		ID:   "01GLOSS",
 		Text: "TEXTGLOSSARY",
 	}))
-	fmt.Println(client.AllGlossary())
 	fmt.Println(client.GetGlossary("01GLOSS"))
 	fmt.Println(client.SetGlossary(entity.Glossary{
 		ID:   "01GLOSS",

@@ -30,8 +30,8 @@ type SpellCellDTO struct {
 	Max   int `json:"max"`
 }
 
-type ItemDTO struct {
-	Id           string  `json:"Id,omitempty"`
+type CharacterItemDTO struct {
+	Id           *string `json:"Id,omitempty"`
 	SimpleItem   string  `json:"SimpleItem,omitempty"`
 	Weight       float64 `json:"Weight,omitempty"`
 	Count        int     `json:"Count"`
@@ -44,18 +44,19 @@ type ItemDTO struct {
 }
 
 type InventoryItemDTO struct {
-	Name           string    `json:"name"`
-	IsInfinity     bool      `json:"isInfinity"`
-	CapacityCount  int       `json:"capacityCount"`
-	CapacityWeight float64   `json:"capacityWeight"`
-	IsBlocked      bool      `json:"isBlocked"`
-	Items          []ItemDTO `json:"items"`
+	Name           string             `json:"name"`
+	IsInfinity     bool               `json:"isInfinity"`
+	CapacityCount  int                `json:"capacityCount"`
+	CapacityWeight float64            `json:"capacityWeight"`
+	IsBlocked      bool               `json:"isBlocked"`
+	Items          []CharacterItemDTO `json:"items"`
 }
 
 type AbilityDTO struct {
-	UserValue   int  `json:"userValue"`
-	MinValue    int  `json:"minValue"`
-	Proficiency bool `json:"proficiency"`
+	Name        string `json:"Name,omitempty"`
+	UserValue   int    `json:"userValue"`
+	MinValue    int    `json:"minValue"`
+	Proficiency bool   `json:"proficiency"`
 }
 
 type CustomStatusDTO struct {

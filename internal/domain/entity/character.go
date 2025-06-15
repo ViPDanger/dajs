@@ -1,96 +1,71 @@
 package entity
 
-import "time"
-
-type Character struct {
-	ID                   string    `json:"Id"`
-	Name                 string    `json:"name"`
-	MyRaceId             *string   `json:"MyRaceId"`
-	UserRace             string    `json:"UserRace"`
-	Hold                 bool      `json:"Hold"`
-	HoldTime             time.Time `json:"HoldTime"`
-	TokenColor           string    `json:"TokenColor"`
-	Speed                int       `json:"Speed"`
-	IHaveLight           bool      `json:"IHaveLight"`
-	TorchValue           int       `json:"TorchValue"`
-	TorchValueSecond     int       `json:"TorchValueSecond"`
-	CellEyeValue         int       `json:"CellEyeValue"`
-	EyeEnabled           bool      `json:"EyeEnabled"`
-	SeeInTheDark         bool      `json:"SeeInTheDark"`
-	Gold                 int       `json:"Gold"`
-	Silver               int       `json:"Silver"`
-	Copper               int       `json:"Copper"`
-	HitPoints            int       `json:"HitPoints"`
-	CurrentHitPoints     int       `json:"CurrentHitPoints"`
-	TempHitPoints        int       `json:"TempHitPoints"`
-	TempCurrentHitPoints int       `json:"TempCurrentHitPoints"`
-	HasInspiration       bool      `json:"HasInspiration"`
-	Alignment            int       `json:"Alignment"`
-	HitDice              int       `json:"HitDice"`
-	HitDiceCount         int       `json:"HitDiceCount"`
-	IsArmorTakeOf        bool      `json:"IsArmorTakeOf"`
-	TwoHanded            bool      `json:"TwoHanded"`
-	SelectedSaveThrowKey int       `json:"SelectedSaveThrowKey"`
-	SizeIndex            int       `json:"SizeIndex"`
-	TagString            *string   `json:"TagString"`
-	Languages            string    `json:"Languages"`
-	Multiplier           float64   `json:"Multiplier"`
-	Inspiration          int       `json:"Inspiration"`
-	Armor                int       `json:"Armor"`
-	Bditelnost           int       `json:"Bditelnost"`
-	IniBonus             int       `json:"IniBonus"`
-	IsPlaying            bool      `json:"IsPlaying"`
-	Note                 string    `json:"Note"`
-	FirstSpellText       string    `json:"FirstSpellText"`
-	SecondSpellText      *string   `json:"SecondSpellText"`
-	Spells               []Item    `json:"Spells"` // Можно уточнить, если известен формат заклинаний
-	HandsCapacity        int       `json:"HandsCapacity"`
-	HandsItems           []Item    `json:"HandsItems"`
-	MainHandsItems       []Item    `json:"MainHandsItems"`
-	ArrowItems           []Item    `json:"ArrowItems"`
-
-	InventoryItems []InventoryItem `json:"InventoryItems"`
-	Parameters     []Parameter     `json:"Parameters"`
-	Classes        []Class         `json:"Classes"`
-
-	DamageResist      string         `json:"DamageResist"`
-	DamageImmun       string         `json:"DamageImmun"`
-	DamageVulner      string         `json:"DamageVulner"`
-	HasAura           bool           `json:"HasAura"`
-	AuraSize          int            `json:"AuraSize"`
-	AuraColor         string         `json:"AuraColor"`
-	AuraAngle         float64        `json:"AuraAngle"`
-	AuraAngleSize     float64        `json:"AuraAngleSize"`
-	AuraOpacity       float64        `json:"AuraOpacity"`
-	AuraType          string         `json:"AuraType"`
-	AuraColorEnable   bool           `json:"AuraColorEnable"`
-	ShowAuraCells     bool           `json:"ShowAuraCells"`
-	IsRotationEnable  bool           `json:"IsRotationEnable"`
-	IsWallBlock       bool           `json:"IsWallBlock"`
-	ShowAuraToPlayers bool           `json:"ShowAuraToPlayers"`
-	CustomAuraImage   *string        `json:"CustomAuraImage"`
-	CustomStatuses    []CustomStatus `json:"CustomStatuses"`
+type CharacterInventory struct {
+	Name           string
+	IsInfinity     bool
+	CapacityCount  int
+	CapacityWeight float64
+	IsBlocked      bool
+	Items          []CharacterItem
 }
 
-func (c *Character) GetID() string {
+type CharacterItem struct {
+	Id           *string `json:"Id,omitempty"`
+	Item         Item
+	SimpleItem   string  `json:"SimpleItem,omitempty"`
+	Weight       float64 `json:"Weight,omitempty"`
+	Count        int     `json:"Count"`
+	InventoryId  string  `json:"InventoryId,omitempty"`
+	IsMagicGlow  bool    `json:"IsMagicGlow,omitempty"`
+	IsMagicFocus bool    `json:"IsMagicFocus,omitempty"`
+	IsRecognized bool    `json:"IsRecognized,omitempty"`
+	OnEquip      bool    `json:"OnEquip,omitempty"`
+	Focused      bool    `json:"Focused,omitempty"`
+}
+
+type Character struct {
+	ID           string `json:"Id"`
+	Name         string `json:"name"`
+	UserRace     string `json:"UserRace"`
+	Speed        int    `json:"Speed"`
+	EyeEnabled   bool   `json:"EyeEnabled"`
+	SeeInTheDark bool   `json:"SeeInTheDark"`
+	Money
+	HitPoints            int          `json:"HitPoints"`
+	CurrentHitPoints     int          `json:"CurrentHitPoints"`
+	TempHitPoints        int          `json:"TempHitPoints"`
+	TempCurrentHitPoints int          `json:"TempCurrentHitPoints"`
+	Alignment            int          `json:"Alignment"`
+	HitDice              int          `json:"HitDice"`
+	HitDiceCount         int          `json:"HitDiceCount"`
+	SizeIndex            int          `json:"SizeIndex"`
+	TagString            *string      `json:"TagString"`
+	Languages            string       `json:"Languages"`
+	Multiplier           float64      `json:"Multiplier"`
+	Inspiration          int          `json:"Inspiration"`
+	Armor                int          `json:"Armor"`
+	IniBonus             int          `json:"IniBonus"`
+	IsPlaying            bool         `json:"IsPlaying"`
+	Note                 string       `json:"Note"`
+	Spells               []SimpleItem `json:"Spells"` // Можно уточнить, если известен формат заклинаний
+	Inventory            []CharacterInventory
+	Parameters           []Parameter    `json:"Parameters"`
+	Classes              []Class        `json:"Classes"`
+	DamageResist         string         `json:"DamageResist"`
+	DamageImmun          string         `json:"DamageImmun"`
+	DamageVulner         string         `json:"DamageVulner"`
+	CustomStatuses       []CustomStatus `json:"CustomStatuses"`
+}
+
+func (c Character) GetID() string {
 	return c.ID
 }
 
-type InventoryItem struct {
-	Name           string  `json:"Name"`
-	IsInfinity     bool    `json:"IsInfinity"`
-	CapacityCount  int     `json:"CapacityCount"`
-	CapacityWeight float64 `json:"CapacityWeight"`
-	IsBlocked      bool    `json:"IsBlocked"`
-	Items          []Item  `json:"Items"`
+type Money struct {
+	Gold   int `json:"Gold"`
+	Silver int `json:"Silver"`
+	Copper int `json:"Copper"`
 }
-
-type Item struct {
-	SimpleItem string  `json:"SimpleItem"`
-	Weight     float64 `json:"Weight"`
-	Count      int     `json:"Count"`
-}
-
 type Parameter struct {
 	Name          string    `json:"Name"`
 	Value         int       `json:"Value"`
@@ -100,9 +75,10 @@ type Parameter struct {
 }
 
 type Ability struct {
-	UserValue   int  `json:"UserValue"`
-	MinValue    int  `json:"MinValue"`
-	Proficiency bool `json:"Proficiency"`
+	Name        string `json:"Name,omitempty"`
+	UserValue   int    `json:"UserValue"`
+	MinValue    int    `json:"MinValue"`
+	Proficiency bool   `json:"Proficiency"`
 }
 
 type Class struct {
@@ -122,17 +98,17 @@ type SpellCell struct {
 }
 
 type CustomStatus struct {
+	ID                    string        `json:"Id"`
+	Name                  string        `json:"Name"`
 	IsHided               bool          `json:"IsHided,omitempty"`
 	InnerStatusCollection []interface{} `json:"InnerStatusCollection"`
 	SelectedModes         []StatusMode  `json:"SelectedModes"`
 	Description           string        `json:"Description"`
 	TokenPicPath          string        `json:"TokenPicPath"`
 	IconPath              string        `json:"IconPath"`
-	ID                    string        `json:"Id"`
-	Name                  string        `json:"Name"`
 }
 
-func (c *CustomStatus) GetID() string {
+func (c CustomStatus) GetID() string {
 	return c.ID
 }
 

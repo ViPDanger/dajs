@@ -18,7 +18,7 @@ func (UC *UserUseCase) Register(user entity.User) error {
 		return err
 	}
 	user.Password = string(hash)
-	if err := UC.Repo.New(user.Name, &user); err != nil {
+	if err := UC.Repo.Insert(&user); err != nil {
 		return err
 	}
 

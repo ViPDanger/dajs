@@ -13,7 +13,7 @@ func ToCharacterEntity(dto dto.CharacterDTO) entity.Character {
 		UserRace:         dto.Race,
 		Classes:          ToClassEntity(dto.Classes),
 		Parameters:       ToParametersEntity(dto.Parameters),
-		InventoryItems:   ToInventoryItemEntityList(dto.InventoryItems),
+		Inventory:        ToInventoryEntityList(dto.InventoryItems),
 		HitPoints:        dto.HitPoints,
 		CurrentHitPoints: dto.CurrentHitPoints,
 		Armor:            dto.Armor,
@@ -28,7 +28,7 @@ func ToCharacterDTO(entity entity.Character) dto.CharacterDTO {
 		Race:             entity.UserRace,
 		Classes:          ToClassDTO(entity.Classes),
 		Parameters:       ToParametersDTO(entity.Parameters),
-		InventoryItems:   ToInventoryItemDTOList(entity.InventoryItems),
+		InventoryItems:   ToInventoryDTOList(entity.Inventory),
 		HitPoints:        entity.HitPoints,
 		CurrentHitPoints: entity.CurrentHitPoints,
 		Armor:            entity.Armor,
@@ -110,50 +110,33 @@ func ToSpellCellDTO(entitys []entity.SpellCell) []dto.SpellCellDTO {
 
 //
 
-// Item -> ItemDTO
-func ToItemDTO(entity entity.Item) dto.ItemDTO {
-	return dto.ItemDTO{
-		SimpleItem: entity.SimpleItem,
-		Weight:     entity.Weight,
-		Count:      entity.Count,
-	}
-}
-
-func ToItemEntity(dto dto.ItemDTO) entity.Item {
-	return entity.Item{
-		SimpleItem: dto.SimpleItem,
-		Weight:     dto.Weight,
-		Count:      dto.Count,
-	}
-}
-
 // InventoryItem -> InventoryItemDTO
-func ToInventoryItemDTO(entitys entity.InventoryItem) dto.InventoryItemDTO {
-	itemsDTO := make([]dto.ItemDTO, len(entitys.Items))
+func ToInventoryItemDTO(entitys entity.CharacterInventory) dto.InventoryItemDTO {
+	itemsDTO := make([]dto.CharacterItemDTO, len(entitys.Items))
 	for i, item := range entitys.Items {
-		itemsDTO[i] = ToItemDTO(item)
+		itemsDTO[i] = ToCharacterItemDTO(item)
 	}
 	return dto.InventoryItemDTO{
 		Name:           entitys.Name,
 		IsInfinity:     entitys.IsInfinity,
+		IsBlocked:      entitys.IsBlocked,
 		CapacityCount:  entitys.CapacityCount,
 		CapacityWeight: entitys.CapacityWeight,
-		IsBlocked:      entitys.IsBlocked,
 		Items:          itemsDTO,
 	}
 }
 
-func ToInventoryItemEntity(dtos dto.InventoryItemDTO) entity.InventoryItem {
-	items := make([]entity.Item, len(dtos.Items))
-	for i, itemDTO := range dtos.Items {
-		items[i] = ToItemEntity(itemDTO)
+func ToInventoryEntity(dto dto.InventoryItemDTO) entity.CharacterInventory {
+	items := make([]entity.CharacterItem, len(dto.Items))
+	for i, itemDTO := range dto.Items {
+		items[i] = ToCharacterItemEntity(itemDTO)
 	}
-	return entity.InventoryItem{
-		Name:           dtos.Name,
-		IsInfinity:     dtos.IsInfinity,
-		CapacityCount:  dtos.CapacityCount,
-		CapacityWeight: dtos.CapacityWeight,
-		IsBlocked:      dtos.IsBlocked,
+	return entity.CharacterInventory{
+		Name:           dto.Name,
+		IsInfinity:     dto.IsInfinity,
+		IsBlocked:      dto.IsBlocked,
+		CapacityCount:  dto.CapacityCount,
+		CapacityWeight: dto.CapacityWeight,
 		Items:          items,
 	}
 }
@@ -161,6 +144,7 @@ func ToInventoryItemEntity(dtos dto.InventoryItemDTO) entity.InventoryItem {
 // Ability -> AbilityDTO
 func ToAbilityDTO(ability entity.Ability) dto.AbilityDTO {
 	return dto.AbilityDTO{
+		Name:        ability.Name,
 		UserValue:   ability.UserValue,
 		MinValue:    ability.MinValue,
 		Proficiency: ability.Proficiency,
@@ -169,6 +153,7 @@ func ToAbilityDTO(ability entity.Ability) dto.AbilityDTO {
 
 func ToAbilityEntity(abilityDTO dto.AbilityDTO) entity.Ability {
 	return entity.Ability{
+		Name:        abilityDTO.Name,
 		UserValue:   abilityDTO.UserValue,
 		MinValue:    abilityDTO.MinValue,
 		Proficiency: abilityDTO.Proficiency,
@@ -193,7 +178,7 @@ func ToCustomStatusEntity(dto dto.CustomStatusDTO) entity.CustomStatus {
 }
 
 // []InventoryItem -> []InventoryItemDTO
-func ToInventoryItemDTOList(entitys []entity.InventoryItem) []dto.InventoryItemDTO {
+func ToInventoryDTOList(entitys []entity.CharacterInventory) []dto.InventoryItemDTO {
 	result := make([]dto.InventoryItemDTO, len(entitys))
 	for i, item := range entitys {
 		result[i] = ToInventoryItemDTO(item)
@@ -201,12 +186,42 @@ func ToInventoryItemDTOList(entitys []entity.InventoryItem) []dto.InventoryItemD
 	return result
 }
 
-func ToInventoryItemEntityList(dtos []dto.InventoryItemDTO) []entity.InventoryItem {
-	result := make([]entity.InventoryItem, len(dtos))
+func ToInventoryEntityList(dtos []dto.InventoryItemDTO) []entity.CharacterInventory {
+	result := make([]entity.CharacterInventory, len(dtos))
 	for i, itemDTO := range dtos {
-		result[i] = ToInventoryItemEntity(itemDTO)
+		result[i] = ToInventoryEntity(itemDTO)
 	}
 	return result
+}
+
+func ToCharacterItemEntity(dto dto.CharacterItemDTO) entity.CharacterItem {
+	return entity.CharacterItem{
+		Id:           dto.Id,
+		SimpleItem:   dto.SimpleItem,
+		Weight:       dto.Weight,
+		Count:        dto.Count,
+		InventoryId:  dto.InventoryId,
+		IsMagicGlow:  dto.IsMagicGlow,
+		IsMagicFocus: dto.IsMagicFocus,
+		IsRecognized: dto.IsRecognized,
+		OnEquip:      dto.OnEquip,
+		Focused:      dto.Focused,
+	}
+}
+
+func ToCharacterItemDTO(item entity.CharacterItem) dto.CharacterItemDTO {
+	return dto.CharacterItemDTO{
+		Id:           item.Id,
+		SimpleItem:   item.SimpleItem,
+		Weight:       item.Weight,
+		Count:        item.Count,
+		InventoryId:  item.InventoryId,
+		IsMagicGlow:  item.IsMagicGlow,
+		IsMagicFocus: item.IsMagicFocus,
+		IsRecognized: item.IsRecognized,
+		OnEquip:      item.OnEquip,
+		Focused:      item.Focused,
+	}
 }
 
 // []CustomStatus -> []CustomStatusDTO

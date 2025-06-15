@@ -1,5 +1,5 @@
 package entity
 
-type WithID interface {
+type Identifiable interface {
 	GetID() string
 }

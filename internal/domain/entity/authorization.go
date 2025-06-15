@@ -15,3 +15,7 @@ type User struct {
 	Name     string
 	Password string
 }
+
+func (c User) GetID() string {
+	return c.Name
+}

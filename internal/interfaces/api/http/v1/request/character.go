@@ -64,7 +64,7 @@ func (r *HttpRepository) AllCharacter() (characters []entity.Character, err erro
 }
 
 // PUT Character
-func (r *HttpRepository) SetCharacter(character entity.Character) (id string, err error) {
+func (r *HttpRepository) PatchCharacter(character entity.Character) (id string, err error) {
 	body, err := json.Marshal(mapper.ToCharacterDTO(character))
 	if err != nil {
 		return
@@ -83,7 +83,7 @@ func (r *HttpRepository) SetCharacter(character entity.Character) (id string, er
 }
 
 // DELETE Character
-func (r *HttpRepository) DeleteCharacter(id string) (character entity.Character, err error) {
+func (r *HttpRepository) DeleteCharacter(id string) (message dto.Message, err error) {
 	req, _ := http.NewRequest("DELETE", r.Host+"/protected/character/delete", nil)
 	req.Header.Set("id", id)
 	resp, err := r.doProtected(req)
@@ -91,10 +91,8 @@ func (r *HttpRepository) DeleteCharacter(id string) (character entity.Character,
 		return
 	}
 	defer resp.Body.Close()
-	var characterDTO dto.CharacterDTO
-	if err = json.NewDecoder(resp.Body).Decode(&characterDTO); err != nil {
+	if err = json.NewDecoder(resp.Body).Decode(&message); err != nil {
 		return
 	}
-	character = mapper.ToCharacterEntity(characterDTO)
 	return
 }
