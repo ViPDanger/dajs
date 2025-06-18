@@ -2,7 +2,7 @@ package app
 
 import (
 	"DAJ/internal/domain/entity"
-	"DAJ/internal/domain/repository/fileRepository"
+	jsonRepository "DAJ/internal/infastructure/json"
 	"DAJ/internal/interfaces/api/dto"
 	"DAJ/internal/interfaces/api/http/v1/handler"
 	"DAJ/internal/interfaces/api/mapper"
@@ -37,9 +37,10 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	//		AUTH HANDLERS
 	auth := r.Group("/auth")
 
-	userRepository, err := fileRepository.NewFileRepository[entity.User]("../../internal/db/files/Users/")
+	userRepository, err := jsonRepository.NewUserRepository("../../internal/infastructure/files/Users/")
 	if err != nil {
-		panic("NO REPOSITORY SEGGS")
+
+		panic(err.Error())
 	}
 	userHandler := handler.UserHandler{UserUC: usecase.UserUseCase{Repo: userRepository}}
 	auth.POST("/login", userHandler.Login)
@@ -53,8 +54,12 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	})
 
 	//		ITEM HANDLER
+	itemRepository, err := jsonRepository.NewItemRepository("../../internal/infastructure/files/Items/")
+	if err != nil {
+		panic(err.Error())
+	}
 	itemHandler := handler.DefaultHandler[entity.Item, dto.ItemDTO]{
-		UC: &usecase.DefaultUseCase[entity.Item]{},
+		UC: usecase.NewDefaultUsecase(itemRepository),
 	}
 
 	item := protected.Group("/item")
@@ -64,14 +69,12 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	item.DELETE("/delete", itemHandler.Delete)
 	item.PUT("/set", itemHandler.Set)
 	//		CHARACTER HANDLER
-	characterRepository, err := fileRepository.NewFileRepository[entity.Character]("../../internal/db/files/Characters/")
+	characterRepository, err := jsonRepository.NewCharacterRepository("../../internal/infastructure/files/Characters/")
 	if err != nil {
-		panic("NO REPOSITORY SEGGS")
+		panic(err.Error())
 	}
 	characterHandler := handler.DefaultHandler[entity.Character, dto.CharacterDTO]{
-		UC: &usecase.CharacterUseCase{
-			Repo: characterRepository,
-		},
+		UC:       usecase.NewCharacterUseCase(characterRepository),
 		ToEntity: mapper.ToCharacterEntity,
 		ToDTO:    mapper.ToCharacterDTO,
 	}
@@ -82,15 +85,14 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	character.DELETE("/delete", characterHandler.Delete)
 	character.PUT("/set", characterHandler.Set)
 	//		GlOSSARY HANDLER
-	glossaryRepository, err := fileRepository.NewFileRepository[entity.Glossary]("../../internal/db/files/Glossarys/")
+	glossaryRepository, err := jsonRepository.NewGlossaryRepository("../../internal/infastructure/files/Glossarys/")
 	if err != nil {
-		panic("NO REPOSITORY SEGGS")
+		log.Logln(logger.Error, err)
+		panic(err.Error())
 	}
 
 	glossaryHandler := handler.DefaultHandler[entity.Glossary, dto.GlossaryDTO]{
-		UC: &usecase.GlossaryUseCase{
-			Repo: glossaryRepository,
-		},
+		UC:       usecase.NewGlossaryUseCase(glossaryRepository),
 		ToEntity: mapper.ToGlossaryEntity,
 		ToDTO:    mapper.ToGlossaryDTO,
 	}

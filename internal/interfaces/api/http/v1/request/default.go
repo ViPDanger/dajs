@@ -8,6 +8,15 @@ import (
 )
 
 // GET Glossary
+
+type Fetcher[T any] interface {
+	Get(id string) (object T, err error)
+	New(object T) (id string, err error)
+	All() (objects []T, err error)
+	Set(object T) (id string, err error)
+	Delete(id string) (object T, err error)
+}
+
 type DefaultFetcher[T any, Tdto any] struct {
 	ToDTO      func(T) Tdto
 	ToEntity   func(Tdto) T
@@ -17,6 +26,27 @@ type DefaultFetcher[T any, Tdto any] struct {
 	AllPath    string
 	SetPath    string
 	DeletePath string
+}
+
+func NewDefaultFetcher[T any, Tdto any](
+	ToDTO func(T) Tdto,
+	ToEntity func(Tdto) T,
+	Client *HttpRepository,
+	GetPath string,
+	NewPath string,
+	AllPath string,
+	SetPath string,
+	DeletePath string) Fetcher[T] {
+	return &DefaultFetcher[T, Tdto]{
+		ToDTO:      ToDTO,
+		ToEntity:   ToEntity,
+		Client:     Client,
+		GetPath:    GetPath,
+		NewPath:    NewPath,
+		AllPath:    AllPath,
+		SetPath:    SetPath,
+		DeletePath: DeletePath,
+	}
 }
 
 func (f *DefaultFetcher[T, Tdto]) Get(id string) (object T, err error) {

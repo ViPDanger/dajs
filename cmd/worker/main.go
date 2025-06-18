@@ -3,7 +3,6 @@ package main
 import (
 	"DAJ/internal/app"
 	"DAJ/internal/domain/entity"
-	"DAJ/internal/interfaces/api/dto"
 	"DAJ/internal/interfaces/api/http/v1/request"
 	"DAJ/internal/interfaces/api/mapper"
 	"DAJ/pkg/logger"
@@ -23,7 +22,7 @@ const (
 func main() {
 	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
 	if err != nil {
-		log.Logln(logger.Error, err)
+		_ = log.Logln(logger.Error, err)
 		return
 	}
 	//
@@ -39,21 +38,31 @@ func main() {
 	client, err := app.RunWorker(log, Login, Password, host)
 
 	if err != nil {
-		log.Logln(logger.Error, err)
+		_ = log.Logln(logger.Error, err)
 		return
 	}
-	itemFetcher := request.DefaultFetcher[entity.Item, dto.ItemDTO]{
-		ToDTO:      mapper.ToItemDTO,
-		ToEntity:   mapper.ToItemEntity,
-		Client:     client,
-		GetPath:    "/protected/character/get",
-		NewPath:    "/protected/character/new",
-		AllPath:    "/protected/character/",
-		SetPath:    "/protected/character/set",
-		DeletePath: "/protected/character/delete",
-	}
-	x, err := itemFetcher.All()
-	fmt.Println(x, err)
+	itemFetcher := request.NewDefaultFetcher(
+		mapper.ToItemDTO,
+		mapper.ToItemEntity,
+		client,
+		"/protected/item/get",
+		"/protected/item/new",
+		"/protected/item/",
+		"/protected/item/set",
+		"/protected/item/delete")
+	characterFetcher := request.NewDefaultFetcher(
+		mapper.ToCharacterDTO,
+		mapper.ToCharacterEntity,
+		client,
+		"/protected/character/get",
+		"/protected/character/new",
+		"/protected/character/",
+		"/protected/character/set",
+		"/protected/character/delete",
+	)
+	fmt.Println(itemFetcher.Get("1"))
+	fmt.Println(characterFetcher.Get("Грим Жаропив"))
+
 	fmt.Println(client.NewGlossary(entity.Glossary{
 		ID:   "01GLOSS",
 		Text: "TEXTGLOSSARY",
@@ -63,4 +72,6 @@ func main() {
 		ID:   "01GLOSS",
 		Text: "NOTEXT",
 	}))
+
+	fmt.Println(client)
 }

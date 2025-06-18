@@ -2,19 +2,19 @@ package entity
 
 type Item interface {
 	Identifiable
-	GetSimpleItem() SimpleItem
+	GetSimpleItem() *SimpleItem
 }
 
 type SimpleItem struct {
-	Id       string  `json:"Id"`
-	Name     string  `json:"Name"`
-	OrigName string  `json:"OrigName"`
-	Comment  string  `json:"Comment"`
-	Price    float64 `json:"Price"`
-	Money    int     `json:"Money"`
-	Weight   float64 `json:"Weight"`
-	HtmlText string  `json:"HtmlText"`
-	Tags     string  `json:"Tags"`
+	Id       string   `json:"Id"`
+	Name     string   `json:"Name"`
+	OrigName string   `json:"OrigName"`
+	Comment  string   `json:"Comment"`
+	Price    float64  `json:"Price"`
+	Money    int      `json:"Money"`
+	Weight   float64  `json:"Weight"`
+	HtmlText string   `json:"HtmlText"`
+	Tags     []string `json:"Tags"`
 }
 
 // Armor Entity
@@ -29,7 +29,7 @@ type Armor struct {
 	PropertyArmor string `json:"PropertyArmor"`
 }
 
-func (item SimpleItem) GetSimpleItem() SimpleItem { return item }
+func (item SimpleItem) GetSimpleItem() *SimpleItem { return &item }
 func (item SimpleItem) GetID() string {
 	return item.Id
 }

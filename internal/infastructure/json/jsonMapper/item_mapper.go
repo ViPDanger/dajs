@@ -1,12 +1,12 @@
-package mapper
+package jsonMapper
 
 import (
 	"DAJ/internal/domain/entity"
-	"DAJ/internal/interfaces/api/dto"
+	"DAJ/internal/infastructure/json/jsonDTO"
 	"strings"
 )
 
-func ToItemEntity(dto dto.ItemDTO) entity.Item {
+func ToItemEntity(dto jsonDTO.ItemDTO) entity.Item {
 	tags := strings.Split(dto.Tags, "|")
 
 	switch {
@@ -57,8 +57,8 @@ func ToItemEntity(dto dto.ItemDTO) entity.Item {
 
 }
 
-func ToItemDTO(e entity.Item) dto.ItemDTO {
-	base := toSimpleItemDTO(e.GetSimpleItem())
+func ToItemDTO(e entity.Item) jsonDTO.ItemDTO {
+	base := toSimpleItemDTO(*e.GetSimpleItem())
 	switch v := e.(type) {
 	case entity.Armor:
 		base.ArmorInt = v.ArmorInt
@@ -79,7 +79,7 @@ func ToItemDTO(e entity.Item) dto.ItemDTO {
 		base.DefaultCount = v.DefaultCount
 		base.CustomTags = v.CustomTags
 	case entity.Container:
-		subDTOs := make([]dto.ItemDTO, len(v.List))
+		subDTOs := make([]jsonDTO.ItemDTO, len(v.List))
 		for i, item := range v.List {
 			subDTOs[i] = ToItemDTO(item)
 		}
@@ -89,17 +89,17 @@ func ToItemDTO(e entity.Item) dto.ItemDTO {
 	return base
 }
 
-func ToSimpleItemEntity(d dto.ItemDTO) entity.SimpleItem {
+func ToSimpleItemEntity(dto jsonDTO.ItemDTO) entity.SimpleItem {
 	return entity.SimpleItem{
-		Id:       d.Id,
-		Name:     d.Name,
-		OrigName: d.OrigName,
-		Comment:  d.Comment,
-		Price:    d.Price,
-		Money:    d.Money,
-		Weight:   d.Weight,
-		HtmlText: d.HtmlText,
-		Tags:     d.Tags,
+		Id:       dto.Id,
+		Name:     dto.Name,
+		OrigName: dto.OrigName,
+		Comment:  dto.Comment,
+		Price:    dto.Price,
+		Money:    dto.Money,
+		Weight:   dto.Weight,
+		HtmlText: dto.HtmlText,
+		Tags:     strings.Split(dto.Tags, "|"),
 	}
 }
 
@@ -112,8 +112,8 @@ func containsTag(tags []string, target string) bool {
 	return false
 }
 
-func toSimpleItemDTO(i entity.SimpleItem) dto.ItemDTO {
-	return dto.ItemDTO{
+func toSimpleItemDTO(i entity.SimpleItem) jsonDTO.ItemDTO {
+	return jsonDTO.ItemDTO{
 		Id:       i.Id,
 		Name:     i.Name,
 		OrigName: i.OrigName,
@@ -122,6 +122,6 @@ func toSimpleItemDTO(i entity.SimpleItem) dto.ItemDTO {
 		Money:    i.Money,
 		Weight:   i.Weight,
 		HtmlText: i.HtmlText,
-		Tags:     i.Tags,
+		Tags:     strings.Join(i.Tags, "|"),
 	}
 }
