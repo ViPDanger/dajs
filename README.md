@@ -15,7 +15,7 @@ cmd/worker/config.ini
   |POST    |  auth/register              | {"user","password"}         | {"Message"}                                                  |   Регистрация пользователя		    |						
   |POST    |  auth/login                 |  {"user","password"}        | {"access_token","access_exp","refresh_token","refresh_exp"}  |   Авторизация авториза			    |
   |POST    |  auth/refresh               |  {"refresh_token"}          |  {"access_token","access_exp"}                               |   Получение access токена из refresh токена |     
-  |PROTECTED				 					    |
+  |PROTECTED	 По анаолии с Character совершаются и другие запросы			 					    |
   |GET     |  protected/characrer/       |                             |  {[]CharacterDTO}					      |						    |
   |GET     |  protected/characrer/get    |   HEADER "ID"               |  {CharacterDTO}			 		      |						    |
   |POST    |  protected/characrer/new    |   {CharacterDTO}            |  {"Message"}			      			      |						    |
