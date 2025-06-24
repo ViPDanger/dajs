@@ -2,8 +2,10 @@ package json
 
 import (
 	"DAJ/internal/domain/entity"
+	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var defaultFileType = ".json"
@@ -19,6 +21,9 @@ type defaultJSONRepository[T entity.Identifiable, Tdto any] struct {
 }
 
 func NewJSONRepository[T entity.Identifiable, Tdto any](filepath string, toDTO func(T) Tdto, ToEntity func(Tdto) T, pathFunc func(*T) string) (f *defaultJSONRepository[T, Tdto], err error) {
+	if filepath == "" || toDTO == nil || ToEntity == nil || pathFunc == nil {
+		return nil, errors.New("Some parameters in NewJSONRepository are empty")
+	}
 	var db jsonDB[Tdto]
 	repository := defaultJSONRepository[T, Tdto]{
 		fileDirectory: filepath,
@@ -46,6 +51,9 @@ func NewJSONRepository[T entity.Identifiable, Tdto any](filepath string, toDTO f
 
 func (r *defaultJSONRepository[T, Tdto]) GetArray(ids []string) (ret []T, err error) {
 	for i := range ids {
+		if ids[i] == "" {
+			return nil, errors.New("some id in Repository.GetArray is empty")
+		}
 		ids[i] = r.setPath(ids[i])
 	}
 	objects, err := r.file.CompileArray(ids)
@@ -60,6 +68,9 @@ func (r *defaultJSONRepository[T, Tdto]) GetArray(ids []string) (ret []T, err er
 }
 
 func (r *defaultJSONRepository[T, Tdto]) Insert(object *T) error {
+	if object == nil {
+		return errors.New("no object in Repository.Insert")
+	}
 	path := r.pathFunc(object)
 	r.filePaths[(*object).GetID()] = path
 	dto := r.toDTO(*object)
@@ -84,12 +95,18 @@ func (r *defaultJSONRepository[T, Tdto]) GetAll() (ret []T, err error) {
 	return
 }
 func (r *defaultJSONRepository[T, Tdto]) Update(object *T) error {
+	if object == nil {
+		return errors.New("no object in Repository.Insert")
+	}
 	path := r.pathFunc(object)
 	dto := r.toDTO(*object)
 	return r.file.Patch(path, &dto)
 
 }
 func (r *defaultJSONRepository[T, Tdto]) Delete(id string) (err error) {
+	if id == "" {
+		return errors.New("no id in Repository.Delete")
+	}
 	return r.file.Delete(r.setPath(id))
 }
 
@@ -100,7 +117,7 @@ func (r *defaultJSONRepository[T, Tdto]) getExistingFilePaths() ([]string, error
 		if err != nil {
 			return err // если ошибка доступа к файлу/папке — пробрасываем её
 		}
-		if !info.IsDir() {
+		if !info.IsDir() && strings.Contains(info.Name(), defaultFileType) {
 			files = append(files, path) // добавляем только файлы
 		}
 		return nil

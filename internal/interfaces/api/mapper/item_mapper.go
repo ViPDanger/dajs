@@ -103,15 +103,6 @@ func ToSimpleItemEntity(dto dto.ItemDTO) entity.SimpleItem {
 	}
 }
 
-func containsTag(tags []string, target string) bool {
-	for _, t := range tags {
-		if strings.TrimSpace(t) == target {
-			return true
-		}
-	}
-	return false
-}
-
 func toSimpleItemDTO(i entity.SimpleItem) dto.ItemDTO {
 	return dto.ItemDTO{
 		Id:       i.Id,
@@ -124,4 +115,13 @@ func toSimpleItemDTO(i entity.SimpleItem) dto.ItemDTO {
 		HtmlText: i.HtmlText,
 		Tags:     strings.Join(i.Tags, "|"),
 	}
+}
+
+func containsTag(tags []string, target string) bool {
+	for _, t := range tags {
+		if strings.TrimSpace(t) == target {
+			return true
+		}
+	}
+	return false
 }

@@ -11,9 +11,9 @@ var (
 	sleepTime = 500 * time.Millisecond
 )
 
-func RunWorker(log logger.Ilogger, login string, password string, baseURL string) (*http.HttpRepository, error) {
+func RunWorker(log logger.Ilogger, login string, password string, baseURL string) (*http.RequestRepository, error) {
 	var err error
-	var HttpRepository *http.HttpRepository
+	var HttpRepository *http.RequestRepository
 	for i := 0; i < retry; i++ {
 		HttpRepository = http.NewHttpRepository(log, baseURL)
 		if err = HttpRepository.Login(login, password); err != nil {

@@ -19,15 +19,15 @@ type ParameterDTO struct {
 }
 
 type ClassDTO struct {
-	Id         string         `json:"id"`
-	Level      int            `json:"level"`
-	SpellCells []SpellCellDTO `json:"spellCells"`
+	Id         string         `json:"Id"`
+	Level      int            `json:"Level"`
+	SpellCells []SpellCellDTO `json:"SpellCells"`
 }
 
 type SpellCellDTO struct {
-	Level int `json:"level"`
-	Left  int `json:"left"`
-	Max   int `json:"max"`
+	Level int `json:"Level"`
+	Left  int `json:"Left"`
+	Max   int `json:"Max"`
 }
 
 type CharacterItemDTO struct {

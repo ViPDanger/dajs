@@ -16,7 +16,7 @@ const (
 	refreshPath  = "/auth/refresh"
 )
 
-func (r *HttpRepository) Register(user, password string) error {
+func (r *RequestRepository) Register(user, password string) error {
 
 	body, err := json.Marshal(dto.UserDTO{
 		Username: user,
@@ -43,7 +43,7 @@ func (r *HttpRepository) Register(user, password string) error {
 
 }
 
-func (r *HttpRepository) Login(user, password string) error {
+func (r *RequestRepository) Login(user, password string) error {
 	body, err := json.Marshal(dto.UserDTO{
 		Username: user,
 		Password: password,
@@ -75,7 +75,7 @@ func (r *HttpRepository) Login(user, password string) error {
 
 }
 
-func (r *HttpRepository) RefreshAccessToken() error {
+func (r *RequestRepository) RefreshAccessToken() error {
 
 	body, err := json.Marshal(mapper.ToRefreshTokenDTO(r.refreshToken))
 	if err != nil {
@@ -99,7 +99,7 @@ func (r *HttpRepository) RefreshAccessToken() error {
 	return nil
 }
 
-func (r *HttpRepository) doProtected(req *http.Request) (*http.Response, error) {
+func (r *RequestRepository) doProtected(req *http.Request) (*http.Response, error) {
 	req.Header.Set("Authorization", "Bearer "+r.accessToken.Str)
 	resp, err := r.Do(req)
 	if err != nil {

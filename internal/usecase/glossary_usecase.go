@@ -5,10 +5,10 @@ import (
 	"DAJ/internal/domain/repository"
 )
 
-type GlossaryUseCase struct {
-	defaultUseCase[entity.Glossary]
+type GlossaryUsecase struct {
+	UseCase[entity.Glossary]
 }
 
 func NewGlossaryUseCase(repository repository.Repository[entity.Glossary]) UseCase[entity.Glossary] {
-	return NewDefaultUsecase(repository)
+	return &GlossaryUsecase{UseCase: NewDefaultUsecase(repository)}
 }

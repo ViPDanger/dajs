@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-type itemRepository struct {
+type itemJSONRepository struct {
 	defaultJSONRepository[entity.Item, jsonDTO.ItemDTO]
 }
 
 func NewItemRepository(filepath string) (repository.Repository[entity.Item], error) {
-	r := itemRepository{}
+	r := itemJSONRepository{}
 	repository, err := NewJSONRepository(filepath, jsonMapper.ToItemDTO, jsonMapper.ToItemEntity, r.itemPathFunc)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func NewItemRepository(filepath string) (repository.Repository[entity.Item], err
 	return &r, nil
 }
 
-func (r *itemRepository) itemPathFunc(object *entity.Item) string {
+func (r *itemJSONRepository) itemPathFunc(object *entity.Item) string {
 	item := (*object).GetSimpleItem()
 	var path string
 	switch {

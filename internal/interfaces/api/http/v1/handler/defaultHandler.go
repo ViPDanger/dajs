@@ -16,6 +16,10 @@ type DefaultHandler[T entity.Identifiable, Tdto any] struct {
 	ToDTO    func(T) Tdto
 }
 
+func NewDefaultHandler[T entity.Identifiable, Tdto any](UC usecase.UseCase[T], ToEntity func(Tdto) T, ToDTO func(T) Tdto) *DefaultHandler[T, Tdto] {
+	return &DefaultHandler[T, Tdto]{UC: UC, ToEntity: ToEntity, ToDTO: ToDTO}
+}
+
 // GET character
 func (h *DefaultHandler[T, Tdto]) Get(c *gin.Context) {
 	id := c.GetHeader("id")

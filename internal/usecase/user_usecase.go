@@ -12,6 +12,10 @@ type UserUseCase struct {
 	Repo repository.Repository[entity.User]
 }
 
+func NewUserUsecase(repo repository.Repository[entity.User]) *UserUseCase {
+	return &UserUseCase{Repo: repo}
+}
+
 func (UC *UserUseCase) Register(user entity.User) error {
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {

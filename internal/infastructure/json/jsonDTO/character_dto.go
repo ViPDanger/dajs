@@ -1,33 +1,33 @@
 package jsonDTO
 
 type CharacterDTO struct {
-	ID               string             `json:"id"`
-	Name             string             `json:"name"`
-	Race             string             `json:"race"`
-	Classes          []ClassDTO         `json:"classes"`
-	Parameters       []ParameterDTO     `json:"parameters"`
-	InventoryItems   []InventoryItemDTO `json:"inventoryitems"`
-	HitPoints        int                `json:"hitPoints"`
-	CurrentHitPoints int                `json:"currentHitPoints"`
-	Armor            int                `json:"armor"`
-	CustomStatuses   []CustomStatusDTO  `json:"customStatuses"`
+	ID               string             `json:"Id"`
+	Name             string             `json:"Name"`
+	Race             string             `json:"Race"`
+	Classes          []ClassDTO         `json:"Classes"`
+	Parameters       []ParameterDTO     `json:"Parameters"`
+	InventoryItems   []InventoryItemDTO `json:"Inventoryitems"`
+	HitPoints        int                `json:"HitPoints"`
+	CurrentHitPoints int                `json:"CurrentHitPoints"`
+	Armor            int                `json:"Armor"`
+	CustomStatuses   []CustomStatusDTO  `json:"CustomStatuses"`
 }
 
 type ParameterDTO struct {
-	Name  string `json:"name"`
-	Value int    `json:"value"`
+	Name  string `json:"Name"`
+	Value int    `json:"Value"`
 }
 
 type ClassDTO struct {
-	Id         string         `json:"id"`
-	Level      int            `json:"level"`
-	SpellCells []SpellCellDTO `json:"spellCells"`
+	Id         string         `json:"Id"`
+	Level      int            `json:"Level"`
+	SpellCells []SpellCellDTO `json:"SpellCells"`
 }
 
 type SpellCellDTO struct {
-	Level int `json:"level"`
-	Left  int `json:"left"`
-	Max   int `json:"max"`
+	Level int `json:"Level"`
+	Left  int `json:"Left"`
+	Max   int `json:"Max"`
 }
 
 type CharacterItemDTO struct {

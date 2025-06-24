@@ -3,12 +3,90 @@ package usecase
 import (
 	"DAJ/internal/domain/entity"
 	"DAJ/internal/domain/repository"
+	"fmt"
 )
 
-type characterUseCase struct {
-	defaultUseCase[entity.Character]
+type characterUsecase struct {
+	UseCase[entity.Character]
+	itemUseCase UseCase[entity.Item]
 }
 
-func NewCharacterUseCase(repository repository.Repository[entity.Character]) UseCase[entity.Character] {
-	return NewDefaultUsecase(repository)
+func NewCharacterUseCase(Repository repository.Repository[entity.Character], itemRepository UseCase[entity.Item]) UseCase[entity.Character] {
+	return &characterUsecase{UseCase: NewDefaultUsecase(Repository), itemUseCase: itemRepository}
+}
+
+func (u characterUsecase) getInventory(Inventorys []entity.CharacterInventory) error {
+	for _, inventory := range Inventorys {
+		s := make([]string, 0)
+
+		for i := range inventory.Items {
+			if inventory.Items[i].Id != nil {
+				s = append(s, *inventory.Items[i].Id)
+			}
+
+		}
+		items, err := u.itemUseCase.GetArray(s)
+		if err != nil {
+			return err
+		}
+		for i, j := 0, 0; j < len(items); i++ {
+			if inventory.Items[i].Id != nil {
+				inventory.Items[i].Item = items[j]
+				j++
+			}
+
+		}
+	}
+
+	return nil
+}
+func (u characterUsecase) GetAll() ([]entity.Character, error) {
+	objects, err := u.UseCase.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range objects {
+		if err := u.getInventory(objects[i].Inventory); err != nil {
+			return nil, err
+		}
+		fmt.Println(objects[i].Inventory)
+	}
+
+	return objects, nil
+}
+func (u characterUsecase) GetArray(ids []string) ([]entity.Character, error) {
+	objects, err := u.UseCase.GetArray(ids)
+	if err != nil {
+		return nil, err
+	}
+	for i := range objects {
+		if err := u.getInventory(objects[i].Inventory); err != nil {
+			return nil, err
+		}
+	}
+	return objects, nil
+}
+
+func (u characterUsecase) GetByID(id string) (*entity.Character, error) {
+	object, err := u.UseCase.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+	if err := u.getInventory(object.Inventory); err != nil {
+		return nil, err
+	}
+	return object, nil
+}
+func (u characterUsecase) New(object *entity.Character) error {
+	if err := u.getInventory(object.Inventory); err != nil {
+		return err
+	}
+	return u.UseCase.New(object)
+}
+func (u characterUsecase) Set(object *entity.Character) error {
+	if err := u.getInventory(object.Inventory); err != nil {
+		return err
+	}
+	return u.UseCase.New(object)
 }

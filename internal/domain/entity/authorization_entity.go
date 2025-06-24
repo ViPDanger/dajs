@@ -3,12 +3,12 @@ package entity
 import "time"
 
 type AccessToken struct {
-	Str        string    `json:"access_token"`
-	ExpireTime time.Time `json:"access_exp"`
+	Str        string
+	ExpireTime time.Time
 }
 type RefreshToken struct {
-	Str        string    `json:"refresh_token"`
-	ExpireTime time.Time `json:"refresh_exp"`
+	Str        string
+	ExpireTime time.Time
 }
 type User struct {
 	Uid      string

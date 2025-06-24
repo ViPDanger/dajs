@@ -6,30 +6,33 @@ type Item interface {
 }
 
 type SimpleItem struct {
-	Id       string   `json:"Id"`
-	Name     string   `json:"Name"`
-	OrigName string   `json:"OrigName"`
-	Comment  string   `json:"Comment"`
-	Price    float64  `json:"Price"`
-	Money    int      `json:"Money"`
-	Weight   float64  `json:"Weight"`
-	HtmlText string   `json:"HtmlText"`
-	Tags     []string `json:"Tags"`
+	Id       string
+	Name     string
+	OrigName string
+	Comment  string
+	Price    float64
+	Money    int
+	Weight   float64
+	HtmlText string
+	Tags     []string
 }
 
 // Armor Entity
 type Armor struct {
 	SimpleItem
-	ArmorInt      int    `json:"ArmorInt"`
-	StealthDis    bool   `json:"StealthDis"`
-	StrArmor      int    `json:"StrArmor"`
-	FullDexArmor  bool   `json:"FullDexArmor"`
-	ShortDexArmor bool   `json:"ShortDexArmor"`
-	NoDexArmor    bool   `json:"NoDexArmor"`
-	PropertyArmor string `json:"PropertyArmor"`
+	ArmorInt      int
+	StealthDis    bool
+	StrArmor      int
+	FullDexArmor  bool
+	ShortDexArmor bool
+	NoDexArmor    bool
+	PropertyArmor string
 }
 
-func (item SimpleItem) GetSimpleItem() *SimpleItem { return &item }
+func (item SimpleItem) GetSimpleItem() *SimpleItem {
+	return &item
+}
+
 func (item SimpleItem) GetID() string {
 	return item.Id
 }
@@ -38,7 +41,7 @@ func (item SimpleItem) GetID() string {
 
 type Container struct {
 	SimpleItem
-	List []Item `json:"List"`
+	List []Item
 }
 
 func (t Container) GetID() string {
@@ -48,11 +51,11 @@ func (t Container) GetID() string {
 // Weapon Entity
 type Weapon struct {
 	SimpleItem
-	IsFencing         bool   `json:"IsFencing"`
-	WeaponFormula     string `json:"WeaponFormula"`
-	WeaponAttackBonus int    `json:"WeaponAttackBonus"`
-	PropertyWeapon    string `json:"PropertyWeapon"`
-	WeaponDamageType  int    `json:"WeaponDamageType"`
+	IsFencing         bool
+	WeaponFormula     string
+	WeaponAttackBonus int
+	PropertyWeapon    string
+	WeaponDamageType  int
 }
 
 func (w Weapon) GetID() string {
@@ -62,7 +65,7 @@ func (w Weapon) GetID() string {
 // Ammunition Entity
 type Ammunition struct {
 	SimpleItem
-	IsCounting   bool   `json:"IsCounting"`
-	DefaultCount int    `json:"DefaultCount"`
-	CustomTags   string `json:"CustomTags"`
+	IsCounting   bool
+	DefaultCount int
+	CustomTags   string
 }

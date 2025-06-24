@@ -1,9 +1,7 @@
 package app
 
 import (
-	"DAJ/internal/domain/entity"
 	jsonRepository "DAJ/internal/infastructure/json"
-	"DAJ/internal/interfaces/api/dto"
 	"DAJ/internal/interfaces/api/http/v1/handler"
 	"DAJ/internal/interfaces/api/mapper"
 	"DAJ/internal/usecase"
@@ -36,20 +34,18 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	})
 	//		AUTH HANDLERS
 	auth := r.Group("/auth")
-
 	userRepository, err := jsonRepository.NewUserRepository("../../internal/infastructure/files/Users/")
 	if err != nil {
-
 		panic(err.Error())
 	}
-	userHandler := handler.UserHandler{UserUC: usecase.UserUseCase{Repo: userRepository}}
+	userHandler := handler.UserHandler{UserUC: *usecase.NewUserUsecase(userRepository)}
 	auth.POST("/login", userHandler.Login)
 	auth.POST("/register", userHandler.Register)
 	auth.POST("/refresh", userHandler.Refresh)
 
 	// 		PROTECTED HANDLERS
-	protected := r.Group("/protected", handler.Protected)
-	protected.GET("/", func(c *gin.Context) {
+	protectedRouter := r.Group("/protected", handler.Protected)
+	protectedRouter.GET("/", func(c *gin.Context) {
 		c.Status(http.StatusOK)
 	})
 
@@ -58,50 +54,71 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	if err != nil {
 		panic(err.Error())
 	}
-	itemHandler := handler.DefaultHandler[entity.Item, dto.ItemDTO]{
-		UC: usecase.NewDefaultUsecase(itemRepository),
-	}
+	itemHandler := handler.NewDefaultHandler(
+		usecase.NewItemUseCase(itemRepository),
+		mapper.ToItemEntity,
+		mapper.ToItemDTO,
+	)
 
-	item := protected.Group("/item")
-	item.GET("/get", itemHandler.Get)
-	item.GET("/", itemHandler.GetAll)
-	item.POST("/new", itemHandler.New)
-	item.DELETE("/delete", itemHandler.Delete)
-	item.PUT("/set", itemHandler.Set)
+	itemRouter := protectedRouter.Group("/item")
+	itemRouter.GET("/get", itemHandler.Get)
+	itemRouter.GET("/", itemHandler.GetAll)
+	itemRouter.POST("/new", itemHandler.New)
+	itemRouter.DELETE("/delete", itemHandler.Delete)
+	itemRouter.PUT("/set", itemHandler.Set)
 	//		CHARACTER HANDLER
 	characterRepository, err := jsonRepository.NewCharacterRepository("../../internal/infastructure/files/Characters/")
 	if err != nil {
 		panic(err.Error())
 	}
-	characterHandler := handler.DefaultHandler[entity.Character, dto.CharacterDTO]{
-		UC:       usecase.NewCharacterUseCase(characterRepository),
-		ToEntity: mapper.ToCharacterEntity,
-		ToDTO:    mapper.ToCharacterDTO,
-	}
-	character := protected.Group("/character")
-	character.GET("/get", characterHandler.Get)
-	character.GET("/", characterHandler.GetAll)
-	character.POST("/new", characterHandler.New)
-	character.DELETE("/delete", characterHandler.Delete)
-	character.PUT("/set", characterHandler.Set)
+	characterHandler := handler.NewDefaultHandler(
+		usecase.NewCharacterUseCase(characterRepository, itemHandler.UC),
+		mapper.ToCharacterEntity,
+		mapper.ToCharacterDTO,
+	)
+	characterRouter := protectedRouter.Group("/character")
+	characterRouter.GET("/get", characterHandler.Get)
+	characterRouter.GET("/", characterHandler.GetAll)
+	characterRouter.POST("/new", characterHandler.New)
+	characterRouter.DELETE("/delete", characterHandler.Delete)
+	characterRouter.PUT("/set", characterHandler.Set)
 	//		GlOSSARY HANDLER
 	glossaryRepository, err := jsonRepository.NewGlossaryRepository("../../internal/infastructure/files/Glossarys/")
 	if err != nil {
-		log.Logln(logger.Error, err)
+		_ = log.Logln(logger.Error, err)
 		panic(err.Error())
 	}
 
-	glossaryHandler := handler.DefaultHandler[entity.Glossary, dto.GlossaryDTO]{
-		UC:       usecase.NewGlossaryUseCase(glossaryRepository),
-		ToEntity: mapper.ToGlossaryEntity,
-		ToDTO:    mapper.ToGlossaryDTO,
+	glossaryHandler := handler.NewDefaultHandler(
+		usecase.NewGlossaryUseCase(glossaryRepository),
+		mapper.ToGlossaryEntity,
+		mapper.ToGlossaryDTO,
+	)
+	glossaryRouter := protectedRouter.Group("/glossary")
+	glossaryRouter.GET("/get", glossaryHandler.Get)
+	glossaryRouter.GET("/", glossaryHandler.GetAll)
+	glossaryRouter.POST("/new", glossaryHandler.New)
+	glossaryRouter.DELETE("/delete", glossaryHandler.Delete)
+	glossaryRouter.PUT("/set", glossaryHandler.Set)
+	//		MAP HANDLER
+
+	mapRepository, err := jsonRepository.NewMapRepository("../../internal/infastructure/files/Maps/")
+	if err != nil {
+		_ = log.Logln(logger.Error, err)
+		panic(err.Error())
 	}
-	glossary := protected.Group("/glossary")
-	glossary.GET("/get", glossaryHandler.Get)
-	glossary.GET("/", glossaryHandler.GetAll)
-	glossary.POST("/new", glossaryHandler.New)
-	glossary.DELETE("/delete", glossaryHandler.Delete)
-	glossary.PUT("/set", glossaryHandler.Set)
+	mapHandler := handler.NewDefaultHandler(
+		usecase.NewMapUseCase(mapRepository),
+		mapper.ToMapEntity,
+		mapper.ToMapDTO,
+	)
+	mapRouter := protectedRouter.Group("/map")
+	mapRouter.GET("/get", mapHandler.Get)
+	mapRouter.GET("/", mapHandler.GetAll)
+	mapRouter.POST("/new", mapHandler.New)
+	mapRouter.DELETE("/delete", mapHandler.Delete)
+	mapRouter.PUT("/set", mapHandler.Set)
+
 	// GRACEFULL SHUTDOWN CTX---------
 	ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
 	go func() {

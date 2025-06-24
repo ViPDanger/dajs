@@ -10,51 +10,51 @@ type CharacterInventory struct {
 }
 
 type CharacterItem struct {
-	Id           *string `json:"Id,omitempty"`
+	Id           *string
 	Item         Item
-	SimpleItem   string  `json:"SimpleItem,omitempty"`
-	Weight       float64 `json:"Weight,omitempty"`
-	Count        int     `json:"Count"`
-	InventoryId  string  `json:"InventoryId,omitempty"`
-	IsMagicGlow  bool    `json:"IsMagicGlow,omitempty"`
-	IsMagicFocus bool    `json:"IsMagicFocus,omitempty"`
-	IsRecognized bool    `json:"IsRecognized,omitempty"`
-	OnEquip      bool    `json:"OnEquip,omitempty"`
-	Focused      bool    `json:"Focused,omitempty"`
+	SimpleItem   string
+	Weight       float64
+	Count        int
+	InventoryId  string
+	IsMagicGlow  bool
+	IsMagicFocus bool
+	IsRecognized bool
+	OnEquip      bool
+	Focused      bool
 }
 
 type Character struct {
-	ID           string `json:"Id"`
-	Name         string `json:"name"`
-	UserRace     string `json:"UserRace"`
-	Speed        int    `json:"Speed"`
-	EyeEnabled   bool   `json:"EyeEnabled"`
-	SeeInTheDark bool   `json:"SeeInTheDark"`
+	ID           string
+	Name         string
+	UserRace     string
+	Speed        int
+	EyeEnabled   bool
+	SeeInTheDark bool
 	Money
-	HitPoints            int          `json:"HitPoints"`
-	CurrentHitPoints     int          `json:"CurrentHitPoints"`
-	TempHitPoints        int          `json:"TempHitPoints"`
-	TempCurrentHitPoints int          `json:"TempCurrentHitPoints"`
-	Alignment            int          `json:"Alignment"`
-	HitDice              int          `json:"HitDice"`
-	HitDiceCount         int          `json:"HitDiceCount"`
-	SizeIndex            int          `json:"SizeIndex"`
-	TagString            *string      `json:"TagString"`
-	Languages            string       `json:"Languages"`
-	Multiplier           float64      `json:"Multiplier"`
-	Inspiration          int          `json:"Inspiration"`
-	Armor                int          `json:"Armor"`
-	IniBonus             int          `json:"IniBonus"`
-	IsPlaying            bool         `json:"IsPlaying"`
-	Note                 string       `json:"Note"`
-	Spells               []SimpleItem `json:"Spells"` // Можно уточнить, если известен формат заклинаний
+	HitPoints            int
+	CurrentHitPoints     int
+	TempHitPoints        int
+	TempCurrentHitPoints int
+	Alignment            int
+	HitDice              int
+	HitDiceCount         int
+	SizeIndex            int
+	TagString            *string
+	Languages            string
+	Multiplier           float64
+	Inspiration          int
+	Armor                int
+	IniBonus             int
+	IsPlaying            bool
+	Note                 string
+	Spells               []Spell
 	Inventory            []CharacterInventory
-	Parameters           []Parameter    `json:"Parameters"`
-	Classes              []Class        `json:"Classes"`
-	DamageResist         string         `json:"DamageResist"`
-	DamageImmun          string         `json:"DamageImmun"`
-	DamageVulner         string         `json:"DamageVulner"`
-	CustomStatuses       []CustomStatus `json:"CustomStatuses"`
+	Parameters           []Parameter
+	Classes              []Class
+	DamageResist         string
+	DamageImmun          string
+	DamageVulner         string
+	CustomStatuses       []CustomStatus
 }
 
 func (c Character) GetID() string {
@@ -62,29 +62,30 @@ func (c Character) GetID() string {
 }
 
 type Money struct {
-	Gold   int `json:"Gold"`
-	Silver int `json:"Silver"`
-	Copper int `json:"Copper"`
+	Gold   int
+	Silver int
+	Copper int
 }
+
 type Parameter struct {
-	Name          string    `json:"Name"`
-	Value         int       `json:"Value"`
-	UserSpasValue int       `json:"UserSpasValue"`
-	Proficiency   bool      `json:"Proficiency"`
-	Abilities     []Ability `json:"Abilities"`
+	Name          string
+	Value         int
+	UserSpasValue int
+	Proficiency   bool
+	Abilities     []Ability
 }
 
 type Ability struct {
-	Name        string `json:"Name,omitempty"`
-	UserValue   int    `json:"UserValue"`
-	MinValue    int    `json:"MinValue"`
-	Proficiency bool   `json:"Proficiency"`
+	Name        string
+	UserValue   int
+	MinValue    int
+	Proficiency bool
 }
 
 type Class struct {
-	ID         string      `json:"Id"`
-	Level      int         `json:"Level"`
-	SpellCells []SpellCell `json:"SpellCells"`
+	ID         string
+	Level      int
+	SpellCells []SpellCell
 }
 
 func (c Class) GetID() string {
@@ -92,20 +93,20 @@ func (c Class) GetID() string {
 }
 
 type SpellCell struct {
-	Level int `json:"Level"`
-	Left  int `json:"Left"`
-	Max   int `json:"Max"`
+	Level int
+	Left  int
+	Max   int
 }
 
 type CustomStatus struct {
-	ID                    string        `json:"Id"`
-	Name                  string        `json:"Name"`
-	IsHided               bool          `json:"IsHided,omitempty"`
-	InnerStatusCollection []interface{} `json:"InnerStatusCollection"`
-	SelectedModes         []StatusMode  `json:"SelectedModes"`
-	Description           string        `json:"Description"`
-	TokenPicPath          string        `json:"TokenPicPath"`
-	IconPath              string        `json:"IconPath"`
+	ID                    string
+	Name                  string
+	IsHided               bool
+	InnerStatusCollection []interface{}
+	SelectedModes         []StatusMode
+	Description           string
+	TokenPicPath          string
+	IconPath              string
 }
 
 func (c CustomStatus) GetID() string {
@@ -113,10 +114,16 @@ func (c CustomStatus) GetID() string {
 }
 
 type StatusMode struct {
-	Name        string  `json:"Name"`
-	Mode        int     `json:"Mode"`
-	RunTimeType int     `json:"RunTimeType"`
-	Value       float64 `json:"Value,omitempty"`
-	Formula     string  `json:"Formula,omitempty"`
-	Ability     string  `json:"Ability,omitempty"`
+	Name        string
+	Mode        int
+	RunTimeType int
+	Value       float64
+	Formula     string
+	Ability     string
+}
+
+type Spell struct {
+	Id      string
+	Name    string
+	Ability string
 }

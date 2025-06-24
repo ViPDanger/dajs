@@ -8,6 +8,7 @@ import (
 type UseCase[T entity.Identifiable] interface {
 	New(item *T) error
 	GetByID(id string) (*T, error)
+	GetArray(ids []string) ([]T, error)
 	GetAll() ([]T, error)
 	Set(item *T) error
 	Delete(id string) error
@@ -33,6 +34,10 @@ func (uc *defaultUseCase[T]) Set(object *T) error {
 }
 func (uc *defaultUseCase[T]) GetByID(id string) (*T, error) {
 	return uc.Repo.GetByID(id)
+}
+
+func (uc *defaultUseCase[T]) GetArray(ids []string) ([]T, error) {
+	return uc.Repo.GetArray(ids)
 }
 func (uc *defaultUseCase[T]) GetAll() ([]T, error) {
 	return uc.Repo.GetAll()

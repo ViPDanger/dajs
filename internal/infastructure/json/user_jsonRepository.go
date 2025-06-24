@@ -17,9 +17,6 @@ func NewUserRepository(filepath string) (repository.Repository[entity.User], err
 	if err != nil {
 		return nil, err
 	}
-	defaultRepository.pathFunc = func(User *entity.User) string {
-		return defaultRepository.fileDirectory + User.Name + defaultFileType
-	}
 	r.defaultJSONRepository = *defaultRepository
 	return &r, nil
 }

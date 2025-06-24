@@ -6,9 +6,9 @@ import (
 )
 
 type itemUseCase struct {
-	ArmorRepo repository.Repository[entity.Armor]
+	UseCase[entity.Item]
 }
 
-func NewItemUseCase(repository repository.Repository[entity.Item]) UseCase[entity.Item] {
-	return NewDefaultUsecase(repository)
+func NewItemUseCase(Repository repository.Repository[entity.Item]) UseCase[entity.Item] {
+	return &itemUseCase{UseCase: NewDefaultUsecase(Repository)}
 }

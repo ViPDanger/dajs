@@ -60,18 +60,9 @@ func main() {
 		"/protected/character/set",
 		"/protected/character/delete",
 	)
-	fmt.Println(itemFetcher.Get("1"))
-	fmt.Println(characterFetcher.Get("Грим Жаропив"))
 
-	fmt.Println(client.NewGlossary(entity.Glossary{
-		ID:   "01GLOSS",
-		Text: "TEXTGLOSSARY",
-	}))
-	fmt.Println(client.GetGlossary("01GLOSS"))
-	fmt.Println(client.SetGlossary(entity.Glossary{
-		ID:   "01GLOSS",
-		Text: "NOTEXT",
-	}))
-
-	fmt.Println(client)
+	_, _ = itemFetcher.New(entity.Weapon{SimpleItem: entity.SimpleItem{Id: "newitem1", Name: "WOWSWORD!", Tags: []string{"Воинское рукопашное оружие", "Оружие", "Обычный"}}})
+	//fmt.Println(item, err)
+	CHARACTER, ERR := characterFetcher.All()
+	fmt.Println(CHARACTER[0].Inventory, ERR)
 }

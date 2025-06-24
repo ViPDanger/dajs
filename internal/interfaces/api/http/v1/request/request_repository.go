@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-type HttpRepository struct {
+type RequestRepository struct {
 	http.Client
 	Log          logger.Ilogger
 	Host         string
@@ -14,8 +14,8 @@ type HttpRepository struct {
 	refreshToken entity.RefreshToken
 }
 
-func NewHttpRepository(logger logger.Ilogger, host string) *HttpRepository {
-	return &HttpRepository{
+func NewHttpRepository(logger logger.Ilogger, host string) *RequestRepository {
+	return &RequestRepository{
 		Log:  logger,
 		Host: host,
 	}
