@@ -119,6 +119,41 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	mapRouter.DELETE("/delete", mapHandler.Delete)
 	mapRouter.PUT("/set", mapHandler.Set)
 
+	//	STATUS HANDLER
+	statusRepository, err := jsonRepository.NewStatusRepository("../../internal/infastructure/files/Status/")
+	if err != nil {
+		_ = log.Logln(logger.Error, err)
+		panic(err.Error())
+	}
+	statusHandler := handler.NewDefaultHandler(
+		usecase.NewStatusUseCase(statusRepository),
+		mapper.ToStatusEntity,
+		mapper.ToStatusDTO,
+	)
+	statusRouter := protectedRouter.Group("/status")
+	statusRouter.GET("/get", statusHandler.Get)
+	statusRouter.GET("/", statusHandler.GetAll)
+	statusRouter.POST("/new", statusHandler.New)
+	statusRouter.DELETE("/delete", statusHandler.Delete)
+	statusRouter.PUT("/set", statusHandler.Set)
+
+	//	ABILITY HANDLER
+	abilityRepository, err := jsonRepository.NewAbilityRepository("../../internal/infastructure/files/Ability/")
+	if err != nil {
+		_ = log.Logln(logger.Error, err)
+		panic(err.Error())
+	}
+	abilityHandler := handler.NewDefaultHandler(
+		usecase.NewAbilityUseCase(abilityRepository),
+		mapper.ToAbilityEntity,
+		mapper.ToAbilityDTO,
+	)
+	abilityRouter := protectedRouter.Group("/Ability")
+	abilityRouter.GET("/get", abilityHandler.Get)
+	abilityRouter.GET("/", abilityHandler.GetAll)
+	abilityRouter.POST("/new", abilityHandler.New)
+	abilityRouter.DELETE("/delete", abilityHandler.Delete)
+	abilityRouter.PUT("/set", abilityHandler.Set)
 	// GRACEFULL SHUTDOWN CTX---------
 	ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
 	go func() {

@@ -17,7 +17,7 @@ func ToCharacterEntity(dto jsonDTO.CharacterDTO) entity.Character {
 		HitPoints:        dto.HitPoints,
 		CurrentHitPoints: dto.CurrentHitPoints,
 		Armor:            dto.Armor,
-		CustomStatuses:   ToCustomStatusEntityList(dto.CustomStatuses),
+		Statuses:         ToCustomStatusEntityList(dto.CustomStatuses),
 	}
 }
 
@@ -32,7 +32,7 @@ func ToCharacterDTO(entity entity.Character) jsonDTO.CharacterDTO {
 		HitPoints:        entity.HitPoints,
 		CurrentHitPoints: entity.CurrentHitPoints,
 		Armor:            entity.Armor,
-		CustomStatuses:   ToCustomStatusDTOList(entity.CustomStatuses),
+		CustomStatuses:   ToCustomStatusDTOList(entity.Statuses),
 	}
 }
 
@@ -141,42 +141,6 @@ func ToInventoryEntity(dto jsonDTO.InventoryItemDTO) entity.CharacterInventory {
 	}
 }
 
-// Ability -> AbilityDTO
-func ToAbilityDTO(ability entity.Ability) jsonDTO.AbilityDTO {
-	return jsonDTO.AbilityDTO{
-		Name:        ability.Name,
-		UserValue:   ability.UserValue,
-		MinValue:    ability.MinValue,
-		Proficiency: ability.Proficiency,
-	}
-}
-
-func ToAbilityEntity(abilityDTO jsonDTO.AbilityDTO) entity.Ability {
-	return entity.Ability{
-		Name:        abilityDTO.Name,
-		UserValue:   abilityDTO.UserValue,
-		MinValue:    abilityDTO.MinValue,
-		Proficiency: abilityDTO.Proficiency,
-	}
-}
-
-// CustomStatus -> CustomStatusDTO
-func ToCustomStatusDTO(entity entity.CustomStatus) jsonDTO.CustomStatusDTO {
-	return jsonDTO.CustomStatusDTO{
-		Description: entity.Description,
-		Id:          entity.ID,
-		Name:        entity.Name, // в dto поле называется "mame" — вероятно, опечатка
-	}
-}
-
-func ToCustomStatusEntity(dto jsonDTO.CustomStatusDTO) entity.CustomStatus {
-	return entity.CustomStatus{
-		Description: dto.Description,
-		ID:          dto.Id,
-		Name:        dto.Name,
-	}
-}
-
 // []InventoryItem -> []InventoryItemDTO
 func ToInventoryDTOList(entitys []entity.CharacterInventory) []jsonDTO.InventoryItemDTO {
 	result := make([]jsonDTO.InventoryItemDTO, len(entitys))
@@ -225,18 +189,18 @@ func ToCharacterItemDTO(item entity.CharacterItem) jsonDTO.CharacterItemDTO {
 }
 
 // []CustomStatus -> []CustomStatusDTO
-func ToCustomStatusDTOList(entitys []entity.CustomStatus) []jsonDTO.CustomStatusDTO {
-	result := make([]jsonDTO.CustomStatusDTO, len(entitys))
+func ToCustomStatusDTOList(entitys []entity.Status) []jsonDTO.StatusDTO {
+	result := make([]jsonDTO.StatusDTO, len(entitys))
 	for i, status := range entitys {
-		result[i] = ToCustomStatusDTO(status)
+		result[i] = ToStatusDTO(status)
 	}
 	return result
 }
 
-func ToCustomStatusEntityList(dtos []jsonDTO.CustomStatusDTO) []entity.CustomStatus {
-	result := make([]entity.CustomStatus, len(dtos))
+func ToCustomStatusEntityList(dtos []jsonDTO.StatusDTO) []entity.Status {
+	result := make([]entity.Status, len(dtos))
 	for i, dto := range dtos {
-		result[i] = ToCustomStatusEntity(dto)
+		result[i] = ToStatusEntity(dto)
 	}
 	return result
 }

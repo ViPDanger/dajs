@@ -5,10 +5,10 @@ import (
 	"DAJ/internal/domain/repository"
 )
 
-type MapUsecase struct {
+type mapUsecase struct {
 	UseCase[entity.Map]
 }
 
 func NewMapUseCase(Repository repository.Repository[entity.Map]) UseCase[entity.Map] {
-	return &MapUsecase{UseCase: NewDefaultUsecase(Repository)}
+	return &mapUsecase{UseCase: NewDefaultUsecase(Repository)}
 }

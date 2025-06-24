@@ -54,7 +54,7 @@ type Character struct {
 	DamageResist         string
 	DamageImmun          string
 	DamageVulner         string
-	CustomStatuses       []CustomStatus
+	Statuses             []Status
 }
 
 func (c Character) GetID() string {
@@ -75,13 +75,6 @@ type Parameter struct {
 	Abilities     []Ability
 }
 
-type Ability struct {
-	Name        string
-	UserValue   int
-	MinValue    int
-	Proficiency bool
-}
-
 type Class struct {
 	ID         string
 	Level      int
@@ -96,30 +89,6 @@ type SpellCell struct {
 	Level int
 	Left  int
 	Max   int
-}
-
-type CustomStatus struct {
-	ID                    string
-	Name                  string
-	IsHided               bool
-	InnerStatusCollection []interface{}
-	SelectedModes         []StatusMode
-	Description           string
-	TokenPicPath          string
-	IconPath              string
-}
-
-func (c CustomStatus) GetID() string {
-	return c.ID
-}
-
-type StatusMode struct {
-	Name        string
-	Mode        int
-	RunTimeType int
-	Value       float64
-	Formula     string
-	Ability     string
 }
 
 type Spell struct {

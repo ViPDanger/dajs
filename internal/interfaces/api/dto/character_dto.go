@@ -10,7 +10,7 @@ type CharacterDTO struct {
 	HitPoints        int                `json:"hitPoints"`
 	CurrentHitPoints int                `json:"currentHitPoints"`
 	Armor            int                `json:"armor"`
-	CustomStatuses   []CustomStatusDTO  `json:"customStatuses"`
+	CustomStatuses   []StatusDTO        `json:"customStatuses"`
 }
 
 type ParameterDTO struct {
@@ -50,17 +50,4 @@ type InventoryItemDTO struct {
 	CapacityWeight float64            `json:"capacityWeight"`
 	IsBlocked      bool               `json:"isBlocked"`
 	Items          []CharacterItemDTO `json:"items"`
-}
-
-type AbilityDTO struct {
-	Name        string `json:"Name,omitempty"`
-	UserValue   int    `json:"userValue"`
-	MinValue    int    `json:"minValue"`
-	Proficiency bool   `json:"proficiency"`
-}
-
-type CustomStatusDTO struct {
-	Description string `json:"description"`
-	Id          string `json:"id"`
-	Name        string `json:"mame"`
 }

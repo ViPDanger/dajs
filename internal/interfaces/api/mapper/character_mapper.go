@@ -17,7 +17,7 @@ func ToCharacterEntity(dto dto.CharacterDTO) entity.Character {
 		HitPoints:        dto.HitPoints,
 		CurrentHitPoints: dto.CurrentHitPoints,
 		Armor:            dto.Armor,
-		CustomStatuses:   ToCustomStatusEntityList(dto.CustomStatuses),
+		Statuses:         ToStatusEntityList(dto.CustomStatuses),
 	}
 }
 
@@ -32,7 +32,7 @@ func ToCharacterDTO(entity entity.Character) dto.CharacterDTO {
 		HitPoints:        entity.HitPoints,
 		CurrentHitPoints: entity.CurrentHitPoints,
 		Armor:            entity.Armor,
-		CustomStatuses:   ToCustomStatusDTOList(entity.CustomStatuses),
+		CustomStatuses:   ToStatusDTOList(entity.Statuses),
 	}
 }
 
@@ -141,42 +141,6 @@ func ToInventoryEntity(dto dto.InventoryItemDTO) entity.CharacterInventory {
 	}
 }
 
-// Ability -> AbilityDTO
-func ToAbilityDTO(ability entity.Ability) dto.AbilityDTO {
-	return dto.AbilityDTO{
-		Name:        ability.Name,
-		UserValue:   ability.UserValue,
-		MinValue:    ability.MinValue,
-		Proficiency: ability.Proficiency,
-	}
-}
-
-func ToAbilityEntity(abilityDTO dto.AbilityDTO) entity.Ability {
-	return entity.Ability{
-		Name:        abilityDTO.Name,
-		UserValue:   abilityDTO.UserValue,
-		MinValue:    abilityDTO.MinValue,
-		Proficiency: abilityDTO.Proficiency,
-	}
-}
-
-// CustomStatus -> CustomStatusDTO
-func ToCustomStatusDTO(entity entity.CustomStatus) dto.CustomStatusDTO {
-	return dto.CustomStatusDTO{
-		Description: entity.Description,
-		Id:          entity.ID,
-		Name:        entity.Name, // в dto поле называется "mame" — вероятно, опечатка
-	}
-}
-
-func ToCustomStatusEntity(dto dto.CustomStatusDTO) entity.CustomStatus {
-	return entity.CustomStatus{
-		Description: dto.Description,
-		ID:          dto.Id,
-		Name:        dto.Name,
-	}
-}
-
 // []InventoryItem -> []InventoryItemDTO
 func ToInventoryDTOList(entitys []entity.CharacterInventory) []dto.InventoryItemDTO {
 	result := make([]dto.InventoryItemDTO, len(entitys))
@@ -222,21 +186,4 @@ func ToCharacterItemDTO(item entity.CharacterItem) dto.CharacterItemDTO {
 		OnEquip:      item.OnEquip,
 		Focused:      item.Focused,
 	}
-}
-
-// []CustomStatus -> []CustomStatusDTO
-func ToCustomStatusDTOList(entitys []entity.CustomStatus) []dto.CustomStatusDTO {
-	result := make([]dto.CustomStatusDTO, len(entitys))
-	for i, status := range entitys {
-		result[i] = ToCustomStatusDTO(status)
-	}
-	return result
-}
-
-func ToCustomStatusEntityList(dtos []dto.CustomStatusDTO) []entity.CustomStatus {
-	result := make([]entity.CustomStatus, len(dtos))
-	for i, dto := range dtos {
-		result[i] = ToCustomStatusEntity(dto)
-	}
-	return result
 }
