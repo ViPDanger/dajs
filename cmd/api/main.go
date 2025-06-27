@@ -22,9 +22,10 @@ func main() {
 	log.Logln(logger.Debug, "Starting the app...")
 	log.Logln(logger.Release, "Starting the app...")
 
-	appConf := app.AppConfig{
-		Addres: cfg.String("server.ip", ""),
-		Port:   cfg.String("server.port", ""),
+	appConf := app.APIConfig{
+		Addres:       cfg.String("server.ip", "localhost"),
+		Port:         cfg.String("server.port", "8080"),
+		HelpmatePath: cfg.String("helpmate.path", "../../"),
 	}
 	log.Logln(logger.Debug, appConf)
 	app.Run(log, appConf)

@@ -5,37 +5,41 @@ import (
 	"DAJ/internal/domain/entity"
 	"DAJ/internal/interfaces/api/http/v1/request"
 	"DAJ/internal/interfaces/api/mapper"
+	"DAJ/pkg/config"
 	"DAJ/pkg/logger"
 	"fmt"
 	"time"
 )
 
 const (
+	cfgPath   = "../api/config.ini"
 	Login     = "newLogin"
 	Password  = "newPassword"
 	logPath   = "./logs/log_"
 	logFormat = "txt"
-
-	host = "http://localhost:8080"
+	host      = "http://localhost:8080"
 )
 
 func main() {
+	cfg := config.NewConfig(cfgPath)
+	logPath := cfg.String("log.path", "log_")
 	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
 	if err != nil {
-		_ = log.Logln(logger.Error, err)
+		fmt.Println(err)
 		return
 	}
 	//
-	appConf := app.AppConfig{
-		Addres: "localhost",
-		Port:   "8080",
+	appConf := app.APIConfig{
+		Addres:       cfg.String("server.ip", "localhost"),
+		Port:         cfg.String("server.port", "8080"),
+		HelpmatePath: cfg.String("helpmate.path", "../../"),
 	}
 	//
 	go func() {
 		app.Run(log, appConf)
 	}()
 
-	client, err := app.RunWorker(log, Login, Password, host)
+	client, err := app.RunWorker(log, Login, Password, "http://"+appConf.Addres+":"+appConf.Port)
 
 	if err != nil {
 		_ = log.Logln(logger.Error, err)

@@ -1,5 +1,6 @@
 [31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
-[31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
+[31m[ERROR]	lstat ../../internal/infastructure/files//Ability: no such file or directory[0m
+tion refused[0m
 [31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
 [31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
 [31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m

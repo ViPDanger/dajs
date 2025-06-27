@@ -1,7 +1,7 @@
 package app
 
 import (
-	jsonRepository "DAJ/internal/infastructure/json"
+	helpmateRepository "DAJ/internal/infastructure/json"
 	"DAJ/internal/interfaces/api/http/v1/handler"
 	"DAJ/internal/interfaces/api/mapper"
 	"DAJ/internal/usecase"
@@ -15,12 +15,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AppConfig struct {
-	Addres string
-	Port   string
+type APIConfig struct {
+	Addres       string
+	Port         string
+	HelpmatePath string
 }
 
-func Run(log logger.Ilogger, conf AppConfig) {
+func Run(log logger.Ilogger, conf APIConfig) {
 
 	// SETUP GIN engine --------------
 	gin.SetMode(gin.ReleaseMode)
@@ -34,7 +35,7 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	})
 	//		AUTH HANDLERS
 	auth := r.Group("/auth")
-	userRepository, err := jsonRepository.NewUserRepository("../../internal/infastructure/files/Users/")
+	userRepository, err := helpmateRepository.NewUserRepository(conf.HelpmatePath + "/Users")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -50,7 +51,7 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	})
 
 	//		ITEM HANDLER
-	itemRepository, err := jsonRepository.NewItemRepository("../../internal/infastructure/files/Items/")
+	itemRepository, err := helpmateRepository.NewItemRepository(conf.HelpmatePath + "/Items")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -67,7 +68,7 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	itemRouter.DELETE("/delete", itemHandler.Delete)
 	itemRouter.PUT("/set", itemHandler.Set)
 	//		CHARACTER HANDLER
-	characterRepository, err := jsonRepository.NewCharacterRepository("../../internal/infastructure/files/Characters/")
+	characterRepository, err := helpmateRepository.NewCharacterRepository(conf.HelpmatePath + "/Characters")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -83,7 +84,7 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	characterRouter.DELETE("/delete", characterHandler.Delete)
 	characterRouter.PUT("/set", characterHandler.Set)
 	//		GlOSSARY HANDLER
-	glossaryRepository, err := jsonRepository.NewGlossaryRepository("../../internal/infastructure/files/Glossarys/")
+	glossaryRepository, err := helpmateRepository.NewGlossaryRepository(conf.HelpmatePath + "/Glossarys")
 	if err != nil {
 		_ = log.Logln(logger.Error, err)
 		panic(err.Error())
@@ -102,7 +103,7 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	glossaryRouter.PUT("/set", glossaryHandler.Set)
 	//		MAP HANDLER
 
-	mapRepository, err := jsonRepository.NewMapRepository("../../internal/infastructure/files/Maps/")
+	mapRepository, err := helpmateRepository.NewMapRepository(conf.HelpmatePath + "/Maps")
 	if err != nil {
 		_ = log.Logln(logger.Error, err)
 		panic(err.Error())
@@ -120,7 +121,7 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	mapRouter.PUT("/set", mapHandler.Set)
 
 	//	STATUS HANDLER
-	statusRepository, err := jsonRepository.NewStatusRepository("../../internal/infastructure/files/Status/")
+	statusRepository, err := helpmateRepository.NewStatusRepository(conf.HelpmatePath + "/Status")
 	if err != nil {
 		_ = log.Logln(logger.Error, err)
 		panic(err.Error())
@@ -138,7 +139,7 @@ func Run(log logger.Ilogger, conf AppConfig) {
 	statusRouter.PUT("/set", statusHandler.Set)
 
 	//	ABILITY HANDLER
-	abilityRepository, err := jsonRepository.NewAbilityRepository("../../internal/infastructure/files/Ability/")
+	abilityRepository, err := helpmateRepository.NewAbilityRepository(conf.HelpmatePath + "/Abilities")
 	if err != nil {
 		_ = log.Logln(logger.Error, err)
 		panic(err.Error())
