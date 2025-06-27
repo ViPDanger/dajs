@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	retry     = 10
-	sleepTime = 500 * time.Millisecond
+	retry       = 10
+	sleepTime   = 500 * time.Millisecond
+	timeoutTime = 3 * time.Second
 )
 
 func RunWorker(log logger.Ilogger, login string, password string, baseURL string) (*http.RequestRepository, error) {
@@ -16,6 +17,7 @@ func RunWorker(log logger.Ilogger, login string, password string, baseURL string
 	var HttpRepository *http.RequestRepository
 	for i := 0; i < retry; i++ {
 		HttpRepository = http.NewHttpRepository(log, baseURL)
+		HttpRepository.Timeout = timeoutTime
 		if err = HttpRepository.Login(login, password); err != nil {
 			_ = HttpRepository.Register(login, password)
 		}

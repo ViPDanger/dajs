@@ -12,17 +12,15 @@ import (
 )
 
 const (
-	cfgPath   = "../api/config.ini"
-	Login     = "newLogin"
-	Password  = "newPassword"
-	logPath   = "./logs/log_"
-	logFormat = "txt"
-	host      = "http://localhost:8080"
+	cfgPath  = "../api/config.ini"
+	Login    = "newLogin"
+	Password = "newPassword"
 )
 
 func main() {
 	cfg := config.NewConfig(cfgPath)
-	logPath := cfg.String("log.path", "log_")
+	logPath := cfg.String("log.path", "./log_")
+	logFormat := cfg.String("log.format", "txt")
 	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
 	if err != nil {
 		fmt.Println(err)

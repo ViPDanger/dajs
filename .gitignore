@@ -1,3 +1,4 @@
-cmd/api/logs
-cmd/worker/logs
+cmd/api/logs/*.txt
+cmd/worker/logs/*.txt
 internal/infastructure/files
+cmd/api/*.ini

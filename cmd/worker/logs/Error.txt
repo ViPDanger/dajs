@@ -1,23 +1,18 @@
-[31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
-[31m[ERROR]	lstat ../../internal/infastructure/files//Ability: no such file or directory[0m
-tion refused[0m
-[31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
-[31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
-[31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
-[31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
-[31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
-[31m[ERROR]	Post "http://localhost:8080/auth/login": dial tcp 127.0.0.1:8080: connect: connection refused[0m
-[31m[ERROR]	invalid character '\u0089' looking for beginning of value[0m
-istr/source/dangeonsandjson/internal/infastructure/json/default_jsonRepository.go:43 +0x614
-DAJ/internal/infastructure/json.NewMapRepository({0xbeca18, 0x28})
-	/home/vipdanger/Distr/source/dangeonsandjson/internal/infastructure/json/map_jsonRepository.go:17 +0x128
-DAJ/internal/app.Run({0xc4dc78, 0xc0001b0b88}, {{0xbd8576, 0x9}, {0xbcd81b, 0x4}})
-	/home/vipdanger/Distr/source/dangeonsandjson/internal/app/api.go:105 +0x1979
-main.main.func1()
-	/home/vipdanger/Distr/source/dangeonsandjson/cmd/worker/main.go:35 +0x53
-created by main.main in goroutine 1
-	/home/vipdanger/Distr/source/dangeonsandjson/cmd/worker/main.go:34 +0x373
-invalid character '\u0089' looking for beginning of value[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	401 Unauthorized[0m
+r.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+[31m[ERROR]	Post "http://vipdanger.keenetic.pro:8080/auth/login": context deadline exceeded (Client.Timeout exceeded while awaiting headers)[0m
+aders)[0m
+having[0m
+or beginning of value[0m
 OR]	401 Unauthorized[0m
 [31m[ERROR]	401 Unauthorized[0m
 [31m[ERROR]	401 Unauthorized[0m
