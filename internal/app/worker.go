@@ -2,7 +2,7 @@ package app
 
 import (
 	http "DAJ/internal/interfaces/api/http/v1/request"
-	"DAJ/pkg/logger"
+	logger "DAJ/pkg/logger/v3"
 	"time"
 )
 
@@ -24,7 +24,7 @@ func RunWorker(log logger.Ilogger, login string, password string, baseURL string
 		if err == nil {
 			break
 		} else {
-			_ = log.Logln(logger.Error, err)
+			log.Logln(logger.Error, err)
 		}
 
 		time.Sleep(sleepTime)

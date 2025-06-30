@@ -3,30 +3,31 @@ package main
 import (
 	"DAJ/internal/app"
 	"DAJ/pkg/config"
-	"DAJ/pkg/logger"
-	"time"
+	logV2 "DAJ/pkg/logger/v2"
+	logger "DAJ/pkg/logger/v3"
 )
 
 const cfgPath = "./config.ini"
 
 func main() {
+
 	//
 	cfg := config.NewConfig(cfgPath)
-	logPath := cfg.String("log.path", "log_")
-	logFormat := cfg.String("log.Format", "txt")
-	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
-	if err != nil {
-		panic(err)
-	}
+	/*
+		logPath := cfg.String("log.path", "log_")
+		logFormat := cfg.String("log.Format", "txt")
+		logPath + time.Now().Format("2006-01-02") + "." + logFormat
+	*/
+	log := logger.Setup()
 
-	log.Logln(logger.Debug, "Starting the app...")
-	log.Logln(logger.Release, "Starting the app...")
+	log.Logln(logV2.Debug, "Starting the app...")
+	log.Logln(logV2.Release, "Starting the app...")
 
 	appConf := app.APIConfig{
 		Addres:       cfg.String("server.ip", "localhost"),
 		Port:         cfg.String("server.port", "8080"),
 		HelpmatePath: cfg.String("helpmate.path", "../../"),
 	}
-	log.Logln(logger.Debug, appConf)
+	log.Logln(logV2.Debug, appConf)
 	app.Run(log, appConf)
 }

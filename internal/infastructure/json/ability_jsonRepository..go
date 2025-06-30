@@ -21,5 +21,5 @@ func NewAbilityRepository(filepath string) (repository.Repository[entity.Ability
 	return &r, nil
 }
 func (r *abilityJSONRepository) AbilityPathFunc(u *entity.Ability) string {
-	return r.fileDirectory + u.GetID() + defaultFileType
+	return r.fileDirectory + "/" + u.GetID() + defaultFileType
 }

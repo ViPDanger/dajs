@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 )
 
 var defaultFileType = ".json"
@@ -13,7 +14,7 @@ var defaultFileType = ".json"
 type defaultJSONRepository[T entity.Identifiable, Tdto any] struct {
 	toDTO         func(T) Tdto
 	ToEntity      func(Tdto) T
-	filePaths     map[string]string
+	filePaths     *sync.Map
 	pathFunc      func(*T) string
 	fileDirectory string
 	fileType      string
@@ -28,6 +29,7 @@ func NewJSONRepository[T entity.Identifiable, Tdto any](filepath string, toDTO f
 	repository := defaultJSONRepository[T, Tdto]{
 		fileDirectory: filepath,
 		fileType:      defaultFileType,
+		filePaths:     &sync.Map{},
 		file:          db,
 		toDTO:         toDTO,
 		ToEntity:      ToEntity,
@@ -36,14 +38,13 @@ func NewJSONRepository[T entity.Identifiable, Tdto any](filepath string, toDTO f
 	if err != nil {
 		return nil, err
 	}
-	repository.filePaths = make(map[string]string, len(mass))
 	for i := range mass {
 		dto, err := repository.file.Compile(mass[i])
 		if err != nil {
 			return nil, err
 		}
 		object := ToEntity(*dto)
-		repository.filePaths[object.GetID()] = mass[i]
+		repository.filePaths.Store(object.GetID(), mass[i])
 	}
 	repository.pathFunc = pathFunc
 	return &repository, nil
@@ -72,7 +73,8 @@ func (r *defaultJSONRepository[T, Tdto]) Insert(object *T) error {
 		return errors.New("no object in Repository.Insert")
 	}
 	path := r.pathFunc(object)
-	r.filePaths[(*object).GetID()] = path
+
+	r.filePaths.Store((*object).GetID(), path)
 	dto := r.toDTO(*object)
 	return r.file.Add(r.pathFunc(object), &dto)
 }
@@ -84,7 +86,7 @@ func (r *defaultJSONRepository[T, Tdto]) GetByID(id string) (ret *T, err error) 
 
 }
 func (r *defaultJSONRepository[T, Tdto]) GetAll() (ret []T, err error) {
-	dtos, err := r.file.CompileDir(r.fileDirectory)
+	dtos, err := r.file.СompileDir(r.fileDirectory)
 	if err != nil {
 		return
 	}
@@ -127,8 +129,8 @@ func (r *defaultJSONRepository[T, Tdto]) getExistingFilePaths() ([]string, error
 }
 
 func (r *defaultJSONRepository[T, Tdto]) setPath(id string) string {
-	if itemPath, exists := r.filePaths[id]; exists {
-		return itemPath
+	if itemPath, exists := r.filePaths.Load(id); exists {
+		return itemPath.(string)
 	}
-	return r.fileDirectory + id + r.fileType
+	return r.fileDirectory + "/" + id + r.fileType
 }

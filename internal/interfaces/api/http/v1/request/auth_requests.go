@@ -3,7 +3,7 @@ package request
 import (
 	"DAJ/internal/interfaces/api/dto"
 	"DAJ/internal/interfaces/api/mapper"
-	"DAJ/pkg/logger"
+	logger "DAJ/pkg/logger/v3"
 	"bytes"
 	"encoding/json"
 	"errors"
@@ -39,7 +39,8 @@ func (r *RequestRepository) Register(user, password string) error {
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return err
 	}
-	return r.Log.Logln(logger.Debug, data)
+	r.Log.Logln(logger.Debug, data)
+	return nil
 
 }
 
@@ -70,7 +71,7 @@ func (r *RequestRepository) Login(user, password string) error {
 	}
 	r.accessToken = mapper.ToAccessTokenEntity(tokensDTO.Access)
 	r.refreshToken = mapper.ToRefreshTokenEntity(tokensDTO.Refresh)
-	_ = r.Log.Logln(logger.Debug, "Успешная Авторизация. Access и Refresh токены сохранены.")
+	r.Log.Logln(logger.Debug, "Успешная Авторизация. Access и Refresh токены сохранены.")
 	return nil
 
 }
@@ -95,7 +96,7 @@ func (r *RequestRepository) RefreshAccessToken() error {
 	}
 
 	r.accessToken = mapper.ToAccessTokenEntity(accessTokenDTO)
-	_ = r.Log.Logln(logger.Debug, "Acces Token is refreshed")
+	r.Log.Logln(logger.Debug, "Acces Token is refreshed")
 	return nil
 }
 
@@ -108,7 +109,7 @@ func (r *RequestRepository) doProtected(req *http.Request) (*http.Response, erro
 	// Если access token истёк — пытаемся обновить
 	if resp.StatusCode == http.StatusUnauthorized {
 
-		_ = r.Log.Logln(logger.Debug, "Access token истёк. Обновляем...")
+		r.Log.Logln(logger.Debug, "Access token истёк. Обновляем...")
 		if err := r.RefreshAccessToken(); err != nil {
 			return nil, err
 		}

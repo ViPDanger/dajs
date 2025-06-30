@@ -22,5 +22,5 @@ func NewGlossaryRepository(filepath string) (repository.Repository[entity.Glossa
 	return &r, nil
 }
 func (r *glossaryJSONRepository) GlossaryPathFunc(u *entity.Glossary) string {
-	return r.fileDirectory + u.ID + defaultFileType
+	return r.fileDirectory + "/" + u.ID + defaultFileType
 }

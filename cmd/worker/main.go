@@ -4,43 +4,32 @@ import (
 	"DAJ/internal/app"
 	"DAJ/internal/domain/entity"
 	"DAJ/internal/interfaces/api/http/v1/request"
+
 	"DAJ/internal/interfaces/api/mapper"
 	"DAJ/pkg/config"
-	"DAJ/pkg/logger"
-	"fmt"
-	"time"
+	logger "DAJ/pkg/logger/v3"
 )
 
 const (
-	cfgPath  = "../api/config.ini"
+	cfgPath  = "./config.ini"
 	Login    = "newLogin"
 	Password = "newPassword"
 )
 
 func main() {
 	cfg := config.NewConfig(cfgPath)
-	logPath := cfg.String("log.path", "./log_")
-	logFormat := cfg.String("log.format", "txt")
-	log, err := logger.NewLog(logPath + time.Now().Format("2006-01-02") + "." + logFormat)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	//
-	appConf := app.APIConfig{
-		Addres:       cfg.String("server.ip", "localhost"),
-		Port:         cfg.String("server.port", "8080"),
-		HelpmatePath: cfg.String("helpmate.path", "../../"),
-	}
-	//
-	go func() {
-		app.Run(log, appConf)
-	}()
+	/*
+		logPath := cfg.String("log.path", "./log_")
+		logFormat := cfg.String("log.format", "txt")
+	*/
+	addres := cfg.String("server.ip", "127.0.0.1")
+	port := cfg.String("server.port", "80")
+	log := logger.Setup()
 
-	client, err := app.RunWorker(log, Login, Password, "http://"+appConf.Addres+":"+appConf.Port)
+	client, err := app.RunWorker(log, Login, Password, "http://"+addres+":"+port)
 
 	if err != nil {
-		_ = log.Logln(logger.Error, err)
+		log.Logln(logger.Error, err)
 		return
 	}
 	itemFetcher := request.NewDefaultFetcher(
@@ -65,6 +54,6 @@ func main() {
 
 	_, _ = itemFetcher.New(entity.Weapon{SimpleItem: entity.SimpleItem{Id: "newitem1", Name: "WOWSWORD!", Tags: []string{"Воинское рукопашное оружие", "Оружие", "Обычный"}}})
 	//fmt.Println(item, err)
-	CHARACTER, ERR := characterFetcher.All()
-	fmt.Println(CHARACTER[0].Inventory, ERR)
+	CHARACTER, ERR := characterFetcher.Get("Грим Жаропив")
+	log.Logln(CHARACTER.Inventory, ERR)
 }

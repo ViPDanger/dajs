@@ -2,7 +2,7 @@ package request
 
 import (
 	"DAJ/internal/domain/entity"
-	"DAJ/pkg/logger"
+	logger "DAJ/pkg/logger/v3"
 	"net/http"
 )
 

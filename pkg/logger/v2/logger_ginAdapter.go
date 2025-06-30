@@ -1,4 +1,4 @@
-package logger
+package v2
 
 import (
 	"fmt"
@@ -7,14 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GinLoggerAdapter struct {
+type ginLoggerAdapter struct {
 	Ilogger
 }
 
-func (a *GinLoggerAdapter) Midleware() gin.HandlerFunc {
+func NewGinLoggerAdapter(l Ilogger) ginLoggerAdapter {
+	return ginLoggerAdapter{Ilogger: l}
+}
+
+func (a *ginLoggerAdapter) Midleware() gin.HandlerFunc {
 	return a.HandlerFunc
 }
-func (a *GinLoggerAdapter) HandlerFunc(c *gin.Context) {
+func (a *ginLoggerAdapter) HandlerFunc(c *gin.Context) {
 	// Start timer
 	start := time.Now()
 	path := c.Request.URL.Path

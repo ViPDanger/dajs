@@ -21,5 +21,5 @@ func NewCharacterRepository(filepath string) (repository.Repository[entity.Chara
 	return &r, nil
 }
 func (r *characterJSONRepository) characterPathFunc(c *entity.Character) string {
-	return r.fileDirectory + c.Name + defaultFileType
+	return r.fileDirectory + "/" + c.Name + defaultFileType
 }

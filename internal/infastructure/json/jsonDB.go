@@ -8,19 +8,14 @@ import (
 	"path/filepath"
 	"reflect"
 	"regexp"
+	"sync"
 )
 
 type jsonDB[T any] struct {
+	mutex sync.RWMutex
 }
 
-func (f *jsonDB[T]) read(filepath string) ([]byte, error) {
-	data, err := os.ReadFile(filepath) // Замените на ваш путь
-	if err != nil {
-		return nil, err
-	}
-	re := regexp.MustCompile(`(?s)/\*.*?\*/`)
-	return re.ReplaceAll(data, []byte("")), nil
-}
+// Просмотреть файл
 func (f *jsonDB[T]) Compile(filepath string) (object *T, err error) {
 	object = new(T)
 	data, err := f.read(filepath)
@@ -31,6 +26,7 @@ func (f *jsonDB[T]) Compile(filepath string) (object *T, err error) {
 	return
 }
 
+// Просмотреть массив файлов
 func (f *jsonDB[T]) CompileArray(filepaths []string) (objects []T, err error) {
 	objects = make([]T, len(filepaths))
 	for i, filepath := range filepaths {
@@ -46,8 +42,10 @@ func (f *jsonDB[T]) CompileArray(filepaths []string) (objects []T, err error) {
 	return
 }
 
+// Изменить существующий файл
 func (f *jsonDB[T]) Patch(filename string, patch *T) error {
 	// Читаем оригинальный файл
+	f.mutex.RLock()
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		return err
@@ -57,11 +55,14 @@ func (f *jsonDB[T]) Patch(filename string, patch *T) error {
 	if err := json.Unmarshal(data, &original); err != nil {
 		return err
 	}
-
+	f.mutex.RUnlock()
+	f.mutex.Lock()
 	// Обновляем оригинальный объект
 	if err := applyPatch(&original, patch); err != nil {
+		f.mutex.Unlock()
 		return err
 	}
+	f.mutex.Unlock()
 	// Сохраняем обратно
 	updated, err := json.MarshalIndent(original, "", "  ")
 	if err != nil {
@@ -72,6 +73,8 @@ func (f *jsonDB[T]) Patch(filename string, patch *T) error {
 
 func (f *jsonDB[T]) Add(filename string, item *T) error {
 	// Проверяем отсутствие наличия файла
+	f.mutex.Lock()
+	defer f.mutex.Unlock()
 	if _, err := os.Stat(filename); err == nil {
 		return errors.New("file already exists")
 	}
@@ -84,8 +87,21 @@ func (f *jsonDB[T]) Add(filename string, item *T) error {
 	return os.WriteFile(filename, updated, 0644)
 }
 
+// read .json file
+func (f *jsonDB[T]) read(filepath string) ([]byte, error) {
+	f.mutex.RLock()
+	data, err := os.ReadFile(filepath)
+	if err != nil {
+		return nil, err
+	}
+	f.mutex.RUnlock()
+	re := regexp.MustCompile(`(?s)/\*.*?\*/`)
+	return re.ReplaceAll(data, []byte("")), nil
+}
+
 // applyPatch обновляет поля original значениями из patch, если они не default.
 func applyPatch[T any](original *T, patch *T) error {
+
 	return recursivePatch(reflect.ValueOf(original).Elem(), reflect.ValueOf(patch).Elem())
 }
 func recursivePatch(origVal, patchVal reflect.Value) error {
@@ -127,9 +143,11 @@ func recursivePatch(origVal, patchVal reflect.Value) error {
 	return nil
 }
 
-func (f *jsonDB[T]) CompileDir(dir string) ([]T, error) {
+// Просмотреть все обьекты в папке
+func (f *jsonDB[T]) СompileDir(dir string) ([]T, error) {
 	var result []T
-
+	f.mutex.RLock()
+	defer f.mutex.RUnlock()
 	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err // Пропустить с ошибкой
@@ -141,7 +159,7 @@ func (f *jsonDB[T]) CompileDir(dir string) ([]T, error) {
 		}
 
 		// Пропустить не-json файлы (можно адаптировать под нужный формат)
-		if filepath.Ext(path) != ".json" {
+		if filepath.Ext(path) != defaultFileType {
 			return nil
 		}
 
@@ -156,8 +174,11 @@ func (f *jsonDB[T]) CompileDir(dir string) ([]T, error) {
 }
 
 func (f *jsonDB[T]) Delete(filename string) error {
+	f.mutex.Lock()
 	if err := os.Remove(filename); err != nil {
+		f.mutex.Unlock()
 		return err
 	}
+	f.mutex.Unlock()
 	return nil
 }

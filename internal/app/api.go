@@ -5,7 +5,7 @@ import (
 	"DAJ/internal/interfaces/api/http/v1/handler"
 	"DAJ/internal/interfaces/api/mapper"
 	"DAJ/internal/usecase"
-	"DAJ/pkg/logger"
+	logger "DAJ/pkg/logger/v2"
 	"context"
 	"net/http"
 	"os"
@@ -27,7 +27,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 	// MIDLEWARE ---------------------
-	ginLogAdapter := logger.GinLoggerAdapter{Ilogger: log}
+	ginLogAdapter := logger.NewGinLoggerAdapter(log)
 	r.Use(ginLogAdapter.HandlerFunc)
 	// SETUP HANDLERS ----------------
 	r.GET("/", func(c *gin.Context) {
@@ -86,7 +86,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	//		GlOSSARY HANDLER
 	glossaryRepository, err := helpmateRepository.NewGlossaryRepository(conf.HelpmatePath + "/Glossarys")
 	if err != nil {
-		_ = log.Logln(logger.Error, err)
+		log.Logln(logger.Error, err)
 		panic(err.Error())
 	}
 
@@ -105,7 +105,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 
 	mapRepository, err := helpmateRepository.NewMapRepository(conf.HelpmatePath + "/Maps")
 	if err != nil {
-		_ = log.Logln(logger.Error, err)
+		log.Logln(logger.Error, err)
 		panic(err.Error())
 	}
 	mapHandler := handler.NewDefaultHandler(
@@ -123,7 +123,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	//	STATUS HANDLER
 	statusRepository, err := helpmateRepository.NewStatusRepository(conf.HelpmatePath + "/Status")
 	if err != nil {
-		_ = log.Logln(logger.Error, err)
+		log.Logln(logger.Error, err)
 		panic(err.Error())
 	}
 	statusHandler := handler.NewDefaultHandler(
@@ -141,7 +141,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	//	ABILITY HANDLER
 	abilityRepository, err := helpmateRepository.NewAbilityRepository(conf.HelpmatePath + "/Abilities")
 	if err != nil {
-		_ = log.Logln(logger.Error, err)
+		log.Logln(logger.Error, err)
 		panic(err.Error())
 	}
 	abilityHandler := handler.NewDefaultHandler(
@@ -161,5 +161,5 @@ func Run(log logger.Ilogger, conf APIConfig) {
 		_ = r.Run(conf.Addres + ":" + conf.Port)
 	}()
 	<-ctx.Done()
-	_ = log.Log(logger.Debug, "Server is closed")
+	log.Log(logger.Debug, "Server is closed")
 }

@@ -17,8 +17,13 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/cmd/worker/main.go"
+        }
+    ],
+        "compounds": [
+        {
+            "name": "Client + Server",
+            "configurations": ["Server", "Client"]
         },
+        ]
 
-
-    ]
 }
