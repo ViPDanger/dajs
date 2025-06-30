@@ -41,7 +41,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	}
 	userHandler := handler.UserHandler{UserUC: *usecase.NewUserUsecase(userRepository)}
 	auth.POST("/login", userHandler.Login)
-	auth.POST("/register", userHandler.Register)
+	auth.POST("/register", userHandler.Registration)
 	auth.POST("/refresh", userHandler.Refresh)
 
 	// 		PROTECTED HANDLERS
@@ -53,7 +53,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	//		ITEM HANDLER
 	itemRepository, err := helpmateRepository.NewItemRepository(conf.HelpmatePath + "/Items")
 	if err != nil {
-		panic(err.Error())
+		log.Fatal(err)
 	}
 	itemHandler := handler.NewDefaultHandler(
 		usecase.NewItemUseCase(itemRepository),
@@ -70,7 +70,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	//		CHARACTER HANDLER
 	characterRepository, err := helpmateRepository.NewCharacterRepository(conf.HelpmatePath + "/Characters")
 	if err != nil {
-		panic(err.Error())
+		log.Fatal(err)
 	}
 	characterHandler := handler.NewDefaultHandler(
 		usecase.NewCharacterUseCase(characterRepository, itemHandler.UC),
@@ -86,8 +86,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	//		GlOSSARY HANDLER
 	glossaryRepository, err := helpmateRepository.NewGlossaryRepository(conf.HelpmatePath + "/Glossarys")
 	if err != nil {
-		log.Logln(logger.Error, err)
-		panic(err.Error())
+		log.Fatal(err)
 	}
 
 	glossaryHandler := handler.NewDefaultHandler(
@@ -105,8 +104,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 
 	mapRepository, err := helpmateRepository.NewMapRepository(conf.HelpmatePath + "/Maps")
 	if err != nil {
-		log.Logln(logger.Error, err)
-		panic(err.Error())
+		log.Fatal(err)
 	}
 	mapHandler := handler.NewDefaultHandler(
 		usecase.NewMapUseCase(mapRepository),
@@ -123,8 +121,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	//	STATUS HANDLER
 	statusRepository, err := helpmateRepository.NewStatusRepository(conf.HelpmatePath + "/Status")
 	if err != nil {
-		log.Logln(logger.Error, err)
-		panic(err.Error())
+		log.Fatal(err)
 	}
 	statusHandler := handler.NewDefaultHandler(
 		usecase.NewStatusUseCase(statusRepository),
@@ -141,8 +138,7 @@ func Run(log logger.Ilogger, conf APIConfig) {
 	//	ABILITY HANDLER
 	abilityRepository, err := helpmateRepository.NewAbilityRepository(conf.HelpmatePath + "/Abilities")
 	if err != nil {
-		log.Logln(logger.Error, err)
-		panic(err.Error())
+		log.Fatal(err)
 	}
 	abilityHandler := handler.NewDefaultHandler(
 		usecase.NewAbilityUseCase(abilityRepository),
@@ -161,5 +157,5 @@ func Run(log logger.Ilogger, conf APIConfig) {
 		_ = r.Run(conf.Addres + ":" + conf.Port)
 	}()
 	<-ctx.Done()
-	log.Log(logger.Debug, "Server is closed")
+	log.Logln(logger.Debug, "Server is closed")
 }

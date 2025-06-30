@@ -5,6 +5,7 @@ import (
 	"DAJ/internal/domain/repository"
 	"DAJ/internal/infastructure/json/jsonDTO"
 	"DAJ/internal/infastructure/json/jsonMapper"
+	"fmt"
 )
 
 type UserRepository struct {
@@ -15,7 +16,7 @@ func NewUserRepository(filepath string) (repository.Repository[entity.User], err
 	r := UserRepository{}
 	defaultRepository, err := NewJSONRepository(filepath, jsonMapper.ToUserDTO, jsonMapper.ToUserEntity, r.UserPathFunc)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("NewUserRepository()/%w", err)
 	}
 	r.defaultJSONRepository = *defaultRepository
 	return &r, nil

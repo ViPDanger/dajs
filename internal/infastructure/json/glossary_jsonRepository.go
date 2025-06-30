@@ -5,6 +5,7 @@ import (
 	"DAJ/internal/domain/repository"
 	"DAJ/internal/infastructure/json/jsonDTO"
 	"DAJ/internal/infastructure/json/jsonMapper"
+	"fmt"
 )
 
 type glossaryJSONRepository struct {
@@ -15,7 +16,7 @@ func NewGlossaryRepository(filepath string) (repository.Repository[entity.Glossa
 	r := glossaryJSONRepository{}
 	defaultRepository, err := NewJSONRepository(filepath, jsonMapper.ToGlossaryDTO, jsonMapper.ToGlossaryEntity, r.GlossaryPathFunc)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("NewGlossaryRepository()/%w", err)
 	}
 	defaultRepository.pathFunc = r.GlossaryPathFunc
 	r.defaultJSONRepository = *defaultRepository

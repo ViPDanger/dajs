@@ -4,7 +4,7 @@ type multyLogger struct {
 	loggers []Ilogger
 }
 
-func NewMultyLogger(l ...Ilogger) Ilogger {
+func NewMultyLogger(l ...Ilogger) *multyLogger {
 	r := multyLogger{}
 	r.AddLoggers(l...)
 	return &r

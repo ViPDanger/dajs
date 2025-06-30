@@ -54,6 +54,9 @@ func (l *logger) Log(n ...any) {
 		return
 	}
 	format := l.formatter.GetFormat()
+	for range len(n) - 1 {
+		format = format + " %w"
+	}
 	fmt.Fprintf(l.writer, format, n...)
 }
 
@@ -73,19 +76,21 @@ func (l *logger) Logln(n ...any) {
 		return
 	}
 
-	format := l.formatter.GetFormat() + "\n"
+	format := l.formatter.GetFormat()
+	for range len(n) - 1 {
+		format = format + " %v"
+	}
+	format = format + "\n"
 	fmt.Fprintf(l.writer, format, n...)
 
 }
 
 func (l *logger) Error(n ...any) error {
-	l.mutex.Lock()
-	defer l.mutex.Unlock()
 	s := fmt.Sprint(n...)
-	l.Log(Error, s)
+	l.Logln(Error, s)
 	return errors.New(s)
 }
 
 func (l *logger) Fatal(n ...any) {
-
+	panic(l.Error(n...))
 }

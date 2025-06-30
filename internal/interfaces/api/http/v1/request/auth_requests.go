@@ -6,7 +6,7 @@ import (
 	logger "DAJ/pkg/logger/v3"
 	"bytes"
 	"encoding/json"
-	"errors"
+	"fmt"
 	"net/http"
 )
 
@@ -16,102 +16,101 @@ const (
 	refreshPath  = "/auth/refresh"
 )
 
-func (r *RequestRepository) Register(user, password string) error {
+func (r *Client) Register(user, password string) error {
 
 	body, err := json.Marshal(dto.UserDTO{
 		Username: user,
 		Password: password,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("Client.Register()/%w", err)
 	}
 	req, _ := http.NewRequest("POST", r.Host+registerPath, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := r.Do(req)
 	if err != nil {
-		return err
+		return fmt.Errorf("Client.Register()/%w", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusCreated {
-		return errors.New(resp.Status)
+		return fmt.Errorf("Client.Register()/%s", resp.Status)
 	}
 	var data dto.Message
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
-		return err
+		return fmt.Errorf("Client.Register()/%w", err)
 	}
-	r.Log.Logln(logger.Debug, data)
+	logger.Logln(logger.Debug, data)
 	return nil
 
 }
 
-func (r *RequestRepository) Login(user, password string) error {
+func (r *Client) Login(user, password string) error {
 	body, err := json.Marshal(dto.UserDTO{
 		Username: user,
 		Password: password,
 	})
 
 	if err != nil {
-		return err
+		return fmt.Errorf("Client.Login()/%w", err)
 
 	}
 	req, _ := http.NewRequest("POST", r.Host+loginPath, bytes.NewBuffer(body))
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := r.Do(req)
 	if err != nil {
-		return err
+		return fmt.Errorf("Client.Login()/%w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(resp.Status)
+		return fmt.Errorf("Client.Login()/%s", resp.Status)
 	}
 	var tokensDTO dto.TokensDTO
 	if err := json.NewDecoder(resp.Body).Decode(&tokensDTO); err != nil {
-		return err
+		return fmt.Errorf("Client.Login()/%w", err)
 	}
 	r.accessToken = mapper.ToAccessTokenEntity(tokensDTO.Access)
 	r.refreshToken = mapper.ToRefreshTokenEntity(tokensDTO.Refresh)
-	r.Log.Logln(logger.Debug, "Успешная Авторизация. Access и Refresh токены сохранены.")
+	logger.Logln(logger.Debug, "Successeful Authorization. Access и Refresh tokens saved.")
 	return nil
-
 }
 
-func (r *RequestRepository) RefreshAccessToken() error {
+func (r *Client) RefreshAccessToken() error {
 
 	body, err := json.Marshal(mapper.ToRefreshTokenDTO(r.refreshToken))
 	if err != nil {
-		return err
+		return fmt.Errorf("Client.RefreshAccessToken()/%w", err)
 	}
 	resp, err := http.Post(r.Host+refreshPath, "application/json", bytes.NewBuffer(body))
 	if err != nil {
-		return err
+		return fmt.Errorf("Client.RefreshAccessToken()/%w", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(resp.Status)
+		return fmt.Errorf("Client.Login()/%s", resp.Status)
 	}
 	var accessTokenDTO dto.AccessTokenDTO
 	if err := json.NewDecoder(resp.Body).Decode(&accessTokenDTO); err != nil {
-		return err
+		return fmt.Errorf("Client.RefreshAccessToken()/%w", err)
 	}
 
 	r.accessToken = mapper.ToAccessTokenEntity(accessTokenDTO)
-	r.Log.Logln(logger.Debug, "Acces Token is refreshed")
+	logger.Logln(logger.Debug, "Acces Token is refreshed")
 	return nil
 }
 
-func (r *RequestRepository) doProtected(req *http.Request) (*http.Response, error) {
+// реквест на middleware проверку protected источников
+func (r *Client) doProtected(req *http.Request) (*http.Response, error) {
 	req.Header.Set("Authorization", "Bearer "+r.accessToken.Str)
 	resp, err := r.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Client.doProtected()/%w", err)
 	}
 	// Если access token истёк — пытаемся обновить
 	if resp.StatusCode == http.StatusUnauthorized {
-
-		r.Log.Logln(logger.Debug, "Access token истёк. Обновляем...")
+		logger.Logln(logger.Debug, "Access token is expired. Refreshing...")
 		if err := r.RefreshAccessToken(); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("Client.doProtected()/%w", err)
 		}
 		// Повторяем запрос
 		return r.doProtected(req)

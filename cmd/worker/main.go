@@ -18,13 +18,12 @@ const (
 
 func main() {
 	cfg := config.NewConfig(cfgPath)
-	/*
-		logPath := cfg.String("log.path", "./log_")
-		logFormat := cfg.String("log.format", "txt")
-	*/
+	logPath := cfg.String("log.path", "log_")
+	logFormat := cfg.String("log.Format", "txt")
+	log := logger.Initialization(logPath, logFormat)
+
 	addres := cfg.String("server.ip", "127.0.0.1")
 	port := cfg.String("server.port", "80")
-	log := logger.Setup()
 
 	client, err := app.RunWorker(log, Login, Password, "http://"+addres+":"+port)
 
@@ -52,8 +51,8 @@ func main() {
 		"/protected/character/delete",
 	)
 
-	_, _ = itemFetcher.New(entity.Weapon{SimpleItem: entity.SimpleItem{Id: "newitem1", Name: "WOWSWORD!", Tags: []string{"Воинское рукопашное оружие", "Оружие", "Обычный"}}})
+	log.Error(itemFetcher.New(entity.Weapon{SimpleItem: entity.SimpleItem{Id: "newitem1", Name: "WOWSWORD!", Tags: []string{"Воинское рукопашное оружие", "Оружие", "Обычный"}}}))
 	//fmt.Println(item, err)
-	CHARACTER, ERR := characterFetcher.Get("Грим Жаропив")
-	log.Logln(CHARACTER.Inventory, ERR)
+	log.Logln(characterFetcher.Get("Грим Жаропив"))
+
 }

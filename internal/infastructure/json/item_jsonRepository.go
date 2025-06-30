@@ -5,6 +5,7 @@ import (
 	"DAJ/internal/domain/repository"
 	"DAJ/internal/infastructure/json/jsonDTO"
 	"DAJ/internal/infastructure/json/jsonMapper"
+	"fmt"
 	"strings"
 )
 
@@ -16,7 +17,7 @@ func NewItemRepository(filepath string) (repository.Repository[entity.Item], err
 	r := itemJSONRepository{}
 	repository, err := NewJSONRepository(filepath, jsonMapper.ToItemDTO, jsonMapper.ToItemEntity, r.itemPathFunc)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("NewItemRepository()/%w", err)
 	}
 	r.defaultJSONRepository = *repository
 	return &r, nil

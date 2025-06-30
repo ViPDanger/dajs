@@ -5,6 +5,7 @@ import (
 	"DAJ/internal/domain/repository"
 	"DAJ/internal/infastructure/json/jsonDTO"
 	"DAJ/internal/infastructure/json/jsonMapper"
+	"fmt"
 )
 
 type characterJSONRepository struct {
@@ -15,7 +16,7 @@ func NewCharacterRepository(filepath string) (repository.Repository[entity.Chara
 	r := characterJSONRepository{}
 	defaultRepository, err := NewJSONRepository(filepath, jsonMapper.ToCharacterDTO, jsonMapper.ToCharacterEntity, r.characterPathFunc)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("NewCharacterRepository()/%w", err)
 	}
 	r.defaultJSONRepository = *defaultRepository
 	return &r, nil

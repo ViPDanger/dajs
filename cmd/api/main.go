@@ -13,12 +13,9 @@ func main() {
 
 	//
 	cfg := config.NewConfig(cfgPath)
-	/*
-		logPath := cfg.String("log.path", "log_")
-		logFormat := cfg.String("log.Format", "txt")
-		logPath + time.Now().Format("2006-01-02") + "." + logFormat
-	*/
-	log := logger.Setup()
+	logPath := cfg.String("log.path", "log_")
+	logFormat := cfg.String("log.Format", "txt")
+	log := logger.Initialization(logPath, logFormat)
 
 	log.Logln(logV2.Debug, "Starting the app...")
 	log.Logln(logV2.Release, "Starting the app...")

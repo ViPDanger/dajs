@@ -20,7 +20,7 @@ func NewDefaultHandler[T entity.Identifiable, Tdto any](UC usecase.UseCase[T], T
 	return &DefaultHandler[T, Tdto]{UC: UC, ToEntity: ToEntity, ToDTO: ToDTO}
 }
 
-// GET character
+// GET object
 func (h *DefaultHandler[T, Tdto]) Get(c *gin.Context) {
 	id := c.GetHeader("id")
 	if id == "" {
@@ -38,12 +38,12 @@ func (h *DefaultHandler[T, Tdto]) Get(c *gin.Context) {
 	c.JSON(http.StatusOK, h.ToDTO(*object))
 }
 
-// POST character
+// POST object
 func (h *DefaultHandler[T, Tdto]) New(c *gin.Context) {
 	var DTO Tdto
 	if err := c.ShouldBindJSON(&DTO); err != nil {
 		_ = c.Error(err)
-		c.JSON(http.StatusBadRequest, dto.Error{Error: "Некорректный JSON"})
+		c.JSON(http.StatusBadRequest, dto.Error{Error: "UnmarshalJSON error"})
 		return
 	}
 	object := h.ToEntity(DTO)
@@ -54,11 +54,11 @@ func (h *DefaultHandler[T, Tdto]) New(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, dto.Message{
-		Message: "Character was created",
+		Message: "NEW: SUCCESS",
 	})
 }
 
-// GET all chatacter
+// GET all objects
 func (h *DefaultHandler[T, Tdto]) GetAll(c *gin.Context) {
 	Objects, err := h.UC.GetAll()
 	if err != nil {
@@ -73,7 +73,7 @@ func (h *DefaultHandler[T, Tdto]) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, ObjectsDTO)
 }
 
-// DELETE character
+// DELETE object
 func (h *DefaultHandler[T, Tdto]) Delete(c *gin.Context) {
 	id := c.GetHeader("id")
 	if id == "" {
@@ -88,10 +88,10 @@ func (h *DefaultHandler[T, Tdto]) Delete(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, dto.Message{Message: "Character with id " + id + "deleted"})
+	c.JSON(http.StatusOK, dto.Message{Message: "DELETE: SUCCESS"})
 }
 
-// PUT character
+// PUT object
 func (h *DefaultHandler[T, Tdto]) Set(c *gin.Context) {
 	var DTO Tdto
 	if err := c.ShouldBindJSON(&DTO); err != nil {
@@ -107,6 +107,6 @@ func (h *DefaultHandler[T, Tdto]) Set(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, dto.Message{
-		Message: "Успешно",
+		Message: "SET: SUCCESS",
 	})
 }

@@ -27,7 +27,7 @@ func (u characterUsecase) getInventory(Inventorys []entity.CharacterInventory) e
 		}
 		items, err := u.itemUseCase.GetArray(s)
 		if err != nil {
-			return err
+			return fmt.Errorf("NewCharacterUsecase()/%w", err)
 		}
 		for i, j := 0, 0; j < len(items); i++ {
 			if inventory.Items[i].Id != nil {
@@ -43,12 +43,12 @@ func (u characterUsecase) getInventory(Inventorys []entity.CharacterInventory) e
 func (u characterUsecase) GetAll() ([]entity.Character, error) {
 	objects, err := u.UseCase.GetAll()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("characterUseCase.GetAll()/%w", err)
 	}
 
 	for i := range objects {
 		if err := u.getInventory(objects[i].Inventory); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("characterUseCase.GetAll()/%w", err)
 		}
 		fmt.Println(objects[i].Inventory)
 	}
@@ -58,11 +58,11 @@ func (u characterUsecase) GetAll() ([]entity.Character, error) {
 func (u characterUsecase) GetArray(ids []string) ([]entity.Character, error) {
 	objects, err := u.UseCase.GetArray(ids)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("characterUseCase.GetArray()/%w", err)
 	}
 	for i := range objects {
 		if err := u.getInventory(objects[i].Inventory); err != nil {
-			return nil, err
+			return nil, fmt.Errorf("characterUseCase.GetArray()/%w", err)
 		}
 	}
 	return objects, nil
@@ -71,22 +71,28 @@ func (u characterUsecase) GetArray(ids []string) ([]entity.Character, error) {
 func (u characterUsecase) GetByID(id string) (*entity.Character, error) {
 	object, err := u.UseCase.GetByID(id)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("characterUseCase.GetById()/%w", err)
 	}
 	if err := u.getInventory(object.Inventory); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("characterUseCase.GetById()/%w", err)
 	}
 	return object, nil
 }
 func (u characterUsecase) New(object *entity.Character) error {
 	if err := u.getInventory(object.Inventory); err != nil {
-		return err
+		return fmt.Errorf("characterUseCase.New()/%w", err)
 	}
-	return u.UseCase.New(object)
+	if err := u.UseCase.New(object); err != nil {
+		return fmt.Errorf("characterUseCase.New()/%w", err)
+	}
+	return nil
 }
 func (u characterUsecase) Set(object *entity.Character) error {
 	if err := u.getInventory(object.Inventory); err != nil {
-		return err
+		return fmt.Errorf("characterUseCase.Set()/%w", err)
 	}
-	return u.UseCase.New(object)
+	if err := u.UseCase.Set(object); err != nil {
+		return fmt.Errorf("characterUseCase.Set()/%w", err)
+	}
+	return nil
 }

@@ -3,6 +3,7 @@ package app
 import (
 	http "DAJ/internal/interfaces/api/http/v1/request"
 	logger "DAJ/pkg/logger/v3"
+	"fmt"
 	"time"
 )
 
@@ -12,25 +13,24 @@ var (
 	timeoutTime = 3 * time.Second
 )
 
-func RunWorker(log logger.Ilogger, login string, password string, baseURL string) (*http.RequestRepository, error) {
+func RunWorker(log logger.Ilogger, login string, password string, baseURL string) (*http.Client, error) {
 	var err error
-	var HttpRepository *http.RequestRepository
+	var Worker *http.Client
 	for i := 0; i < retry; i++ {
-		HttpRepository = http.NewHttpRepository(log, baseURL)
-		HttpRepository.Timeout = timeoutTime
-		if err = HttpRepository.Login(login, password); err != nil {
-			_ = HttpRepository.Register(login, password)
+		Worker = http.NewHttpRepository(log, baseURL)
+		Worker.Timeout = timeoutTime
+		if err = Worker.Login(login, password); err != nil {
+			_ = Worker.Register(login, password)
 		}
 		if err == nil {
 			break
 		} else {
-			log.Logln(logger.Error, err)
+			log.Logln(logger.Warning, err)
 		}
-
 		time.Sleep(sleepTime)
 	}
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Run Worker/%w", err)
 	}
-	return HttpRepository, nil
+	return Worker, nil
 }

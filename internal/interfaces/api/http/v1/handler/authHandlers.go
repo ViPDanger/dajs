@@ -18,11 +18,11 @@ type UserHandler struct {
 }
 
 // REGISTER USER -----------
-func (userHandler *UserHandler) Register(c *gin.Context) {
+func (userHandler *UserHandler) Registration(c *gin.Context) {
 	var userDTO dto.UserDTO
 	if err := c.ShouldBindJSON(&userDTO); err != nil {
 		_ = c.Error(err)
-		c.JSON(http.StatusBadRequest, dto.Error{Error: "Некорректный JSON"})
+		c.JSON(http.StatusBadRequest, dto.Error{Error: "UnmarshalJSON error"})
 		return
 	}
 	if err := userHandler.UserUC.Register(mapper.ToUserEntity(userDTO)); err != nil {
@@ -30,7 +30,7 @@ func (userHandler *UserHandler) Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 	}
 	c.JSON(http.StatusCreated, dto.Message{
-		Message: "Регистрация прошла успешно",
+		Message: "Registration: Success",
 	})
 }
 
@@ -39,7 +39,7 @@ func (userHandler *UserHandler) Login(c *gin.Context) {
 	var userDTO dto.UserDTO
 	if err := c.ShouldBindJSON(&userDTO); err != nil {
 		_ = c.Error(err)
-		c.JSON(http.StatusBadRequest, dto.Error{Error: "Некорректный JSON"})
+		c.JSON(http.StatusBadRequest, dto.Error{Error: "UnmarshalJSON error"})
 		return
 	}
 	user := mapper.ToUserEntity(userDTO)
@@ -79,7 +79,7 @@ func (userHandler *UserHandler) Refresh(c *gin.Context) {
 	refreshToken := mapper.ToRefreshTokenEntity(refreshDTO)
 	token, err := jwt.ParseRefreshToken(refreshToken.Str)
 	if err != nil || !token.Valid {
-		err = errors.New("Невалидный токен")
+		err = errors.New("Invalid token")
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, err)
 		return

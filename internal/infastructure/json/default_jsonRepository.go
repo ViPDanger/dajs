@@ -2,9 +2,10 @@ package json
 
 import (
 	"DAJ/internal/domain/entity"
-	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"sync"
 )
@@ -23,7 +24,9 @@ type defaultJSONRepository[T entity.Identifiable, Tdto any] struct {
 
 func NewJSONRepository[T entity.Identifiable, Tdto any](filepath string, toDTO func(T) Tdto, ToEntity func(Tdto) T, pathFunc func(*T) string) (f *defaultJSONRepository[T, Tdto], err error) {
 	if filepath == "" || toDTO == nil || ToEntity == nil || pathFunc == nil {
-		return nil, errors.New("Some parameters in NewJSONRepository are empty")
+		var o T
+		TName := reflect.TypeOf(o).Name()
+		return nil, fmt.Errorf("NewJSONRepository[%s](): Some parameters are empty", TName)
 	}
 	var db jsonDB[Tdto]
 	repository := defaultJSONRepository[T, Tdto]{
@@ -51,15 +54,20 @@ func NewJSONRepository[T entity.Identifiable, Tdto any](filepath string, toDTO f
 }
 
 func (r *defaultJSONRepository[T, Tdto]) GetArray(ids []string) (ret []T, err error) {
+
 	for i := range ids {
 		if ids[i] == "" {
-			return nil, errors.New("some id in Repository.GetArray is empty")
+			var o T
+			TName := reflect.TypeOf(o).Name()
+			return nil, fmt.Errorf("JSONRepositrory[%s].GetArray()/Some Id in id array is empty", TName)
 		}
 		ids[i] = r.setPath(ids[i])
 	}
 	objects, err := r.file.CompileArray(ids)
 	if err != nil {
-		return
+		var o T
+		TName := reflect.TypeOf(o).Name()
+		return nil, fmt.Errorf("JSONRepositrory[%s].GetArray()/%w", TName, err)
 	}
 	ret = make([]T, len(objects))
 	for i := range objects {
@@ -70,17 +78,22 @@ func (r *defaultJSONRepository[T, Tdto]) GetArray(ids []string) (ret []T, err er
 
 func (r *defaultJSONRepository[T, Tdto]) Insert(object *T) error {
 	if object == nil {
-		return errors.New("no object in Repository.Insert")
+		var o T
+		TName := reflect.TypeOf(o).Name()
+		return fmt.Errorf("JSONRepositrory[%s].Insert(): Nill pointer", TName)
 	}
 	path := r.pathFunc(object)
-
 	r.filePaths.Store((*object).GetID(), path)
 	dto := r.toDTO(*object)
 	return r.file.Add(r.pathFunc(object), &dto)
 }
 func (r *defaultJSONRepository[T, Tdto]) GetByID(id string) (ret *T, err error) {
-
 	dto, err := r.file.Compile(r.setPath(id))
+	if err != nil {
+		var o T
+		TName := reflect.TypeOf(o).Name()
+		return nil, fmt.Errorf("JSONRepositrory[%s].GetByID()/%w", TName, err)
+	}
 	object := r.ToEntity(*dto)
 	return &object, err
 
@@ -88,7 +101,9 @@ func (r *defaultJSONRepository[T, Tdto]) GetByID(id string) (ret *T, err error) 
 func (r *defaultJSONRepository[T, Tdto]) GetAll() (ret []T, err error) {
 	dtos, err := r.file.СompileDir(r.fileDirectory)
 	if err != nil {
-		return
+		var o T
+		TName := reflect.TypeOf(o).Name()
+		return nil, fmt.Errorf("JSONRepositrory[%s].GetAll()/%w", TName, err)
 	}
 	ret = make([]T, len(dtos))
 	for i := range dtos {
@@ -98,7 +113,9 @@ func (r *defaultJSONRepository[T, Tdto]) GetAll() (ret []T, err error) {
 }
 func (r *defaultJSONRepository[T, Tdto]) Update(object *T) error {
 	if object == nil {
-		return errors.New("no object in Repository.Insert")
+		var o T
+		TName := reflect.TypeOf(o).Name()
+		return fmt.Errorf("JSONRepositrory[%s].Update(): Nill pointer", TName)
 	}
 	path := r.pathFunc(object)
 	dto := r.toDTO(*object)
@@ -107,7 +124,9 @@ func (r *defaultJSONRepository[T, Tdto]) Update(object *T) error {
 }
 func (r *defaultJSONRepository[T, Tdto]) Delete(id string) (err error) {
 	if id == "" {
-		return errors.New("no id in Repository.Delete")
+		var o T
+		TName := reflect.TypeOf(o).Name()
+		return fmt.Errorf("JSONRepositrory[%s].Delete(): Empty id", TName)
 	}
 	return r.file.Delete(r.setPath(id))
 }
@@ -117,7 +136,10 @@ func (r *defaultJSONRepository[T, Tdto]) getExistingFilePaths() ([]string, error
 	var files []string
 	err := filepath.Walk(r.fileDirectory, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			return err // если ошибка доступа к файлу/папке — пробрасываем её
+			var o T
+			TName := reflect.TypeOf(o).Name()
+			return fmt.Errorf("JSONRepositrory[%s].getExistingFilePath()/%w", TName, err)
+
 		}
 		if !info.IsDir() && strings.Contains(info.Name(), defaultFileType) {
 			files = append(files, path) // добавляем только файлы

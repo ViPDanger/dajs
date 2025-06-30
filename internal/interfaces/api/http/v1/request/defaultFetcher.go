@@ -4,10 +4,10 @@ import (
 	"DAJ/internal/interfaces/api/dto"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"reflect"
 )
-
-// GET Glossary
 
 type Fetcher[T any] interface {
 	Get(id string) (object T, err error)
@@ -20,7 +20,7 @@ type Fetcher[T any] interface {
 type defaultFetcher[T any, Tdto any] struct {
 	ToDTO      func(T) Tdto
 	ToEntity   func(Tdto) T
-	Client     *RequestRepository
+	Client     *Client
 	GetPath    string
 	NewPath    string
 	AllPath    string
@@ -31,7 +31,7 @@ type defaultFetcher[T any, Tdto any] struct {
 func NewDefaultFetcher[T any, Tdto any](
 	ToDTO func(T) Tdto,
 	ToEntity func(Tdto) T,
-	Client *RequestRepository,
+	Client *Client,
 	GetPath string,
 	NewPath string,
 	AllPath string,
@@ -49,52 +49,59 @@ func NewDefaultFetcher[T any, Tdto any](
 	}
 }
 
+// GET
 func (f *defaultFetcher[T, Tdto]) Get(id string) (object T, err error) {
 	req, _ := http.NewRequest("GET", f.Client.Host+f.GetPath, nil)
 	req.Header.Set("id", id)
 	resp, err := f.Client.doProtected(req)
 	if err != nil {
-		return
+		TName := reflect.TypeOf(new(T)).Name()[1:]
+		return object, fmt.Errorf("DefaultFetcher[%s].Get()/%w", TName, err)
 	}
 	defer resp.Body.Close()
 	var DTO Tdto
 	if err = json.NewDecoder(resp.Body).Decode(&DTO); err != nil {
-		return
+		TName := reflect.TypeOf(new(T)).Name()[1:]
+		return object, fmt.Errorf("DefaultFetcher[%s].Get()/%w", TName, err)
 	}
 	object = f.ToEntity(DTO)
 	return
 }
 
-// POST Glossary
+// POST
 func (f *defaultFetcher[T, Tdto]) New(object T) (id string, err error) {
+	TName := reflect.TypeOf(object).Name()
 	body, err := json.Marshal(f.ToDTO(object))
 	if err != nil {
-		return
+		return "", fmt.Errorf("DefaultFetcher[%s].New()/%w", TName, err)
 	}
 	req, _ := http.NewRequest("POST", f.Client.Host+f.NewPath, bytes.NewBuffer(body))
 	resp, err := f.Client.doProtected(req)
 	if err != nil {
-		return
+		return "", fmt.Errorf("DefaultFetcher[%s].New()/%w", TName, err)
+
 	}
 	defer resp.Body.Close()
 	var message dto.Message
 	if err = json.NewDecoder(resp.Body).Decode(&message); err != nil {
-		return
+		return "", fmt.Errorf("DefaultFetcher[%s].New()/%w", TName, err)
 	}
 	return message.Message, nil
 }
 
-// GET ALL Glossary
+// GET all
 func (f *defaultFetcher[T, Tdto]) All() (objects []T, err error) {
+
+	TName := reflect.TypeOf(objects).Name()
 	req, _ := http.NewRequest("GET", f.Client.Host+f.AllPath, nil)
 	resp, err := f.Client.doProtected(req)
 	if err != nil {
-		return
+		return nil, fmt.Errorf("DefaultFetcher[%s].New()/%w", TName, err)
 	}
 	defer resp.Body.Close()
 	DTOs := make([]Tdto, 0)
 	if err = json.NewDecoder(resp.Body).Decode(&DTOs); err != nil {
-		return
+		return nil, fmt.Errorf("DefaultFetcher[%s].New()/%w", TName, err)
 	}
 	objects = make([]T, len(DTOs))
 	for i := range DTOs {
@@ -103,21 +110,24 @@ func (f *defaultFetcher[T, Tdto]) All() (objects []T, err error) {
 	return
 }
 
-// PUT Glossary
+// PUT
 func (f *defaultFetcher[T, Tdto]) Set(object T) (id string, err error) {
 	body, err := json.Marshal(f.ToDTO(object))
 	if err != nil {
-		return
+		TName := reflect.TypeOf(new(T)).Name()[1:]
+		return "", fmt.Errorf("DefaultFetcher[%s].Set()/%w", TName, err)
 	}
 	req, _ := http.NewRequest("PUT", f.Client.Host+f.SetPath, bytes.NewBuffer(body))
 	resp, err := f.Client.doProtected(req)
 	if err != nil {
-		return
+		TName := reflect.TypeOf(new(T)).Name()[1:]
+		return "", fmt.Errorf("DefaultFetcher[%s].Set()/%w", TName, err)
 	}
 	defer resp.Body.Close()
 	var message dto.Message
 	if err = json.NewDecoder(resp.Body).Decode(&message); err != nil {
-		return
+		TName := reflect.TypeOf(new(T)).Name()[1:]
+		return "", fmt.Errorf("DefaultFetcher[%s].Set()/%w", TName, err)
 	}
 	return message.Message, nil
 }
@@ -128,12 +138,14 @@ func (f *defaultFetcher[T, Tdto]) Delete(id string) (object T, err error) {
 	req.Header.Set("id", id)
 	resp, err := f.Client.doProtected(req)
 	if err != nil {
-		return
+		TName := reflect.TypeOf(new(T)).Name()[1:]
+		return object, fmt.Errorf("DefaultFetcher[%s].Set()/%w", TName, err)
 	}
 	defer resp.Body.Close()
 	var DTO Tdto
 	if err = json.NewDecoder(resp.Body).Decode(&DTO); err != nil {
-		return
+		TName := reflect.TypeOf(new(T)).Name()[1:]
+		return object, fmt.Errorf("DefaultFetcher[%s].Set()/%w", TName, err)
 	}
 	return f.ToEntity(DTO), nil
 }

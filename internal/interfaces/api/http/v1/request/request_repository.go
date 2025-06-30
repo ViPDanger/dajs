@@ -6,17 +6,15 @@ import (
 	"net/http"
 )
 
-type RequestRepository struct {
+type Client struct {
 	http.Client
-	Log          logger.Ilogger
 	Host         string
 	accessToken  entity.AccessToken
 	refreshToken entity.RefreshToken
 }
 
-func NewHttpRepository(logger logger.Ilogger, host string) *RequestRepository {
-	return &RequestRepository{
-		Log:  logger,
+func NewHttpRepository(logger logger.Ilogger, host string) *Client {
+	return &Client{
 		Host: host,
 	}
 }
