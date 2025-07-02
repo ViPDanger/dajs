@@ -2,7 +2,7 @@ package app
 
 import (
 	helpmateRepository "DAJ/internal/infastructure/json"
-	"DAJ/internal/interfaces/api/http/v1/handler"
+	"DAJ/internal/interfaces/api/handler"
 	"DAJ/internal/interfaces/api/mapper"
 	"DAJ/internal/usecase"
 	logger "DAJ/pkg/logger/v2"
@@ -60,13 +60,11 @@ func Run(log logger.Ilogger, conf APIConfig) {
 		mapper.ToItemEntity,
 		mapper.ToItemDTO,
 	)
-
-	itemRouter := protectedRouter.Group("/item")
-	itemRouter.GET("/get", itemHandler.Get)
-	itemRouter.GET("/", itemHandler.GetAll)
-	itemRouter.POST("/new", itemHandler.New)
-	itemRouter.DELETE("/delete", itemHandler.Delete)
-	itemRouter.PUT("/set", itemHandler.Set)
+	protectedRouter.GET("/item", itemHandler.Get)
+	protectedRouter.GET("/item/all", itemHandler.GetAll)
+	protectedRouter.POST("/item", itemHandler.New)
+	protectedRouter.DELETE("/item", itemHandler.Delete)
+	protectedRouter.PUT("/item", itemHandler.Set)
 	//		CHARACTER HANDLER
 	characterRepository, err := helpmateRepository.NewCharacterRepository(conf.HelpmatePath + "/Characters")
 	if err != nil {
@@ -77,12 +75,11 @@ func Run(log logger.Ilogger, conf APIConfig) {
 		mapper.ToCharacterEntity,
 		mapper.ToCharacterDTO,
 	)
-	characterRouter := protectedRouter.Group("/character")
-	characterRouter.GET("/get", characterHandler.Get)
-	characterRouter.GET("/", characterHandler.GetAll)
-	characterRouter.POST("/new", characterHandler.New)
-	characterRouter.DELETE("/delete", characterHandler.Delete)
-	characterRouter.PUT("/set", characterHandler.Set)
+	protectedRouter.GET("/character", characterHandler.Get)
+	protectedRouter.GET("/character/all", characterHandler.GetAll)
+	protectedRouter.POST("/character", characterHandler.New)
+	protectedRouter.DELETE("/character", characterHandler.Delete)
+	protectedRouter.PUT("/character", characterHandler.Set)
 	//		GlOSSARY HANDLER
 	glossaryRepository, err := helpmateRepository.NewGlossaryRepository(conf.HelpmatePath + "/Glossarys")
 	if err != nil {
@@ -94,12 +91,11 @@ func Run(log logger.Ilogger, conf APIConfig) {
 		mapper.ToGlossaryEntity,
 		mapper.ToGlossaryDTO,
 	)
-	glossaryRouter := protectedRouter.Group("/glossary")
-	glossaryRouter.GET("/get", glossaryHandler.Get)
-	glossaryRouter.GET("/", glossaryHandler.GetAll)
-	glossaryRouter.POST("/new", glossaryHandler.New)
-	glossaryRouter.DELETE("/delete", glossaryHandler.Delete)
-	glossaryRouter.PUT("/set", glossaryHandler.Set)
+	protectedRouter.GET("/glossary", glossaryHandler.Get)
+	protectedRouter.GET("/glossary/all", glossaryHandler.GetAll)
+	protectedRouter.POST("/glossary", glossaryHandler.New)
+	protectedRouter.DELETE("/glossary", glossaryHandler.Delete)
+	protectedRouter.PUT("/glossary", glossaryHandler.Set)
 	//		MAP HANDLER
 
 	mapRepository, err := helpmateRepository.NewMapRepository(conf.HelpmatePath + "/Maps")
@@ -111,12 +107,11 @@ func Run(log logger.Ilogger, conf APIConfig) {
 		mapper.ToMapEntity,
 		mapper.ToMapDTO,
 	)
-	mapRouter := protectedRouter.Group("/map")
-	mapRouter.GET("/get", mapHandler.Get)
-	mapRouter.GET("/", mapHandler.GetAll)
-	mapRouter.POST("/new", mapHandler.New)
-	mapRouter.DELETE("/delete", mapHandler.Delete)
-	mapRouter.PUT("/set", mapHandler.Set)
+	protectedRouter.GET("/map", mapHandler.Get)
+	protectedRouter.GET("/map/all", mapHandler.GetAll)
+	protectedRouter.POST("/map", mapHandler.New)
+	protectedRouter.DELETE("/map", mapHandler.Delete)
+	protectedRouter.PUT("/map", mapHandler.Set)
 
 	//	STATUS HANDLER
 	statusRepository, err := helpmateRepository.NewStatusRepository(conf.HelpmatePath + "/Status")
@@ -128,12 +123,11 @@ func Run(log logger.Ilogger, conf APIConfig) {
 		mapper.ToStatusEntity,
 		mapper.ToStatusDTO,
 	)
-	statusRouter := protectedRouter.Group("/status")
-	statusRouter.GET("/get", statusHandler.Get)
-	statusRouter.GET("/", statusHandler.GetAll)
-	statusRouter.POST("/new", statusHandler.New)
-	statusRouter.DELETE("/delete", statusHandler.Delete)
-	statusRouter.PUT("/set", statusHandler.Set)
+	protectedRouter.GET("/status", statusHandler.Get)
+	protectedRouter.GET("/status/all", statusHandler.GetAll)
+	protectedRouter.POST("/status", statusHandler.New)
+	protectedRouter.DELETE("/status", statusHandler.Delete)
+	protectedRouter.PUT("/status", statusHandler.Set)
 
 	//	ABILITY HANDLER
 	abilityRepository, err := helpmateRepository.NewAbilityRepository(conf.HelpmatePath + "/Abilities")
@@ -145,12 +139,11 @@ func Run(log logger.Ilogger, conf APIConfig) {
 		mapper.ToAbilityEntity,
 		mapper.ToAbilityDTO,
 	)
-	abilityRouter := protectedRouter.Group("/Ability")
-	abilityRouter.GET("/get", abilityHandler.Get)
-	abilityRouter.GET("/", abilityHandler.GetAll)
-	abilityRouter.POST("/new", abilityHandler.New)
-	abilityRouter.DELETE("/delete", abilityHandler.Delete)
-	abilityRouter.PUT("/set", abilityHandler.Set)
+	protectedRouter.GET("/ability", abilityHandler.Get)
+	protectedRouter.GET("/ability/all", abilityHandler.GetAll)
+	protectedRouter.POST("/ability", abilityHandler.New)
+	protectedRouter.DELETE("/ability", abilityHandler.Delete)
+	protectedRouter.PUT("/ability", abilityHandler.Set)
 	// GRACEFULL SHUTDOWN CTX---------
 	ctx, _ := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
 	go func() {

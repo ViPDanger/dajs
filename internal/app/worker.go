@@ -1,7 +1,7 @@
 package app
 
 import (
-	http "DAJ/internal/interfaces/api/http/v1/request"
+	http "DAJ/internal/interfaces/api/request"
 	logger "DAJ/pkg/logger/v3"
 	"fmt"
 	"time"

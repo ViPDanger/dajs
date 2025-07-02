@@ -91,7 +91,7 @@ func ToItemDTO(e entity.Item) jsonDTO.ItemDTO {
 
 func ToSimpleItemEntity(dto jsonDTO.ItemDTO) entity.SimpleItem {
 	return entity.SimpleItem{
-		Id:       dto.Id,
+		ID:       dto.Id,
 		Name:     dto.Name,
 		OrigName: dto.OrigName,
 		Comment:  dto.Comment,
@@ -114,7 +114,7 @@ func containsTag(tags []string, target string) bool {
 
 func toSimpleItemDTO(i entity.SimpleItem) jsonDTO.ItemDTO {
 	return jsonDTO.ItemDTO{
-		Id:       i.Id,
+		Id:       i.ID,
 		Name:     i.Name,
 		OrigName: i.OrigName,
 		Comment:  i.Comment,

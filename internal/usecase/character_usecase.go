@@ -20,8 +20,8 @@ func (u characterUsecase) getInventory(Inventorys []entity.CharacterInventory) e
 		s := make([]string, 0)
 
 		for i := range inventory.Items {
-			if inventory.Items[i].Id != nil {
-				s = append(s, *inventory.Items[i].Id)
+			if inventory.Items[i].ID != nil {
+				s = append(s, *inventory.Items[i].ID)
 			}
 
 		}
@@ -30,7 +30,7 @@ func (u characterUsecase) getInventory(Inventorys []entity.CharacterInventory) e
 			return fmt.Errorf("NewCharacterUsecase()/%w", err)
 		}
 		for i, j := 0, 0; j < len(items); i++ {
-			if inventory.Items[i].Id != nil {
+			if inventory.Items[i].ID != nil {
 				inventory.Items[i].Item = items[j]
 				j++
 			}

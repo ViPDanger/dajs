@@ -2,3 +2,4 @@ cmd/api/logs/*.txt
 cmd/worker/logs/*.txt
 internal/infastructure/files
 cmd/api/*.ini
+*__debug_*

@@ -160,7 +160,7 @@ func ToInventoryEntityList(dtos []dto.InventoryItemDTO) []entity.CharacterInvent
 
 func ToCharacterItemEntity(dto dto.CharacterItemDTO) entity.CharacterItem {
 	return entity.CharacterItem{
-		Id:           dto.Id,
+		ID:           dto.Id,
 		SimpleItem:   dto.SimpleItem,
 		Weight:       dto.Weight,
 		Count:        dto.Count,
@@ -175,7 +175,7 @@ func ToCharacterItemEntity(dto dto.CharacterItemDTO) entity.CharacterItem {
 
 func ToCharacterItemDTO(item entity.CharacterItem) dto.CharacterItemDTO {
 	return dto.CharacterItemDTO{
-		Id:           item.Id,
+		Id:           item.ID,
 		SimpleItem:   item.SimpleItem,
 		Weight:       item.Weight,
 		Count:        item.Count,

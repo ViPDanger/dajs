@@ -23,5 +23,5 @@ func NewMapRepository(filepath string) (repository.Repository[entity.Map], error
 	return &r, nil
 }
 func (r *mapJSONRepository) mapPathFunc(u *entity.Map) string {
-	return r.fileDirectory + u.ID + defaultFileType
+	return r.fileDirectory + u.GetID() + defaultFileType
 }

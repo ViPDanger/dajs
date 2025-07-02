@@ -10,7 +10,7 @@ type CharacterInventory struct {
 }
 
 type CharacterItem struct {
-	Id           *string
+	ID           *string
 	Item         Item
 	SimpleItem   string
 	Weight       float64

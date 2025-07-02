@@ -91,7 +91,7 @@ func ToItemDTO(e entity.Item) dto.ItemDTO {
 
 func ToSimpleItemEntity(dto dto.ItemDTO) entity.SimpleItem {
 	return entity.SimpleItem{
-		Id:       dto.Id,
+		ID:       dto.Id,
 		Name:     dto.Name,
 		OrigName: dto.OrigName,
 		Comment:  dto.Comment,
@@ -105,7 +105,7 @@ func ToSimpleItemEntity(dto dto.ItemDTO) entity.SimpleItem {
 
 func toSimpleItemDTO(i entity.SimpleItem) dto.ItemDTO {
 	return dto.ItemDTO{
-		Id:       i.Id,
+		Id:       i.ID,
 		Name:     i.Name,
 		OrigName: i.OrigName,
 		Comment:  i.Comment,
