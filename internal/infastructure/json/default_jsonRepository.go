@@ -1,13 +1,14 @@
 package json
 
 import (
-	"DAJ/internal/domain/entity"
 	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
 	"sync"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
 )
 
 var defaultFileType = ".json"

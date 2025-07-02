@@ -1,4 +1,4 @@
-module DAJ
+module github.com/ViPDanger/dajs
 
 go 1.23.0
 

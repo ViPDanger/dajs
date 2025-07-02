@@ -1,8 +1,8 @@
 package mapper
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/interfaces/api/dto"
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/dto"
 )
 
 func ToGlossaryEntity(dto dto.GlossaryDTO) entity.Glossary {

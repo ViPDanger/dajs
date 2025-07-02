@@ -1,9 +1,10 @@
 package mapper
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/interfaces/api/dto"
 	"strings"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/dto"
 )
 
 func ToItemEntity(dto dto.ItemDTO) entity.Item {

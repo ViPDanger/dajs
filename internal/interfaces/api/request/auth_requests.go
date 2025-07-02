@@ -1,13 +1,14 @@
 package request
 
 import (
-	"DAJ/internal/interfaces/api/dto"
-	"DAJ/internal/interfaces/api/mapper"
-	logger "DAJ/pkg/logger/v3"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/ViPDanger/dajs/internal/interfaces/api/dto"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/mapper"
+	logger "github.com/ViPDanger/dajs/pkg/logger/v3"
 )
 
 const (

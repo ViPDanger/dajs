@@ -1,10 +1,11 @@
 package testrepository
 
 import (
-	"DAJ/internal/domain/entity"
 	"errors"
 	"fmt"
 	"reflect"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
 )
 
 func NewTestRepository[T entity.Identifiable]() *testRepository[T] {

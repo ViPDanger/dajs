@@ -1,12 +1,13 @@
 package v3
 
 import (
-	log "DAJ/pkg/logger/v2"
 	"fmt"
 	"io"
 	"os"
 	"sync"
 	"time"
+
+	log "github.com/ViPDanger/dajs/pkg/logger/v2"
 )
 
 var once sync.Once

@@ -1,10 +1,11 @@
 package app
 
 import (
-	http "DAJ/internal/interfaces/api/request"
-	logger "DAJ/pkg/logger/v3"
 	"fmt"
 	"time"
+
+	http "github.com/ViPDanger/dajs/internal/interfaces/api/request"
+	logger "github.com/ViPDanger/dajs/pkg/logger/v3"
 )
 
 var (

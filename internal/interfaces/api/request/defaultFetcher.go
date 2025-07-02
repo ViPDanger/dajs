@@ -1,12 +1,13 @@
 package request
 
 import (
-	"DAJ/internal/interfaces/api/dto"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"reflect"
+
+	"github.com/ViPDanger/dajs/internal/interfaces/api/dto"
 )
 
 type Fetcher[T any] interface {

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"DAJ/internal/app"
-	"DAJ/pkg/config"
-	logV2 "DAJ/pkg/logger/v2"
-	logger "DAJ/pkg/logger/v3"
+	"github.com/ViPDanger/dajs/internal/app"
+	"github.com/ViPDanger/dajs/pkg/config"
+	logV2 "github.com/ViPDanger/dajs/pkg/logger/v2"
+	logger "github.com/ViPDanger/dajs/pkg/logger/v3"
 )
 
 const cfgPath = "./config.ini"

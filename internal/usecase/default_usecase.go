@@ -1,10 +1,11 @@
 package usecase
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/domain/repository"
 	"fmt"
 	"reflect"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/domain/repository"
 )
 
 type UseCase[T entity.Identifiable] interface {

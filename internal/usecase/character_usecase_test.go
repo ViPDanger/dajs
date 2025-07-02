@@ -1,10 +1,11 @@
 package usecase_test
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/usecase"
 	"errors"
 	"testing"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/usecase"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -188,7 +189,7 @@ func TestCharacterUsecase_New(t *testing.T) {
 	}
 
 	mockItemUC.On("GetArray", []string{itemID}).Return([]entity.Item{&item}, nil)
-		mockItemUC.On("GetArray", []string{itemID}).Return([]entity.Item{&item}, nil)
+	mockItemUC.On("GetArray", []string{itemID}).Return([]entity.Item{&item}, nil)
 	mockCharRepo.On("New", &char).Return(nil)
 
 	characterUC := usecase.NewCharacterUseCase(mockCharRepo, mockItemUC)

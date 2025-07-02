@@ -1,9 +1,10 @@
 package jwt
 
 import (
-	"DAJ/internal/domain/entity"
 	"errors"
 	"time"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
 
 	"github.com/golang-jwt/jwt/v5"
 )

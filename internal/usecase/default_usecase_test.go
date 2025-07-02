@@ -1,10 +1,11 @@
 package usecase_test
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/usecase"
 	"errors"
 	"testing"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/usecase"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

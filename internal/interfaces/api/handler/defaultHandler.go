@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/interfaces/api/dto"
-	"DAJ/internal/usecase"
 	"errors"
 	"net/http"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/dto"
+	"github.com/ViPDanger/dajs/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )

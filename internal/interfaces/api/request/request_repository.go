@@ -1,9 +1,10 @@
 package request
 
 import (
-	"DAJ/internal/domain/entity"
-	logger "DAJ/pkg/logger/v3"
 	"net/http"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	logger "github.com/ViPDanger/dajs/pkg/logger/v3"
 )
 
 type Client struct {

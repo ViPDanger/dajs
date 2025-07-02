@@ -1,13 +1,13 @@
 package main
 
 import (
-	"DAJ/internal/app"
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/interfaces/api/request"
+	"github.com/ViPDanger/dajs/internal/app"
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/request"
 
-	"DAJ/internal/interfaces/api/mapper"
-	"DAJ/pkg/config"
-	logger "DAJ/pkg/logger/v3"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/mapper"
+	"github.com/ViPDanger/dajs/pkg/config"
+	logger "github.com/ViPDanger/dajs/pkg/logger/v3"
 )
 
 const (

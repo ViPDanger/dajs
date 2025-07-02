@@ -1,11 +1,12 @@
 package json
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/domain/repository"
-	"DAJ/internal/infastructure/json/jsonDTO"
-	"DAJ/internal/infastructure/json/jsonMapper"
 	"fmt"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/domain/repository"
+	"github.com/ViPDanger/dajs/internal/infastructure/json/jsonDTO"
+	"github.com/ViPDanger/dajs/internal/infastructure/json/jsonMapper"
 )
 
 type glossaryJSONRepository struct {

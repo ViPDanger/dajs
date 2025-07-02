@@ -1,6 +1,6 @@
 package repository
 
-import "DAJ/internal/domain/entity"
+import "github.com/ViPDanger/dajs/internal/domain/entity"
 
 type Repository[T entity.Identifiable] interface {
 	Insert(item *T) error

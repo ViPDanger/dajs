@@ -1,13 +1,14 @@
 package handler
 
 import (
-	dto "DAJ/internal/interfaces/api/dto"
-	"DAJ/internal/interfaces/api/jwt"
-	"DAJ/internal/interfaces/api/mapper"
-	"DAJ/internal/usecase"
 	"errors"
 	"net/http"
 	"strings"
+
+	dto "github.com/ViPDanger/dajs/internal/interfaces/api/dto"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/jwt"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/mapper"
+	"github.com/ViPDanger/dajs/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )

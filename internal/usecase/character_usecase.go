@@ -1,9 +1,10 @@
 package usecase
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/domain/repository"
 	"fmt"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/domain/repository"
 )
 
 type characterUsecase struct {

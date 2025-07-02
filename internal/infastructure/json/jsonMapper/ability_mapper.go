@@ -1,8 +1,8 @@
 package jsonMapper
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/infastructure/json/jsonDTO"
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/infastructure/json/jsonDTO"
 )
 
 // Ability -> AbilityDTO

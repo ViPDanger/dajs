@@ -1,9 +1,10 @@
 package jsonMapper
 
 import (
-	"DAJ/internal/domain/entity"
-	"DAJ/internal/infastructure/json/jsonDTO"
 	"strings"
+
+	"github.com/ViPDanger/dajs/internal/domain/entity"
+	"github.com/ViPDanger/dajs/internal/infastructure/json/jsonDTO"
 )
 
 func ToItemEntity(dto jsonDTO.ItemDTO) entity.Item {

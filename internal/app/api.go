@@ -1,16 +1,17 @@
 package app
 
 import (
-	helpmateRepository "DAJ/internal/infastructure/json"
-	"DAJ/internal/interfaces/api/handler"
-	"DAJ/internal/interfaces/api/mapper"
-	"DAJ/internal/usecase"
-	logger "DAJ/pkg/logger/v2"
 	"context"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	helpmateRepository "github.com/ViPDanger/dajs/internal/infastructure/json"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/handler"
+	"github.com/ViPDanger/dajs/internal/interfaces/api/mapper"
+	"github.com/ViPDanger/dajs/internal/usecase"
+	logger "github.com/ViPDanger/dajs/pkg/logger/v2"
 
 	"github.com/gin-gonic/gin"
 )
