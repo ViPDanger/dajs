@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"context"
+	"errors"
 	"fmt"
 
 	"github.com/ViPDanger/dajs/internal/domain/entity"
@@ -9,39 +11,51 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserUseCase struct {
-	Repo repository.Repository[entity.User]
+type UserUseCase interface {
+	Register(ctx context.Context, user entity.User) (*entity.ID, error)
+	Login(ctx context.Context, user entity.User) error
+	Delete(ctx context.Context, character entity.ID) error
 }
 
-func NewUserUsecase(repo repository.Repository[entity.User]) *UserUseCase {
-	return &UserUseCase{Repo: repo}
+type userUseCase struct {
+	repository.UserRepository
 }
 
-func (UC *UserUseCase) Register(user entity.User) error {
+func NewUserUseCase(repo repository.UserRepository) UserUseCase {
+	return &userUseCase{UserRepository: repo}
+}
+
+func (uc *userUseCase) Register(ctx context.Context, user entity.User) (id *entity.ID, err error) {
+	if uc.UserRepository == nil {
+		return nil, errors.New("userUseCase.Register(): Nill pointer repository")
+	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return fmt.Errorf("UserUseCase.Register()/%w", err)
+		return nil, fmt.Errorf("userUseCase.Register()/%w", err)
 	}
 	user.Password = string(hash)
-	if err := UC.Repo.Insert(&user); err != nil {
-		return fmt.Errorf("UserUseCase.Register()/%w", err)
+	if id, err = uc.UserRepository.Insert(ctx, &user); err != nil {
+		return nil, fmt.Errorf("userUseCase.Register()/%w", err)
 	}
-
-	return nil
+	return
 }
-func (UC *UserUseCase) Login(user entity.User) error {
-	if repoUser, err := UC.Repo.GetByID(user.Name); err != nil {
-		return fmt.Errorf("UserUseCase.Login()/%w", err)
+func (uc *userUseCase) Login(ctx context.Context, user entity.User) (err error) {
+	if uc.UserRepository == nil {
+		return errors.New("userUseCase.Login(): Nill pointer repository")
+	}
+	if repoUser, err := uc.UserRepository.GetByID(ctx, user.GetID()); err != nil {
+		return fmt.Errorf("userUseCase.Login()/%w", err)
 	} else if bcrypt.CompareHashAndPassword([]byte(repoUser.Password), []byte(user.Password)) != nil {
-		return fmt.Errorf("UserUseCase.Login(): Wrong login or password")
+		return fmt.Errorf("userUseCase.Login(): Wrong login or password")
 	}
-
 	return nil
 }
-
-func (UC *UserUseCase) Delete(character entity.User) error {
-	if err := UC.Repo.Delete(character.Name); err != nil {
-		return fmt.Errorf("UserUseCase.Delete()/%w", err)
+func (uc *userUseCase) Delete(ctx context.Context, id entity.ID) error {
+	if uc.UserRepository == nil {
+		return errors.New("userUseCase.Delete(): Nill pointer repository")
+	}
+	if err := uc.UserRepository.Delete(ctx, id); err != nil {
+		return fmt.Errorf("userUseCase.Delete()/%w", err)
 	}
 	return nil
 }

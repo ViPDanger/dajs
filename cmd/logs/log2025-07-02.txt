@@ -1,0 +1,26 @@
+[DEBUG]	Starting the app...
+	Starting the app...
+[DEBUG]	{127.0.0.1 8080 ../../internal/infastructure/files/}
+[DEBUG]	Starting the app...
+	Starting the app...
+[DEBUG]	{127.0.0.1 8080 ../../internal/infastructure/files/}
+[DEBUG]	Starting the app...
+	Starting the app...
+[DEBUG]	{127.0.0.1 8080 ../../internal/infastructure/files/}
+[GIN]	2025/07/02 - 04:47:16 | 200 |  142.575415ms |       127.0.0.1 | POST     "/auth/login"
+
+[GIN]	2025/07/02 - 04:47:19 | 500 |  2.770576196s |       127.0.0.1 | POST     "/protected/item"
+Error #01: defaultUseCase[entity.Item].New()/file already exists
+
+[GIN]	2025/07/02 - 04:47:22 | 200 |    2.931349ms |       127.0.0.1 | GET      "/protected/character"
+
+[DEBUG]	Starting the app...
+	Starting the app...
+[DEBUG]	{127.0.0.1 8080 ../../internal/infastructure/files/}
+[GIN]	2025/07/02 - 04:50:08 | 200 |  119.643377ms |       127.0.0.1 | POST     "/auth/login"
+
+[GIN]	2025/07/02 - 04:50:12 | 500 |  4.439613472s |       127.0.0.1 | POST     "/protected/item"
+Error #01: defaultUseCase[entity.Item].New()/file already exists
+
+[GIN]	2025/07/02 - 04:50:16 | 200 |    2.099968ms |       127.0.0.1 | GET      "/protected/character"
+

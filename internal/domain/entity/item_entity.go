@@ -6,7 +6,7 @@ type Item interface {
 }
 
 type SimpleItem struct {
-	ID       string
+	ID
 	Name     string
 	OrigName string
 	Comment  string
@@ -33,19 +33,11 @@ func (item SimpleItem) GetSimpleItem() *SimpleItem {
 	return &item
 }
 
-func (item SimpleItem) GetID() string {
-	return item.ID
-}
-
 // Trinket Entity
 
 type Container struct {
 	SimpleItem
 	List []Item
-}
-
-func (t Container) GetID() string {
-	return t.SimpleItem.ID
 }
 
 // Weapon Entity
@@ -56,10 +48,6 @@ type Weapon struct {
 	WeaponAttackBonus int
 	PropertyWeapon    string
 	WeaponDamageType  int
-}
-
-func (w Weapon) GetID() string {
-	return w.SimpleItem.ID
 }
 
 // Ammunition Entity

@@ -1,0 +1,21 @@
+[DEBUG]	Starting the app...
+	Starting the app...
+[DEBUG]	{127.0.0.1 8080 ../../internal/infastructure/files/}
+[GIN]	2025/07/04 - 03:48:29 | 400 |     142.749µs |       127.0.0.1 | POST     "/auth/register"
+Error #01: json: cannot unmarshal number into Go struct field UserDTO.user of type string
+
+[GIN]	2025/07/04 - 03:50:25 | 201 |  119.907808ms |       127.0.0.1 | POST     "/auth/register"
+
+[GIN]	2025/07/04 - 04:22:49 | 200 |  115.330884ms |       127.0.0.1 | POST     "/auth/login"
+
+[GIN]	2025/07/04 - 04:23:50 | 200 |  112.123888ms |       127.0.0.1 | POST     "/auth/login"
+
+[GIN]	2025/07/04 - 04:24:45 | 200 |  113.242341ms |       127.0.0.1 | POST     "/auth/login"
+
+[GIN]	2025/07/04 - 04:27:49 | 200 |  110.784605ms |       127.0.0.1 | POST     "/auth/login"
+
+[GIN]	2025/07/04 - 04:28:56 | 200 |   91.883172ms |       127.0.0.1 | POST     "/auth/login"
+
+[GIN]	2025/07/04 - 04:33:21 | 200 |  111.766148ms |       127.0.0.1 | POST     "/auth/login"
+
+[DEBUG]	Server is closed

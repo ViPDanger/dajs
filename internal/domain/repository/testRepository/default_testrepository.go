@@ -34,14 +34,14 @@ func (r *testRepository[T]) GetByID(id string) (ret *T, err error) {
 }
 func (r *testRepository[T]) Insert(item *T) error {
 	var o T
-	TName := reflect.TypeOf(o).Name()
+	TName := reflect.TypeOf(o).String()
 	if item == nil {
 		return fmt.Errorf("Test Repositrory[%s].Insert: Nill pointer", TName)
 	}
-	if _, exists := r.Objects[(*item).GetID()]; exists {
+	if _, exists := r.Objects[(*item).GetID().String()]; exists {
 		return fmt.Errorf("Test Repositrory[%s].Insert: Object already exists", TName)
 	}
-	r.Objects[(*item).GetID()] = *item
+	r.Objects[(*item).GetID().String()] = *item
 	return nil
 }
 
@@ -49,15 +49,15 @@ func (r *testRepository[T]) Update(item *T) error {
 
 	if item == nil {
 		var o T
-		TName := reflect.TypeOf(o).Name()
+		TName := reflect.TypeOf(o).String()
 		return fmt.Errorf("Test Repositrory[%s].Update: Nill pointer", TName)
 	}
-	if _, exists := r.Objects[(*item).GetID()]; !exists {
+	if _, exists := r.Objects[(*item).GetID().String()]; !exists {
 		var o T
-		TName := reflect.TypeOf(o).Name()
+		TName := reflect.TypeOf(o).String()
 		return fmt.Errorf("Test Repositrory[%s].Update: Object not exists", TName)
 	}
-	r.Objects[(*item).GetID()] = *item
+	r.Objects[(*item).GetID().String()] = *item
 	return nil
 
 }
@@ -73,7 +73,7 @@ func (r *testRepository[T]) Delete(id string) (err error) {
 
 	if _, exists := r.Objects[id]; !exists {
 		var o T
-		TName := reflect.TypeOf(o).Name()
+		TName := reflect.TypeOf(o).String()
 		err = fmt.Errorf("Test Repositrory[%s].Delete: Object not exists", TName)
 	}
 	delete(r.Objects, id)

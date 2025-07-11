@@ -16,6 +16,6 @@ type User struct {
 	Password string
 }
 
-func (c User) GetID() string {
-	return c.Name
+func (c User) GetID() ID {
+	return ID(c.Name)
 }
