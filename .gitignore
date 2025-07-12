@@ -2,5 +2,6 @@ go-api/cmd/api/logs/*.txt
 go-api/cmd/worker/logs/*.txt
 go-api/internal/infastructure/files
 go-api/cmd/api/*.ini
+telegram-bot/
 *__pycache__*
 *__debug_*
