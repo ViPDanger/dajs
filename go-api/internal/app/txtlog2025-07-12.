@@ -1,0 +1,589 @@
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 00:57:09 | 201 |   175.26939ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 00:57:09 | 200 |  152.525834ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 00:57:09 | 200 |     132.058µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 00:57:11 | 200 |     111.069µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 00:57:15 | 401 |      80.121µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 00:57:19 | 401 |     117.892µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 00:57:20 | 401 |      91.182µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 00:58:09 | 401 |      56.466µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 00:58:10 | 401 |     378.441µs |                 | DELETE   "/character"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 00:58:16 | 201 |  163.742332ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 00:58:16 | 200 |  143.407431ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 00:58:16 | 200 |     142.328µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 00:58:16 | 200 |       1.613µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 00:58:16 | 401 |       20.92µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 00:58:16 | 401 |      15.499µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 00:58:16 | 401 |      13.235µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 00:58:16 | 401 |      10.921µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 00:58:16 | 401 |       11.04µs |                 | DELETE   "/character"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:01:30 | 201 |   161.76675ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:01:30 | 200 |   146.53797ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:01:30 | 200 |     163.287µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:01:30 | 200 |       26.35µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:01:30 | 401 |      16.011µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 01:01:30 | 401 |      12.523µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 01:01:30 | 401 |      12.774µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 01:01:30 | 401 |      13.696µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 01:01:30 | 401 |      38.393µs |                 | DELETE   "/character"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:02:00 | 201 |     158.168ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:02:00 | 200 |  151.806906ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:02:00 | 200 |     222.188µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:02:00 | 200 |       2.594µs |                 | GET      "/"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:03:11 | 201 |  166.562584ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:03:11 | 200 |  142.084198ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:03:11 | 200 |      207.55µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:03:11 | 200 |       2.154µs |                 | GET      "/"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:05:22 | 201 |  184.471272ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:05:23 | 200 |  156.507335ms |                 | POST     "/login"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:07:34 | 201 |  164.330583ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:07:34 | 200 |  158.584458ms |                 | POST     "/login"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:08:36 | 201 |  166.264436ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:08:37 | 200 |  141.404783ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:10:07 | 200 |         1m30s |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:10:07 | 200 |       4.518µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:11:29 | 401 |         1m22s |                 | POST     "/character"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:12:29 | 201 |  157.523171ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:12:29 | 200 |  147.698169ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:12:33 | 200 |  3.847027916s |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:12:33 | 200 |       4.909µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:12:36 | 401 |  2.867014277s |                 | POST     "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:12:40 | 401 |  3.971837126s |                 | GET      "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:12:41 | 401 |  1.044158341s |                 | GET      "/character/all"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:12:42 | 401 |  495.112722ms |                 | PUT      "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:12:42 | 401 |  235.946175ms |                 | DELETE   "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:12:46 | 201 |  159.097359ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:12:46 | 200 |  160.709245ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:12:46 | 200 |     147.017µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:12:46 | 200 |       1.413µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:12:46 | 401 |      24.186µs |                 | POST     "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:12:46 | 401 |      15.249µs |                 | GET      "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:12:46 | 401 |      20.659µs |                 | GET      "/character/all"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:12:46 | 401 |      20.238µs |                 | PUT      "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:12:46 | 401 |      15.139µs |                 | DELETE   "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:13:44 | 201 |  165.290303ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:13:44 | 200 |  169.654636ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:13:44 | 200 |     194.657µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:13:44 | 200 |       3.076µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:13:44 | 401 |      46.448µs |                 | POST     "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:13:44 | 401 |      27.121µs |                 | GET      "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:13:44 | 401 |      24.886µs |                 | GET      "/character/all"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:13:44 | 401 |      22.042µs |                 | PUT      "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:13:44 | 401 |      23.915µs |                 | DELETE   "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:13:59 | 201 |  188.868572ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:13:59 | 200 |  164.778101ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:13:59 | 200 |     305.509µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:13:59 | 200 |       2.114µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:13:59 | 401 |      60.659µs |                 | POST     "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:13:59 | 401 |       44.23µs |                 | GET      "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:13:59 | 401 |      29.493µs |                 | GET      "/character/all"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:13:59 | 401 |      23.402µs |                 | PUT      "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[GIN]	2025/07/12 - 01:13:59 | 401 |      24.173µs |                 | DELETE   "/character"
+Error #01: userHandler.Protected(): Invalid token
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:14:47 | 201 |  164.844365ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:14:47 | 200 |  157.484016ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:14:47 | 200 |     274.535µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:14:47 | 200 |       2.745µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:14:49 | 500 |  1.749770045s |                 | POST     "/character"
+Error #01: characterHandler.New()/characterUsecase.New(): Nill pointer repository
+
+[GIN]	2025/07/12 - 01:14:50 | 400 |  850.215117ms |                 | GET      "/character"
+Error #01: characterHandler.Get(): Нет ID в запросе
+
+[GIN]	2025/07/12 - 01:14:50 | 500 |     312.644µs |                 | GET      "/character/all"
+Error #01: characterHandler.GetAll()/characterUsecase.GetAll(): Nill pointer repository
+
+[GIN]	2025/07/12 - 01:14:50 | 500 |     638.242µs |                 | PUT      "/character"
+Error #01: characterUsecase.Set(): Nill pointer repository
+
+[GIN]	2025/07/12 - 01:14:50 | 400 |     172.561µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete(): No ID header in request
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:15:23 | 201 |   161.02083ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:15:24 | 200 |  142.068206ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:15:24 | 200 |     159.899µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:15:24 | 200 |       1.343µs |                 | GET      "/"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:16:23 | 201 |  163.193212ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:16:23 | 200 |  155.892839ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:16:23 | 200 |     263.158µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:16:23 | 200 |       2.284µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:16:30 | 500 |  1.833183368s |                 | POST     "/character"
+Error #01: characterHandler.New()/characterUsecase.New(): Nill pointer repository
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:17:12 | 201 |  164.703791ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:17:12 | 200 |  162.670748ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:17:12 | 200 |     141.207µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:17:12 | 200 |       1.433µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:17:20 | 500 |  3.459539327s |                 | POST     "/character"
+Error #01: characterHandler.New()/characterUsecase.New(): Nill pointer repository
+
+[GIN]	2025/07/12 - 01:17:35 | 400 |  3.714630014s |                 | GET      "/character"
+Error #01: characterHandler.Get(): Нет ID в запросе
+
+[GIN]	2025/07/12 - 01:17:35 | 500 |      273.69µs |                 | GET      "/character/all"
+Error #01: characterHandler.GetAll()/characterUsecase.GetAll(): Nill pointer repository
+
+[GIN]	2025/07/12 - 01:17:35 | 500 |     478.433µs |                 | PUT      "/character"
+Error #01: characterUsecase.Set(): Nill pointer repository
+
+[GIN]	2025/07/12 - 01:17:35 | 400 |     140.837µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete(): No ID header in request
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 01:22:05 | 201 |  159.178828ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 01:22:05 | 200 |  151.570403ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 01:22:05 | 200 |      276.42µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 01:22:05 | 200 |      55.091µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 01:22:05 | 500 |     646.753µs |                 | POST     "/character"
+Error #01: characterHandler.New()/%!w(<nil>)
+
+[GIN]	2025/07/12 - 01:22:05 | 400 |     192.816µs |                 | GET      "/character"
+Error #01: characterHandler.Get(): Нет ID в запросе
+
+[GIN]	2025/07/12 - 01:22:05 | 200 |     152.431µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 01:22:05 | 200 |     313.418µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 01:22:05 | 400 |     160.506µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete(): No ID header in request
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:13:42 | 201 |  152.812439ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:13:42 | 200 |  131.659017ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:13:42 | 200 |     149.116µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:13:42 | 200 |      25.618µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:13:42 | 500 |     333.428µs |                 | POST     "/character"
+Error #01: characterHandler.New()/%!w(<nil>)
+
+[GIN]	2025/07/12 - 02:13:42 | 400 |     112.658µs |                 | GET      "/character"
+Error #01: characterHandler.Get(): Нет ID в запросе
+
+[GIN]	2025/07/12 - 02:13:42 | 200 |      95.857µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:13:42 | 200 |     228.253µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:13:42 | 400 |     101.348µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete(): No ID header in request
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:15:31 | 201 |  149.580053ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:15:31 | 200 |  130.317465ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:15:31 | 200 |     197.727µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:15:31 | 200 |       2.124µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:15:31 | 500 |     456.468µs |                 | POST     "/character"
+Error #01: characterHandler.New()/%!w(<nil>)
+
+[GIN]	2025/07/12 - 02:15:31 | 400 |     108.171µs |                 | GET      "/character"
+Error #01: characterHandler.Get():No id header in request
+
+[GIN]	2025/07/12 - 02:15:31 | 200 |     132.726µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:15:31 | 200 |     370.098µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:15:31 | 400 |     126.715µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete(): No ID header in request
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:17:27 | 201 |  149.168671ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:17:27 | 200 |  130.061856ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:17:27 | 200 |     142.174µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:17:27 | 200 |       1.823µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:17:27 | 500 |     348.989µs |                 | POST     "/character"
+Error #01: characterHandler.New()/%!w(<nil>)
+
+[GIN]	2025/07/12 - 02:17:27 | 400 |      83.535µs |                 | GET      "/character"
+Error #01: characterHandler.Get():No id header in request
+
+[GIN]	2025/07/12 - 02:17:27 | 200 |     125.514µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:17:27 | 200 |      295.65µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:17:27 | 400 |     121.065µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete(): No ID header in request
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:18:09 | 201 |  158.385043ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:18:09 | 200 |  149.604004ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:18:09 | 200 |     220.731µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:18:09 | 200 |       2.054µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:18:09 | 500 |     578.938µs |                 | POST     "/character"
+Error #01: characterHandler.New()/%!w(<nil>)
+
+[GIN]	2025/07/12 - 02:18:09 | 400 |     169.485µs |                 | GET      "/character"
+Error #01: characterHandler.Get():No id header in request
+
+[GIN]	2025/07/12 - 02:18:09 | 200 |     327.249µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:18:09 | 200 |     465.306µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:18:09 | 400 |     101.519µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete(): No ID header in request
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:19:27 | 201 |  157.041162ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:19:27 | 200 |  148.320289ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:19:27 | 200 |     165.118µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:19:27 | 200 |       1.723µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:19:27 | 200 |         322µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 02:19:27 | 400 |      93.855µs |                 | GET      "/character"
+Error #01: characterHandler.Get():No id header in request
+
+[GIN]	2025/07/12 - 02:19:27 | 200 |     151.192µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:19:27 | 200 |     251.519µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:19:27 | 400 |      72.205µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete(): No ID header in request
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:21:22 | 201 |  138.219988ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:21:22 | 200 |  152.316081ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:21:22 | 200 |     138.328µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:21:22 | 200 |       1.413µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:21:22 | 200 |     297.496µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 02:21:28 | 200 |   5.94489507s |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 02:21:28 | 200 |     199.112µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:21:28 | 200 |     414.794µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:21:28 | 200 |     118.651µs |                 | DELETE   "/character"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:22:35 | 201 |  111.033388ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:22:35 | 200 |    89.70188ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:22:35 | 200 |      88.585µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:22:35 | 200 |       1.152µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:22:35 | 200 |     137.517µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 02:22:35 | 200 |      43.962µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 02:22:35 | 200 |      47.008µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:22:35 | 200 |     101.089µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:22:35 | 200 |      41.588µs |                 | DELETE   "/character"
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:23:42 | 201 |  148.607629ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |  153.921817ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |     194.733µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |       1.653µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |     408.413µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |       144.6µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |     140.903µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |     306.202µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |      76.774µs |                 | DELETE   "/character"
+
+[GIN]	2025/07/12 - 02:23:42 | 400 |     156.713µs |                 | POST     "/character"
+Error #01: characterHandler.New()/EOF
+
+[GIN]	2025/07/12 - 02:23:42 | 500 |      99.165µs |                 | GET      "/character"
+Error #01: characterHandler.Get()/characterUsecase.GetByID()/Object not exists
+
+[GIN]	2025/07/12 - 02:23:42 | 200 |     107.962µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:23:42 | 400 |      77.114µs |                 | PUT      "/character"
+Error #01: characterHandler.Set()/EOF
+
+[GIN]	2025/07/12 - 02:23:42 | 500 |     111.268µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete()/characterUsecase.Delete()/Test Repositrory[entity.Character].Delete: Object not exists
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:24:49 | 201 |  151.029427ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |  150.187864ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |       139.1µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |       1.303µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |     369.561µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |      82.354µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |     136.746µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |     318.645µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |       75.08µs |                 | DELETE   "/character"
+
+[GIN]	2025/07/12 - 02:24:49 | 400 |      106.84µs |                 | POST     "/character"
+Error #01: characterHandler.New()/EOF
+
+[GIN]	2025/07/12 - 02:24:49 | 500 |      84.628µs |                 | GET      "/character"
+Error #01: characterHandler.Get()/characterUsecase.GetByID()/Object not exists
+
+[GIN]	2025/07/12 - 02:24:49 | 200 |      55.534µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:24:49 | 400 |      80.601µs |                 | PUT      "/character"
+Error #01: characterHandler.Set()/EOF
+
+[GIN]	2025/07/12 - 02:24:49 | 500 |     126.697µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete()/characterUsecase.Delete()/Test Repositrory[entity.Character].Delete: Object not exists
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:25:36 | 201 |  151.601233ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:25:36 | 200 |  135.874965ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:25:36 | 200 |     137.307µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:25:36 | 200 |       1.402µs |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:25:36 | 200 |      337.19µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 02:25:36 | 200 |      84.648µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 02:25:36 | 200 |     109.615µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:25:36 | 200 |     254.896µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:25:36 | 200 |      50.344µs |                 | DELETE   "/character"
+
+[GIN]	2025/07/12 - 02:25:36 | 400 |      73.007µs |                 | POST     "/character"
+Error #01: characterHandler.New()/EOF
+
+[GIN]	2025/07/12 - 02:25:36 | 500 |       58.77µs |                 | GET      "/character"
+Error #01: characterHandler.Get()/characterUsecase.GetByID()/Object not exists
+
+[GIN]	2025/07/12 - 02:25:36 | 400 |      55.353µs |                 | PUT      "/character"
+Error #01: characterHandler.Set()/EOF
+
+[GIN]	2025/07/12 - 02:25:36 | 500 |      68.759µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete()/characterUsecase.Delete()/Test Repositrory[entity.Character].Delete: Object not exists
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:25:52 | 201 |  111.735558ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:25:52 | 200 |   89.308552ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:25:52 | 200 |      75.141µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:25:52 | 200 |         952ns |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:25:52 | 200 |     130.204µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 02:25:52 | 200 |      47.158µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 02:25:52 | 200 |      45.315µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:25:52 | 200 |     102.171µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:25:52 | 200 |      43.591µs |                 | DELETE   "/character"
+
+[GIN]	2025/07/12 - 02:25:52 | 400 |      65.272µs |                 | POST     "/character"
+Error #01: characterHandler.New()/EOF
+
+[GIN]	2025/07/12 - 02:25:52 | 500 |      29.636µs |                 | GET      "/character"
+Error #01: characterHandler.Get()/characterUsecase.GetByID()/Object not exists
+
+[GIN]	2025/07/12 - 02:25:52 | 400 |      23.113µs |                 | PUT      "/character"
+Error #01: characterHandler.Set()/EOF
+
+[GIN]	2025/07/12 - 02:25:52 | 500 |      67.837µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete()/characterUsecase.Delete()/Test Repositrory[entity.Character].Delete: Object not exists
+
+[DEBUG]	app is started on 127.0.0.1 : 8090
+[GIN]	2025/07/12 - 02:26:59 | 201 |  111.126349ms |                 | POST     "/register"
+
+[GIN]	2025/07/12 - 02:26:59 | 200 |    89.53997ms |                 | POST     "/login"
+
+[GIN]	2025/07/12 - 02:26:59 | 200 |      67.176µs |                 | POST     "/refresh"
+
+[GIN]	2025/07/12 - 02:26:59 | 200 |         791ns |                 | GET      "/"
+
+[GIN]	2025/07/12 - 02:26:59 | 200 |     115.005µs |                 | POST     "/character"
+
+[GIN]	2025/07/12 - 02:26:59 | 200 |       37.16µs |                 | GET      "/character"
+
+[GIN]	2025/07/12 - 02:26:59 | 200 |      36.969µs |                 | GET      "/character/all"
+
+[GIN]	2025/07/12 - 02:26:59 | 200 |      89.137µs |                 | PUT      "/character"
+
+[GIN]	2025/07/12 - 02:26:59 | 200 |      55.725µs |                 | DELETE   "/character"
+
+[GIN]	2025/07/12 - 02:26:59 | 400 |      84.308µs |                 | POST     "/character"
+Error #01: characterHandler.New()/EOF
+
+[GIN]	2025/07/12 - 02:26:59 | 500 |      22.242µs |                 | GET      "/character"
+Error #01: characterHandler.Get()/characterUsecase.GetByID()/Object not exists
+
+[GIN]	2025/07/12 - 02:26:59 | 400 |      20.328µs |                 | PUT      "/character"
+Error #01: characterHandler.Set()/EOF
+
+[GIN]	2025/07/12 - 02:26:59 | 500 |      52.018µs |                 | DELETE   "/character"
+Error #01: characterHandler.Delete()/characterUsecase.Delete()/Test Repositrory[entity.Character].Delete: Object not exists
+

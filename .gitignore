@@ -1,5 +1,6 @@
-cmd/api/logs/*.txt
-cmd/worker/logs/*.txt
-internal/infastructure/files
-cmd/api/*.ini
+go-api/cmd/api/logs/*.txt
+go-api/cmd/worker/logs/*.txt
+go-api/internal/infastructure/files
+go-api/cmd/api/*.ini
+*__pycache__*
 *__debug_*
