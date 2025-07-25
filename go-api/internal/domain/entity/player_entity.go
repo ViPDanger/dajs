@@ -1,6 +1,6 @@
 package entity
 
-type Player struct {
+type PlayerCharacter struct {
 	Character
 	CharacterRace `json:"race"`
 	Background    `json:"background"`

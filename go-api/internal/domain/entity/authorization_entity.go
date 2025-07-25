@@ -11,11 +11,7 @@ type RefreshToken struct {
 	ExpireTime time.Time
 }
 type User struct {
-	Uid      string
-	Name     string
+	ID       `bson:"_id"`
+	Username string
 	Password string
-}
-
-func (c User) GetID() ID {
-	return ID(c.Name)
 }

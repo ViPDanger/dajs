@@ -10,11 +10,11 @@ import (
 )
 
 type ItemUsecase interface {
-	New(ctx context.Context, Item *entity.Item) (*entity.ID, error)
-	GetByID(ctx context.Context, id entity.ID) (*entity.Item, error)
-	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.Item, error)
-	GetAll(ctx context.Context) ([]*entity.Item, error)
-	Set(ctx context.Context, Item *entity.Item) error
+	New(ctx context.Context, Item entity.Item) (*entity.ID, error)
+	GetByID(ctx context.Context, id entity.ID) (entity.Item, error)
+	GetArray(ctx context.Context, ids []entity.ID) ([]entity.Item, error)
+	GetAll(ctx context.Context) ([]entity.Item, error)
+	Set(ctx context.Context, Item entity.Item) error
 	Delete(ctx context.Context, id entity.ID) error
 }
 
@@ -26,7 +26,7 @@ type itemUsecase struct {
 	repository.ItemRepository
 }
 
-func (u *itemUsecase) New(ctx context.Context, item *entity.Item) (id *entity.ID, err error) {
+func (u *itemUsecase) New(ctx context.Context, item entity.Item) (id *entity.ID, err error) {
 	if u.ItemRepository == nil {
 		return nil, errors.New("ItemRepository.New(): Nill pointer repository")
 
@@ -36,7 +36,7 @@ func (u *itemUsecase) New(ctx context.Context, item *entity.Item) (id *entity.ID
 	}
 	return
 }
-func (u *itemUsecase) GetByID(ctx context.Context, id entity.ID) (item *entity.Item, err error) {
+func (u *itemUsecase) GetByID(ctx context.Context, id entity.ID) (item entity.Item, err error) {
 	if u.ItemRepository == nil {
 		return nil, errors.New("itemUsecase.GetByID(): Nill pointer repository")
 
@@ -46,7 +46,7 @@ func (u *itemUsecase) GetByID(ctx context.Context, id entity.ID) (item *entity.I
 	}
 	return
 }
-func (u *itemUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*entity.Item, err error) {
+func (u *itemUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []entity.Item, err error) {
 	if u.ItemRepository == nil {
 		return nil, errors.New("itemUsecase.GetArray(): Nill pointer repository")
 
@@ -56,7 +56,7 @@ func (u *itemUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*e
 	}
 	return
 }
-func (u *itemUsecase) GetAll(ctx context.Context) (items []*entity.Item, err error) {
+func (u *itemUsecase) GetAll(ctx context.Context) (items []entity.Item, err error) {
 	if u.ItemRepository == nil {
 		return nil, errors.New("itemUsecase.GetAll(): Nill pointer repository")
 
@@ -66,7 +66,7 @@ func (u *itemUsecase) GetAll(ctx context.Context) (items []*entity.Item, err err
 	}
 	return
 }
-func (u *itemUsecase) Set(ctx context.Context, item *entity.Item) (err error) {
+func (u *itemUsecase) Set(ctx context.Context, item entity.Item) (err error) {
 	if u.ItemRepository == nil {
 		return errors.New("itemUsecase.Update(): Nill pointer repository")
 

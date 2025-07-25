@@ -7,14 +7,14 @@ import (
 
 func ToUserEntity(userDTO dto.UserDTO) entity.User {
 	return entity.User{
-		Name:     userDTO.Username,
+		Username: userDTO.Username,
 		Password: userDTO.Password,
 	}
 }
 
 func ToUserDTO(user entity.User) dto.UserDTO {
 	return dto.UserDTO{
-		Username: user.Name,
+		Username: user.Username,
 		Password: user.Password,
 	}
 }

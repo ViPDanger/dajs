@@ -12,6 +12,7 @@ import (
 type NPCUsecase interface {
 	New(ctx context.Context, NPC *entity.NPC) (*entity.ID, error)
 	GetByID(ctx context.Context, id entity.ID) (*entity.NPC, error)
+	GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.NPC, error)
 	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.NPC, error)
 	GetAll(ctx context.Context) ([]*entity.NPC, error)
 	Set(ctx context.Context, NPC *entity.NPC) error

@@ -1,12 +1,11 @@
 package entity
 
 type Item interface {
-	Identifiable
 	GetSimpleItem() *SimpleItem
 }
 
 type SimpleItem struct {
-	ID
+	ID       `bson:"_id"`
 	Name     string
 	OrigName string
 	Comment  string

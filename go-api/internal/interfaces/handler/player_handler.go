@@ -16,7 +16,7 @@ type playerHandler struct {
 	UC usecase.PlayerUsecase
 }
 
-func NewPlayerHandler(UC usecase.PlayerUsecase) *playerHandler {
+func NewPlayerCharacterHandler(UC usecase.PlayerUsecase) *playerHandler {
 	return &playerHandler{}
 }
 
@@ -43,9 +43,35 @@ func (h *playerHandler) Get(c *gin.Context) {
 	c.JSON(http.StatusOK, mapper.ToPlayerDTO(*object))
 }
 
+func (h *playerHandler) GetByCreatorID(c *gin.Context) {
+	// проверка id header
+	clientId, ok := c.Get("client_id")
+	if !ok {
+		err := errors.New("playerHandler.Get(): Нет ID в запросе")
+		_ = c.Error(err)
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+
+	// обращение к Usecase
+	objects, err := h.UC.GetByCreatorID(c.Request.Context(), entity.ID(clientId.(string)))
+	if err != nil {
+		err = fmt.Errorf("playerHandler.Get()/%w", err)
+		_ = c.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	dtos := make([]dto.PlayerCharacterDTO, len(objects))
+	for i := range objects {
+		dtos[i] = mapper.ToPlayerDTO(*(objects[i]))
+	}
+	// ВЫВОД
+	c.JSON(http.StatusOK, dtos)
+}
+
 // POST object
 func (h *playerHandler) New(c *gin.Context) {
-	var DTO dto.PlayerDTO
+	var DTO dto.PlayerCharacterDTO
 	// проверка body запроса
 	if err := c.ShouldBindJSON(&DTO); err != nil {
 		err = fmt.Errorf("playerHandler.New()/%w", err)
@@ -54,6 +80,8 @@ func (h *playerHandler) New(c *gin.Context) {
 		return
 	}
 	object := mapper.ToPlayerEntity(DTO)
+	clientID, _ := c.Get("client_id")
+	object.CreatorID = clientID.(entity.ID).String()
 	// Обращение к Usecase
 	id, err := h.UC.New(c.Request.Context(), &object)
 	if err != nil || id != nil {
@@ -77,7 +105,7 @@ func (h *playerHandler) GetAll(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ObjectsDTO := make([]dto.PlayerDTO, len(Objects))
+	ObjectsDTO := make([]dto.PlayerCharacterDTO, len(Objects))
 	for i := range Objects {
 		ObjectsDTO[i] = mapper.ToPlayerDTO(*Objects[i])
 	}
@@ -100,12 +128,12 @@ func (h *playerHandler) Delete(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "DELETE: SUCCESS"})
+	c.JSON(http.StatusCreated, gin.H{"message": "DELETE: SUCCESS"})
 }
 
 // PUT object
 func (h *playerHandler) Set(c *gin.Context) {
-	var DTO dto.PlayerDTO
+	var DTO dto.PlayerCharacterDTO
 	if err := c.ShouldBindJSON(&DTO); err != nil {
 		err = fmt.Errorf("playerHandler.Set()/%w", err)
 		_ = c.Error(err)

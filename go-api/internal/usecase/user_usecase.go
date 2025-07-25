@@ -12,8 +12,8 @@ import (
 )
 
 type UserUseCase interface {
-	Register(ctx context.Context, user entity.User) (*entity.ID, error)
-	Login(ctx context.Context, user entity.User) error
+	Register(ctx context.Context, user entity.User) error
+	Login(ctx context.Context, user entity.User) (*entity.ID, error)
 	Delete(ctx context.Context, character entity.ID) error
 }
 
@@ -25,30 +25,31 @@ func NewUserUseCase(repo repository.UserRepository) UserUseCase {
 	return &userUseCase{UserRepository: repo}
 }
 
-func (uc *userUseCase) Register(ctx context.Context, user entity.User) (id *entity.ID, err error) {
+func (uc *userUseCase) Register(ctx context.Context, user entity.User) (err error) {
 	if uc.UserRepository == nil {
-		return nil, errors.New("userUseCase.Register(): Nill pointer repository")
+		return errors.New("userUseCase.Register(): Nill pointer repository")
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, fmt.Errorf("userUseCase.Register()/%w", err)
+		return fmt.Errorf("userUseCase.Register()/%w", err)
 	}
 	user.Password = string(hash)
-	if id, err = uc.UserRepository.Insert(ctx, &user); err != nil {
-		return nil, fmt.Errorf("userUseCase.Register()/%w", err)
+	if err = uc.UserRepository.Insert(ctx, &user); err != nil {
+		return fmt.Errorf("userUseCase.Register()/%w", err)
 	}
 	return
 }
-func (uc *userUseCase) Login(ctx context.Context, user entity.User) (err error) {
+func (uc *userUseCase) Login(ctx context.Context, user entity.User) (id *entity.ID, err error) {
 	if uc.UserRepository == nil {
-		return errors.New("userUseCase.Login(): Nill pointer repository")
+		return nil, errors.New("userUseCase.Login(): Nill pointer repository")
 	}
-	if repoUser, err := uc.UserRepository.GetByID(ctx, user.GetID()); err != nil {
-		return fmt.Errorf("userUseCase.Login()/%w", err)
+	repoUser, err := uc.UserRepository.Get(ctx, user.Username)
+	if err != nil {
+		return nil, fmt.Errorf("userUseCase.Login()/%w", err)
 	} else if bcrypt.CompareHashAndPassword([]byte(repoUser.Password), []byte(user.Password)) != nil {
-		return fmt.Errorf("userUseCase.Login(): Wrong login or password")
+		return nil, fmt.Errorf("userUseCase.Login(): Wrong login or password")
 	}
-	return nil
+	return &repoUser.ID, nil
 }
 func (uc *userUseCase) Delete(ctx context.Context, id entity.ID) error {
 	if uc.UserRepository == nil {

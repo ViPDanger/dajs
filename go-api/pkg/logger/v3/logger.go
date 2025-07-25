@@ -107,7 +107,7 @@ func Initialization(path string, format string) Ilogger {
 			logPath = defaultPath
 		}
 		if logType == "" {
-			logPath = defaultFileType
+			logType = defaultFileType
 		}
 		var err error
 		logger, err = newLog()

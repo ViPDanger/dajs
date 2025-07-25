@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   mongo:
+  
     image: mongo
-    container_name: mongo
+    container_name: mongo_dajs
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
@@ -15,7 +16,7 @@ services:
 
   mongo-express:
     image: mongo-express
-    container_name: mongo-express
+    container_name: mongo-express_dajs
     restart: always
     depends_on:
       - mongo

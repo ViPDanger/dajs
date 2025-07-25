@@ -15,11 +15,11 @@ var RefreshTokenTime = time.Hour * 24 * 7
 var AccessKey = []byte("ACCESSKEY")
 var RefreshKey = []byte("REFRESHKEY")
 
-func NewAccessToken(username string) (accessToken entity.AccessToken, err error) {
+func NewAccessToken(id string) (accessToken entity.AccessToken, err error) {
 
 	claims := jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(AccessTokenTime).Unix(),
+		"id":  id,
+		"exp": time.Now().Add(AccessTokenTime).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	accessString, err := token.SignedString(AccessKey)
@@ -34,10 +34,10 @@ func NewAccessToken(username string) (accessToken entity.AccessToken, err error)
 	}, err
 }
 
-func NewRefreshToken(username string) (refreshToken entity.RefreshToken, err error) {
+func NewRefreshToken(id string) (refreshToken entity.RefreshToken, err error) {
 	claims := jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(RefreshTokenTime).Unix(),
+		"id":  id,
+		"exp": time.Now().Add(RefreshTokenTime).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	refreshString, err := token.SignedString(RefreshKey)
@@ -76,5 +76,16 @@ func RefreshAccessToken(refreshTokenString string) (accessToken entity.AccessTok
 		err = errors.New("Invalid Token")
 		return
 	}
-	return NewAccessToken(c["username"].(string))
+	return NewAccessToken(c["id"].(string))
+}
+
+func GetIDFromToken(token *jwt.Token) (id *entity.ID, err error) {
+	if mapClaims, ok := token.Claims.(jwt.MapClaims); ok {
+		if s, ok := mapClaims["id"].(string); ok {
+			id := entity.ID(s)
+			return &id, nil
+		}
+		return nil, errors.New("GetIdFromToken(): no id in mapClaims")
+	}
+	return nil, errors.New("GetIdFromToken(): can't parse mapClaims from token")
 }

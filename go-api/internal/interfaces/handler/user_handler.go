@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/ViPDanger/dajs/go-api/internal/domain/entity"
 	dto "github.com/ViPDanger/dajs/go-api/internal/interfaces/dto"
 	"github.com/ViPDanger/dajs/go-api/internal/interfaces/jwt"
 	"github.com/ViPDanger/dajs/go-api/internal/interfaces/mapper"
@@ -39,13 +38,13 @@ func (userHandler *userHandler) Registration(c *gin.Context) {
 		return
 	}
 	var err error
-	var id *entity.ID
-	if id, err = userHandler.UserUseCase.Register(c.Request.Context(), mapper.ToUserEntity(userDTO)); err != nil && id != nil {
+	if err = userHandler.UserUseCase.Register(c.Request.Context(), mapper.ToUserEntity(userDTO)); err != nil {
 		err = fmt.Errorf("userHandler.Registration()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, err)
+		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"id": *id})
+	c.JSON(http.StatusCreated, gin.H{"message": "User registred succsessefully"})
 }
 
 // LOGIN USER	--------
@@ -57,21 +56,21 @@ func (userHandler *userHandler) Login(c *gin.Context) {
 		return
 	}
 	user := mapper.ToUserEntity(userDTO)
-	err := userHandler.UserUseCase.Login(c.Request.Context(), user)
-	if err != nil {
+	id, err := userHandler.UserUseCase.Login(c.Request.Context(), user)
+	if err != nil || id == nil {
 		err = fmt.Errorf("userHandler.Login()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusUnauthorized, err)
 		return
 	}
-	accessToken, err := jwt.NewAccessToken(user.Name)
+	accessToken, err := jwt.NewAccessToken(id.String())
 	if err != nil {
 		err = fmt.Errorf("userHandler.Login()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	refreshToken, err := jwt.NewRefreshToken(user.Name)
+	refreshToken, err := jwt.NewRefreshToken(id.String())
 	if err != nil {
 		err = fmt.Errorf("userHandler.Login()/%w", err)
 		_ = c.Error(err)
@@ -119,8 +118,8 @@ func Protected(c *gin.Context) {
 	if accessHeader == "" {
 		err := errors.New("userHandler.Protected():No token in protected request")
 		_ = c.Error(err)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Токен отсутствует"})
-		return
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Токен отсутствует"})
+
 	}
 	tokenString := strings.TrimPrefix(accessHeader, "Bearer ")
 	token, err := jwt.ParseAccessToken(tokenString)
@@ -129,7 +128,14 @@ func Protected(c *gin.Context) {
 		_ = c.Error(err)
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 		return
-
 	}
+	id, err := jwt.GetIDFromToken(token)
+	if id == nil || err != nil {
+		err = errors.New("userHandler.Protected(): Can't take id from token")
+		_ = c.Error(err)
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+		return
+	}
+	c.Set("client_id", *id)
 	c.Next()
 }

@@ -19,17 +19,20 @@
             "program": "${workspaceFolder}/go-api/internal/app/app_test.go"
         },
         { 
-                "name": "Python: main.py",
+                "name": "Telegram-Bot",
                 "type": "python",
                 "request": "launch",
                 "mode": "debug",
                 "program": "${workspaceFolder}/telegram-bot/main.py",
                 "console": "integratedTerminal"
         }
-
-        
-
-
-    ]
+    ],
+  "compounds": [
+    {
+      "name": "Bot+Server",
+      "configurations": ["Telegram-Bot", "Server"],
+      "stopAll": true
+    }
+  ]
 
 }

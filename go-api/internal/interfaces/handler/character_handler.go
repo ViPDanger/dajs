@@ -43,6 +43,32 @@ func (h *characterHandler) Get(c *gin.Context) {
 	c.JSON(http.StatusOK, mapper.ToCharacterDTO(*object))
 }
 
+func (h *characterHandler) GetByCreatorID(c *gin.Context) {
+	// проверка clientId header
+	clientId, ok := c.Get("client_id")
+	if !ok {
+		err := errors.New("characterHandler.Get(): client_id не найден")
+		_ = c.Error(err)
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+	// обращение к Usecase
+	objects, err := h.Usecase.GetByCreatorID(c.Request.Context(), clientId.(entity.ID))
+	if err != nil {
+		err = fmt.Errorf("characterHandler.Get()/%w", err)
+		_ = c.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	dtos := make([]dto.CharacterDTO, len(objects))
+
+	for i := range objects {
+		dtos[i] = mapper.ToCharacterDTO(*(objects[i]))
+	}
+	// ВЫВОД
+	c.JSON(http.StatusOK, dtos)
+}
+
 // POST object
 func (h *characterHandler) New(c *gin.Context) {
 	var DTO dto.CharacterDTO
@@ -54,6 +80,8 @@ func (h *characterHandler) New(c *gin.Context) {
 		return
 	}
 	object := mapper.ToCharacterEntity(DTO)
+	clientID, _ := c.Get("client_id")
+	object.CreatorID = clientID.(entity.ID).String()
 	// Обращение к Usecase
 	id, err := h.Usecase.New(c.Request.Context(), &object)
 	if err != nil || id == nil {
@@ -63,7 +91,7 @@ func (h *characterHandler) New(c *gin.Context) {
 		return
 	}
 	// ВЫВОД
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"id": id.String(),
 	})
 }
@@ -113,6 +141,8 @@ func (h *characterHandler) Set(c *gin.Context) {
 		return
 	}
 	object := mapper.ToCharacterEntity(DTO)
+	clientID, _ := c.Get("client_id")
+	object.CreatorID = clientID.(entity.ID).String()
 	err := h.Usecase.Set(c.Request.Context(), &object)
 	if err != nil {
 		_ = c.Error(err)

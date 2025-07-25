@@ -11,6 +11,7 @@ import (
 
 type CharacterUsecase interface {
 	New(ctx context.Context, character *entity.Character) (*entity.ID, error)
+	GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.Character, error)
 	GetByID(ctx context.Context, id entity.ID) (*entity.Character, error)
 	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.Character, error)
 	GetAll(ctx context.Context) ([]*entity.Character, error)

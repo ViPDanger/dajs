@@ -12,6 +12,7 @@ import (
 type MonsterUsecase interface {
 	New(ctx context.Context, Monster *entity.Monster) (*entity.ID, error)
 	GetByID(ctx context.Context, id entity.ID) (*entity.Monster, error)
+	GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.Monster, error)
 	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.Monster, error)
 	GetAll(ctx context.Context) ([]*entity.Monster, error)
 	Set(ctx context.Context, Monster *entity.Monster) error
