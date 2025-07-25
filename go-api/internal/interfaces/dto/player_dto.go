@@ -1,6 +1,6 @@
 package dto
 
-type PlayerCharacterDTO struct {
+type PlayerCharDTO struct {
 	CharacterDTO
 	CharacterRaceDTO `json:"race"`
 	BackgroundDTO    `json:"background"`

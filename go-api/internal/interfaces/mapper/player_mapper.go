@@ -5,8 +5,8 @@ import (
 	"github.com/ViPDanger/dajs/go-api/internal/interfaces/dto"
 )
 
-func ToPlayerEntity(d dto.PlayerCharacterDTO) entity.PlayerCharacter {
-	return entity.PlayerCharacter{
+func ToPlayerCharEntity(d dto.PlayerCharDTO) entity.PlayerChar {
+	return entity.PlayerChar{
 		Character:     ToCharacterEntity(d.CharacterDTO),
 		CharacterRace: ToCharacterRaceEntity(d.CharacterRaceDTO),
 		Background:    ToBackgroundEntity(d.BackgroundDTO),
@@ -19,8 +19,8 @@ func ToPlayerEntity(d dto.PlayerCharacterDTO) entity.PlayerCharacter {
 	}
 }
 
-func ToPlayerDTO(e entity.PlayerCharacter) dto.PlayerCharacterDTO {
-	return dto.PlayerCharacterDTO{
+func ToPlayerCharDTO(e entity.PlayerChar) dto.PlayerCharDTO {
+	return dto.PlayerCharDTO{
 		CharacterDTO:     ToCharacterDTO(e.Character),
 		CharacterRaceDTO: ToCharacterRaceDTO(e.CharacterRace),
 		BackgroundDTO:    ToBackgroundDTO(e.Background),

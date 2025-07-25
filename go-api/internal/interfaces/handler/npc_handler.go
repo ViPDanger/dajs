@@ -13,11 +13,11 @@ import (
 )
 
 type npcHandler struct {
-	UC usecase.NPCUsecase
+	Usecase usecase.NPCUsecase
 }
 
-func NewNPCHandler(UC usecase.NPCUsecase) *npcHandler {
-	return &npcHandler{}
+func NewNPCHandler(uc usecase.NPCUsecase) *npcHandler {
+	return &npcHandler{Usecase: uc}
 }
 
 // GET object
@@ -25,14 +25,14 @@ func (h *npcHandler) Get(c *gin.Context) {
 	// проверка id header
 	id := c.GetHeader("id")
 	if id == "" {
-		err := errors.New("npcHandler.Get(): Нет ID в запросе")
+		err := errors.New("npcHandler.Get():No id header in request")
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	// обращение к Usecase
-	object, err := h.UC.GetByID(c.Request.Context(), entity.ID(id))
+	object, err := h.Usecase.GetByID(c.Request.Context(), entity.ID(id))
 	if err != nil {
 		err = fmt.Errorf("npcHandler.Get()/%w", err)
 		_ = c.Error(err)
@@ -44,17 +44,16 @@ func (h *npcHandler) Get(c *gin.Context) {
 }
 
 func (h *npcHandler) GetByCreatorID(c *gin.Context) {
-	// проверка id header
+	// проверка clientId header
 	clientId, ok := c.Get("client_id")
 	if !ok {
-		err := errors.New("npcHandler.Get(): Нет ID в запросе")
+		err := errors.New("npcHandler.Get(): client_id не найден")
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-
 	// обращение к Usecase
-	objects, err := h.UC.GetByCreatorID(c.Request.Context(), entity.ID(clientId.(string)))
+	objects, err := h.Usecase.GetByCreatorID(c.Request.Context(), clientId.(entity.ID))
 	if err != nil {
 		err = fmt.Errorf("npcHandler.Get()/%w", err)
 		_ = c.Error(err)
@@ -62,8 +61,9 @@ func (h *npcHandler) GetByCreatorID(c *gin.Context) {
 		return
 	}
 	dtos := make([]dto.NPCdto, len(objects))
+
 	for i := range objects {
-		dtos[i] = mapper.ToNPCdto(*(objects[i]))
+		dtos[i] = mapper.ToNPCdto((objects[i]))
 	}
 	// ВЫВОД
 	c.JSON(http.StatusOK, dtos)
@@ -81,10 +81,10 @@ func (h *npcHandler) New(c *gin.Context) {
 	}
 	object := mapper.ToNPCEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(entity.ID).String()
+	object.CreatorID = clientID.(entity.ID)
 	// Обращение к Usecase
-	id, err := h.UC.New(c.Request.Context(), &object)
-	if err != nil || id != nil {
+	id, err := h.Usecase.New(c.Request.Context(), &object)
+	if err != nil || id == nil {
 		err = fmt.Errorf("npcHandler.New()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -98,7 +98,7 @@ func (h *npcHandler) New(c *gin.Context) {
 
 // GET all objects
 func (h *npcHandler) GetAll(c *gin.Context) {
-	Objects, err := h.UC.GetAll(c.Request.Context())
+	Objects, err := h.Usecase.GetAll(c.Request.Context())
 	if err != nil {
 		err = fmt.Errorf("npcHandler.GetAll()/%w", err)
 		_ = c.Error(err)
@@ -107,7 +107,7 @@ func (h *npcHandler) GetAll(c *gin.Context) {
 	}
 	ObjectsDTO := make([]dto.NPCdto, len(Objects))
 	for i := range Objects {
-		ObjectsDTO[i] = mapper.ToNPCdto(*Objects[i])
+		ObjectsDTO[i] = mapper.ToNPCdto(Objects[i])
 	}
 	c.JSON(http.StatusOK, ObjectsDTO)
 }
@@ -121,7 +121,7 @@ func (h *npcHandler) Delete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	err := h.UC.Delete(c.Request.Context(), entity.ID(id))
+	err := h.Usecase.Delete(c.Request.Context(), entity.ID(id))
 	if err != nil {
 		err = fmt.Errorf("npcHandler.Delete()/%w", err)
 		_ = c.Error(err)
@@ -141,7 +141,9 @@ func (h *npcHandler) Set(c *gin.Context) {
 		return
 	}
 	object := mapper.ToNPCEntity(DTO)
-	err := h.UC.Set(c.Request.Context(), &object)
+	clientID, _ := c.Get("client_id")
+	object.CreatorID = clientID.(entity.ID)
+	err := h.Usecase.Set(c.Request.Context(), &object)
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

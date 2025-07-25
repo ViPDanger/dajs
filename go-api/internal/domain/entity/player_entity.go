@@ -1,7 +1,7 @@
 package entity
 
-type PlayerCharacter struct {
-	Character
+type PlayerChar struct {
+	Character     `bson:",inline"`
 	CharacterRace `json:"race"`
 	Background    `json:"background"`
 	Inventory     `json:"inventory"`

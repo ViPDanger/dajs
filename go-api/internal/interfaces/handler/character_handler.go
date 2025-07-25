@@ -63,7 +63,7 @@ func (h *characterHandler) GetByCreatorID(c *gin.Context) {
 	dtos := make([]dto.CharacterDTO, len(objects))
 
 	for i := range objects {
-		dtos[i] = mapper.ToCharacterDTO(*(objects[i]))
+		dtos[i] = mapper.ToCharacterDTO((objects[i]))
 	}
 	// ВЫВОД
 	c.JSON(http.StatusOK, dtos)
@@ -81,7 +81,7 @@ func (h *characterHandler) New(c *gin.Context) {
 	}
 	object := mapper.ToCharacterEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(entity.ID).String()
+	object.CreatorID = clientID.(entity.ID)
 	// Обращение к Usecase
 	id, err := h.Usecase.New(c.Request.Context(), &object)
 	if err != nil || id == nil {
@@ -107,7 +107,7 @@ func (h *characterHandler) GetAll(c *gin.Context) {
 	}
 	ObjectsDTO := make([]dto.CharacterDTO, len(Objects))
 	for i := range Objects {
-		ObjectsDTO[i] = mapper.ToCharacterDTO(*Objects[i])
+		ObjectsDTO[i] = mapper.ToCharacterDTO(Objects[i])
 	}
 	c.JSON(http.StatusOK, ObjectsDTO)
 }
@@ -142,7 +142,7 @@ func (h *characterHandler) Set(c *gin.Context) {
 	}
 	object := mapper.ToCharacterEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(entity.ID).String()
+	object.CreatorID = clientID.(entity.ID)
 	err := h.Usecase.Set(c.Request.Context(), &object)
 	if err != nil {
 		_ = c.Error(err)

@@ -55,7 +55,7 @@ func (h *glossaryHandler) New(c *gin.Context) {
 	}
 	object := mapper.ToGlossaryEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(entity.ID).String()
+	object.CreatorID = clientID.(entity.ID)
 	// Обращение к Usecase
 	id, err := h.UC.New(c.Request.Context(), &object)
 	if err != nil || id != nil {
@@ -81,7 +81,7 @@ func (h *glossaryHandler) GetAll(c *gin.Context) {
 	}
 	ObjectsDTO := make([]dto.GlossaryDTO, len(Objects))
 	for i := range Objects {
-		ObjectsDTO[i] = mapper.ToGlossaryDTO(*Objects[i])
+		ObjectsDTO[i] = mapper.ToGlossaryDTO(Objects[i])
 	}
 	c.JSON(http.StatusOK, ObjectsDTO)
 }

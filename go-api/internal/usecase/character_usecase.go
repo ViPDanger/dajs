@@ -11,15 +11,15 @@ import (
 
 type CharacterUsecase interface {
 	New(ctx context.Context, character *entity.Character) (*entity.ID, error)
-	GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.Character, error)
+	GetByCreatorID(ctx context.Context, id entity.ID) ([]entity.Character, error)
 	GetByID(ctx context.Context, id entity.ID) (*entity.Character, error)
-	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.Character, error)
-	GetAll(ctx context.Context) ([]*entity.Character, error)
+	GetArray(ctx context.Context, ids []entity.ID) ([]entity.Character, error)
+	GetAll(ctx context.Context) ([]entity.Character, error)
 	Set(ctx context.Context, character *entity.Character) error
 	Delete(ctx context.Context, id entity.ID) error
 }
 
-func NewCharacterUseCase(Repository repository.CharacterRepository) CharacterUsecase {
+func NewCharacterUsecase(Repository repository.CharacterRepository) CharacterUsecase {
 	return &characterUsecase{CharacterRepository: Repository}
 }
 
@@ -47,7 +47,17 @@ func (u *characterUsecase) GetByID(ctx context.Context, id entity.ID) (item *ent
 	}
 	return
 }
-func (u *characterUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*entity.Character, err error) {
+func (u *characterUsecase) GetByCreatorID(ctx context.Context, id entity.ID) (items []entity.Character, err error) {
+	if u.CharacterRepository == nil || ctx == nil {
+		return nil, errors.New("characterUsecase.GetByID(): Nill pointer repository")
+
+	}
+	if items, err = u.CharacterRepository.GetByCreatorID(ctx, id); err != nil {
+		err = fmt.Errorf("characterUsecase.GetByID()/%w", err)
+	}
+	return
+}
+func (u *characterUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []entity.Character, err error) {
 	if u.CharacterRepository == nil || ctx == nil {
 		return nil, errors.New("characterUsecase.GetArray(): Nill pointer repository")
 
@@ -57,7 +67,7 @@ func (u *characterUsecase) GetArray(ctx context.Context, ids []entity.ID) (items
 	}
 	return
 }
-func (u *characterUsecase) GetAll(ctx context.Context) (items []*entity.Character, err error) {
+func (u *characterUsecase) GetAll(ctx context.Context) (items []entity.Character, err error) {
 	if u.CharacterRepository == nil || ctx == nil {
 		return nil, errors.New("characterUsecase.GetAll(): Nill pointer repository")
 

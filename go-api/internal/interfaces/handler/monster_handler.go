@@ -13,11 +13,11 @@ import (
 )
 
 type monsterHandler struct {
-	UC usecase.MonsterUsecase
+	Usecase usecase.MonsterUsecase
 }
 
-func NewMonsterHandler(UC usecase.MonsterUsecase) *monsterHandler {
-	return &monsterHandler{}
+func NewMonsterHandler(uc usecase.MonsterUsecase) *monsterHandler {
+	return &monsterHandler{Usecase: uc}
 }
 
 // GET object
@@ -25,14 +25,14 @@ func (h *monsterHandler) Get(c *gin.Context) {
 	// проверка id header
 	id := c.GetHeader("id")
 	if id == "" {
-		err := errors.New("monsterHandler.Get(): Нет ID в запросе")
+		err := errors.New("monsterHandler.Get():No id header in request")
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	// обращение к Usecase
-	object, err := h.UC.GetByID(c.Request.Context(), entity.ID(id))
+	object, err := h.Usecase.GetByID(c.Request.Context(), entity.ID(id))
 	if err != nil {
 		err = fmt.Errorf("monsterHandler.Get()/%w", err)
 		_ = c.Error(err)
@@ -44,18 +44,16 @@ func (h *monsterHandler) Get(c *gin.Context) {
 }
 
 func (h *monsterHandler) GetByCreatorID(c *gin.Context) {
-	// проверка id header
+	// проверка clientId header
 	clientId, ok := c.Get("client_id")
 	if !ok {
-		err := errors.New("monsterHandler.Get(): Нет ID в запросе")
+		err := errors.New("monsterHandler.Get(): client_id не найден")
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-
 	// обращение к Usecase
-
-	objects, err := h.UC.GetByCreatorID(c.Request.Context(), entity.ID(clientId.(string)))
+	objects, err := h.Usecase.GetByCreatorID(c.Request.Context(), clientId.(entity.ID))
 	if err != nil {
 		err = fmt.Errorf("monsterHandler.Get()/%w", err)
 		_ = c.Error(err)
@@ -63,8 +61,9 @@ func (h *monsterHandler) GetByCreatorID(c *gin.Context) {
 		return
 	}
 	dtos := make([]dto.MonsterDTO, len(objects))
+
 	for i := range objects {
-		dtos[i] = mapper.ToMonsterDTO(*(objects[i]))
+		dtos[i] = mapper.ToMonsterDTO((objects[i]))
 	}
 	// ВЫВОД
 	c.JSON(http.StatusOK, dtos)
@@ -82,10 +81,10 @@ func (h *monsterHandler) New(c *gin.Context) {
 	}
 	object := mapper.ToMonsterEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(entity.ID).String()
+	object.CreatorID = clientID.(entity.ID)
 	// Обращение к Usecase
-	id, err := h.UC.New(c.Request.Context(), &object)
-	if err != nil || id != nil {
+	id, err := h.Usecase.New(c.Request.Context(), &object)
+	if err != nil || id == nil {
 		err = fmt.Errorf("monsterHandler.New()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -99,7 +98,7 @@ func (h *monsterHandler) New(c *gin.Context) {
 
 // GET all objects
 func (h *monsterHandler) GetAll(c *gin.Context) {
-	Objects, err := h.UC.GetAll(c.Request.Context())
+	Objects, err := h.Usecase.GetAll(c.Request.Context())
 	if err != nil {
 		err = fmt.Errorf("monsterHandler.GetAll()/%w", err)
 		_ = c.Error(err)
@@ -108,7 +107,7 @@ func (h *monsterHandler) GetAll(c *gin.Context) {
 	}
 	ObjectsDTO := make([]dto.MonsterDTO, len(Objects))
 	for i := range Objects {
-		ObjectsDTO[i] = mapper.ToMonsterDTO(*Objects[i])
+		ObjectsDTO[i] = mapper.ToMonsterDTO(Objects[i])
 	}
 	c.JSON(http.StatusOK, ObjectsDTO)
 }
@@ -122,7 +121,7 @@ func (h *monsterHandler) Delete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	err := h.UC.Delete(c.Request.Context(), entity.ID(id))
+	err := h.Usecase.Delete(c.Request.Context(), entity.ID(id))
 	if err != nil {
 		err = fmt.Errorf("monsterHandler.Delete()/%w", err)
 		_ = c.Error(err)
@@ -142,7 +141,9 @@ func (h *monsterHandler) Set(c *gin.Context) {
 		return
 	}
 	object := mapper.ToMonsterEntity(DTO)
-	err := h.UC.Set(c.Request.Context(), &object)
+	clientID, _ := c.Get("client_id")
+	object.CreatorID = clientID.(entity.ID)
+	err := h.Usecase.Set(c.Request.Context(), &object)
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

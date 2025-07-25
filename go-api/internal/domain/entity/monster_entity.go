@@ -1,7 +1,7 @@
 package entity
 
 type Monster struct {
-	Character
+	Character        `bson:",inline"`
 	Type             string   `json:"type"`      // Например: "dragon", "fiend", "beast"
 	Challenge        float64  `json:"challenge"` // CR (Challenge Rating)
 	Legendary        bool     `json:"legendary"` // Есть ли легендарные действия

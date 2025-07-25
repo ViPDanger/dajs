@@ -10,16 +10,16 @@ import (
 )
 
 type MonsterUsecase interface {
-	New(ctx context.Context, Monster *entity.Monster) (*entity.ID, error)
+	New(ctx context.Context, monster *entity.Monster) (*entity.ID, error)
+	GetByCreatorID(ctx context.Context, id entity.ID) ([]entity.Monster, error)
 	GetByID(ctx context.Context, id entity.ID) (*entity.Monster, error)
-	GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.Monster, error)
-	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.Monster, error)
-	GetAll(ctx context.Context) ([]*entity.Monster, error)
-	Set(ctx context.Context, Monster *entity.Monster) error
+	GetArray(ctx context.Context, ids []entity.ID) ([]entity.Monster, error)
+	GetAll(ctx context.Context) ([]entity.Monster, error)
+	Set(ctx context.Context, monster *entity.Monster) error
 	Delete(ctx context.Context, id entity.ID) error
 }
 
-func NewMonsterUsecase(Repository repository.MonsterRepository) MonsterUsecase {
+func NewMonsterUseCase(Repository repository.MonsterRepository) MonsterUsecase {
 	return &monsterUsecase{MonsterRepository: Repository}
 }
 
@@ -28,7 +28,7 @@ type monsterUsecase struct {
 }
 
 func (u *monsterUsecase) New(ctx context.Context, item *entity.Monster) (id *entity.ID, err error) {
-	if u.MonsterRepository == nil {
+	if u.MonsterRepository == nil || ctx == nil {
 		return nil, errors.New("monsterUsecase.New(): Nill pointer repository")
 
 	}
@@ -38,7 +38,7 @@ func (u *monsterUsecase) New(ctx context.Context, item *entity.Monster) (id *ent
 	return
 }
 func (u *monsterUsecase) GetByID(ctx context.Context, id entity.ID) (item *entity.Monster, err error) {
-	if u.MonsterRepository == nil {
+	if u.MonsterRepository == nil || ctx == nil {
 		return nil, errors.New("monsterUsecase.GetByID(): Nill pointer repository")
 
 	}
@@ -47,8 +47,18 @@ func (u *monsterUsecase) GetByID(ctx context.Context, id entity.ID) (item *entit
 	}
 	return
 }
-func (u *monsterUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*entity.Monster, err error) {
-	if u.MonsterRepository == nil {
+func (u *monsterUsecase) GetByCreatorID(ctx context.Context, id entity.ID) (items []entity.Monster, err error) {
+	if u.MonsterRepository == nil || ctx == nil {
+		return nil, errors.New("monsterUsecase.GetByID(): Nill pointer repository")
+
+	}
+	if items, err = u.MonsterRepository.GetByCreatorID(ctx, id); err != nil {
+		err = fmt.Errorf("monsterUsecase.GetByID()/%w", err)
+	}
+	return
+}
+func (u *monsterUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []entity.Monster, err error) {
+	if u.MonsterRepository == nil || ctx == nil {
 		return nil, errors.New("monsterUsecase.GetArray(): Nill pointer repository")
 
 	}
@@ -57,8 +67,8 @@ func (u *monsterUsecase) GetArray(ctx context.Context, ids []entity.ID) (items [
 	}
 	return
 }
-func (u *monsterUsecase) GetAll(ctx context.Context) (items []*entity.Monster, err error) {
-	if u.MonsterRepository == nil {
+func (u *monsterUsecase) GetAll(ctx context.Context) (items []entity.Monster, err error) {
+	if u.MonsterRepository == nil || ctx == nil {
 		return nil, errors.New("monsterUsecase.GetAll(): Nill pointer repository")
 
 	}
@@ -68,7 +78,7 @@ func (u *monsterUsecase) GetAll(ctx context.Context) (items []*entity.Monster, e
 	return
 }
 func (u *monsterUsecase) Set(ctx context.Context, item *entity.Monster) (err error) {
-	if u.MonsterRepository == nil {
+	if u.MonsterRepository == nil || ctx == nil {
 		return errors.New("monsterUsecase.Set(): Nill pointer repository")
 
 	}
@@ -78,7 +88,7 @@ func (u *monsterUsecase) Set(ctx context.Context, item *entity.Monster) (err err
 	return
 }
 func (u *monsterUsecase) Delete(ctx context.Context, id entity.ID) (err error) {
-	if u.MonsterRepository == nil {
+	if u.MonsterRepository == nil || ctx == nil {
 		return errors.New("monsterUsecase.Delete(): Nill pointer repository")
 
 	}

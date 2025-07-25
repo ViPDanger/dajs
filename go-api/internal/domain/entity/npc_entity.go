@@ -1,7 +1,7 @@
 package entity
 
 type NPC struct {
-	Character
+	Character  `bson:",inline"`
 	Occupation string `json:"occupation"` // Например: "blacksmith", "priest"
 	Notes      string `json:"notes"`
 }

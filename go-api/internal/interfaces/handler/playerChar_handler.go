@@ -12,136 +12,138 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type playerHandler struct {
-	UC usecase.PlayerUsecase
+type playerCharHandler struct {
+	Usecase usecase.PlayerCharUsecase
 }
 
-func NewPlayerCharacterHandler(UC usecase.PlayerUsecase) *playerHandler {
-	return &playerHandler{}
+func NewPlayerCharHandler(uc usecase.PlayerCharUsecase) *playerCharHandler {
+	return &playerCharHandler{Usecase: uc}
 }
 
 // GET object
-func (h *playerHandler) Get(c *gin.Context) {
+func (h *playerCharHandler) Get(c *gin.Context) {
 	// проверка id header
 	id := c.GetHeader("id")
 	if id == "" {
-		err := errors.New("playerHandler.Get(): Нет ID в запросе")
+		err := errors.New("playerCharHandler.Get():No id header in request")
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	// обращение к Usecase
-	object, err := h.UC.GetByID(c.Request.Context(), entity.ID(id))
+	object, err := h.Usecase.GetByID(c.Request.Context(), entity.ID(id))
 	if err != nil {
-		err = fmt.Errorf("playerHandler.Get()/%w", err)
+		err = fmt.Errorf("playerCharHandler.Get()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	// ВЫВОД
-	c.JSON(http.StatusOK, mapper.ToPlayerDTO(*object))
+	c.JSON(http.StatusOK, mapper.ToPlayerCharDTO(*object))
 }
 
-func (h *playerHandler) GetByCreatorID(c *gin.Context) {
-	// проверка id header
+func (h *playerCharHandler) GetByCreatorID(c *gin.Context) {
+	// проверка clientId header
 	clientId, ok := c.Get("client_id")
 	if !ok {
-		err := errors.New("playerHandler.Get(): Нет ID в запросе")
+		err := errors.New("playerCharHandler.Get(): client_id не найден")
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-
 	// обращение к Usecase
-	objects, err := h.UC.GetByCreatorID(c.Request.Context(), entity.ID(clientId.(string)))
+	objects, err := h.Usecase.GetByCreatorID(c.Request.Context(), clientId.(entity.ID))
 	if err != nil {
-		err = fmt.Errorf("playerHandler.Get()/%w", err)
+		err = fmt.Errorf("playerCharHandler.Get()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	dtos := make([]dto.PlayerCharacterDTO, len(objects))
+	dtos := make([]dto.PlayerCharDTO, len(objects))
+
 	for i := range objects {
-		dtos[i] = mapper.ToPlayerDTO(*(objects[i]))
+		dtos[i] = mapper.ToPlayerCharDTO((objects[i]))
 	}
 	// ВЫВОД
 	c.JSON(http.StatusOK, dtos)
 }
 
 // POST object
-func (h *playerHandler) New(c *gin.Context) {
-	var DTO dto.PlayerCharacterDTO
+func (h *playerCharHandler) New(c *gin.Context) {
+	var DTO dto.PlayerCharDTO
 	// проверка body запроса
 	if err := c.ShouldBindJSON(&DTO); err != nil {
-		err = fmt.Errorf("playerHandler.New()/%w", err)
+		err = fmt.Errorf("playerCharHandler.New()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "UnmarshalJSON error"})
 		return
 	}
-	object := mapper.ToPlayerEntity(DTO)
+	object := mapper.ToPlayerCharEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(entity.ID).String()
+	object.CreatorID = clientID.(entity.ID)
 	// Обращение к Usecase
-	id, err := h.UC.New(c.Request.Context(), &object)
-	if err != nil || id != nil {
-		err = fmt.Errorf("playerHandler.New()/%w", err)
+	id, err := h.Usecase.New(c.Request.Context(), &object)
+	if err != nil || id == nil {
+		err = fmt.Errorf("playerCharHandler.New()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	// ВЫВОД
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"id": id.String(),
 	})
 }
 
 // GET all objects
-func (h *playerHandler) GetAll(c *gin.Context) {
-	Objects, err := h.UC.GetAll(c.Request.Context())
+func (h *playerCharHandler) GetAll(c *gin.Context) {
+	Objects, err := h.Usecase.GetAll(c.Request.Context())
 	if err != nil {
-		err = fmt.Errorf("playerHandler.GetAll()/%w", err)
+		err = fmt.Errorf("playerCharHandler.GetAll()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ObjectsDTO := make([]dto.PlayerCharacterDTO, len(Objects))
+	ObjectsDTO := make([]dto.PlayerCharDTO, len(Objects))
 	for i := range Objects {
-		ObjectsDTO[i] = mapper.ToPlayerDTO(*Objects[i])
+		ObjectsDTO[i] = mapper.ToPlayerCharDTO(Objects[i])
 	}
 	c.JSON(http.StatusOK, ObjectsDTO)
 }
 
 // DELETE object
-func (h *playerHandler) Delete(c *gin.Context) {
+func (h *playerCharHandler) Delete(c *gin.Context) {
 	id := c.GetHeader("id")
 	if id == "" {
-		err := errors.New("playerHandler.Delete(): No ID header in request")
+		err := errors.New("playerCharHandler.Delete(): No ID header in request")
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	err := h.UC.Delete(c.Request.Context(), entity.ID(id))
+	err := h.Usecase.Delete(c.Request.Context(), entity.ID(id))
 	if err != nil {
-		err = fmt.Errorf("playerHandler.Delete()/%w", err)
+		err = fmt.Errorf("playerCharHandler.Delete()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"message": "DELETE: SUCCESS"})
+	c.JSON(http.StatusOK, gin.H{"message": "DELETE: SUCCESS"})
 }
 
 // PUT object
-func (h *playerHandler) Set(c *gin.Context) {
-	var DTO dto.PlayerCharacterDTO
+func (h *playerCharHandler) Set(c *gin.Context) {
+	var DTO dto.PlayerCharDTO
 	if err := c.ShouldBindJSON(&DTO); err != nil {
-		err = fmt.Errorf("playerHandler.Set()/%w", err)
+		err = fmt.Errorf("playerCharHandler.Set()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректный JSON"})
 		return
 	}
-	object := mapper.ToPlayerEntity(DTO)
-	err := h.UC.Set(c.Request.Context(), &object)
+	object := mapper.ToPlayerCharEntity(DTO)
+	clientID, _ := c.Get("client_id")
+	object.CreatorID = clientID.(entity.ID)
+	err := h.Usecase.Set(c.Request.Context(), &object)
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

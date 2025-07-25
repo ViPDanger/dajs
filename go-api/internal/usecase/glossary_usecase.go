@@ -10,16 +10,16 @@ import (
 )
 
 type GlossaryUsecase interface {
-	New(ctx context.Context, object *entity.Glossary) (*entity.ID, error)
+	New(ctx context.Context, glossary *entity.Glossary) (*entity.ID, error)
 	GetByID(ctx context.Context, id entity.ID) (*entity.Glossary, error)
-	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.Glossary, error)
-	GetAll(ctx context.Context) ([]*entity.Glossary, error)
-	Set(ctx context.Context, object *entity.Glossary) error
+	GetArray(ctx context.Context, ids []entity.ID) ([]entity.Glossary, error)
+	GetAll(ctx context.Context) ([]entity.Glossary, error)
+	Set(ctx context.Context, glossary *entity.Glossary) error
 	Delete(ctx context.Context, id entity.ID) error
 }
 
-func NewGlossaryUseCase(repository repository.GlossaryRepository) GlossaryUsecase {
-	return &glossaryUsecase{GlossaryRepository: repository}
+func NewGlossaryUseCase(Repository repository.GlossaryRepository) GlossaryUsecase {
+	return &glossaryUsecase{GlossaryRepository: Repository}
 }
 
 type glossaryUsecase struct {
@@ -27,7 +27,7 @@ type glossaryUsecase struct {
 }
 
 func (u *glossaryUsecase) New(ctx context.Context, item *entity.Glossary) (id *entity.ID, err error) {
-	if u.GlossaryRepository == nil {
+	if u.GlossaryRepository == nil || ctx == nil {
 		return nil, errors.New("glossaryUsecase.New(): Nill pointer repository")
 
 	}
@@ -37,7 +37,7 @@ func (u *glossaryUsecase) New(ctx context.Context, item *entity.Glossary) (id *e
 	return
 }
 func (u *glossaryUsecase) GetByID(ctx context.Context, id entity.ID) (item *entity.Glossary, err error) {
-	if u.GlossaryRepository == nil {
+	if u.GlossaryRepository == nil || ctx == nil {
 		return nil, errors.New("glossaryUsecase.GetByID(): Nill pointer repository")
 
 	}
@@ -46,8 +46,9 @@ func (u *glossaryUsecase) GetByID(ctx context.Context, id entity.ID) (item *enti
 	}
 	return
 }
-func (u *glossaryUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*entity.Glossary, err error) {
-	if u.GlossaryRepository == nil {
+
+func (u *glossaryUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []entity.Glossary, err error) {
+	if u.GlossaryRepository == nil || ctx == nil {
 		return nil, errors.New("glossaryUsecase.GetArray(): Nill pointer repository")
 
 	}
@@ -56,8 +57,8 @@ func (u *glossaryUsecase) GetArray(ctx context.Context, ids []entity.ID) (items 
 	}
 	return
 }
-func (u *glossaryUsecase) GetAll(ctx context.Context) (items []*entity.Glossary, err error) {
-	if u.GlossaryRepository == nil {
+func (u *glossaryUsecase) GetAll(ctx context.Context) (items []entity.Glossary, err error) {
+	if u.GlossaryRepository == nil || ctx == nil {
 		return nil, errors.New("glossaryUsecase.GetAll(): Nill pointer repository")
 
 	}
@@ -67,7 +68,7 @@ func (u *glossaryUsecase) GetAll(ctx context.Context) (items []*entity.Glossary,
 	return
 }
 func (u *glossaryUsecase) Set(ctx context.Context, item *entity.Glossary) (err error) {
-	if u.GlossaryRepository == nil {
+	if u.GlossaryRepository == nil || ctx == nil {
 		return errors.New("glossaryUsecase.Set(): Nill pointer repository")
 
 	}
@@ -77,7 +78,7 @@ func (u *glossaryUsecase) Set(ctx context.Context, item *entity.Glossary) (err e
 	return
 }
 func (u *glossaryUsecase) Delete(ctx context.Context, id entity.ID) (err error) {
-	if u.GlossaryRepository == nil {
+	if u.GlossaryRepository == nil || ctx == nil {
 		return errors.New("glossaryUsecase.Delete(): Nill pointer repository")
 
 	}

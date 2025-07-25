@@ -7,3 +7,4 @@ telegram-bot/venv
 *log*.txt
 *__pycache__*
 *__debug_*
+examples/do

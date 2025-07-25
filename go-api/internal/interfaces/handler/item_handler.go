@@ -17,7 +17,7 @@ type itemHandler struct {
 }
 
 func NewItemHandler(UC usecase.ItemUsecase) *itemHandler {
-	return &itemHandler{}
+	return &itemHandler{UC}
 }
 
 // GET object
@@ -40,7 +40,7 @@ func (h *itemHandler) Get(c *gin.Context) {
 		return
 	}
 	// ВЫВОД
-	c.JSON(http.StatusOK, mapper.ToItemDTO(object))
+	c.JSON(http.StatusOK, mapper.ToItemDTO(*object))
 }
 
 func (h *itemHandler) GetByCreatorID(c *gin.Context) {
@@ -66,8 +66,8 @@ func (h *itemHandler) New(c *gin.Context) {
 	}
 	object := mapper.ToItemEntity(DTO)
 	// Обращение к Usecase
-	id, err := h.UC.New(c.Request.Context(), object)
-	if err != nil || id != nil {
+	id, err := h.UC.New(c.Request.Context(), &object)
+	if err != nil || id == nil {
 		err = fmt.Errorf("itemHandler.New()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -124,7 +124,7 @@ func (h *itemHandler) Set(c *gin.Context) {
 		return
 	}
 	object := mapper.ToItemEntity(DTO)
-	err := h.UC.Set(c.Request.Context(), object)
+	err := h.UC.Set(c.Request.Context(), &object)
 	if err != nil {
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

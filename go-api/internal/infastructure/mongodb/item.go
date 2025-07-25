@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/ViPDanger/dajs/go-api/internal/domain/entity"
+	"github.com/ViPDanger/dajs/go-api/internal/domain/repository"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -15,16 +16,14 @@ type mongoItemRepository struct {
 	collection *mongo.Collection
 }
 
-func NewMongoItemRepository(db *mongo.Database) *mongoItemRepository {
+func NewItemRepository(db *mongo.Database) repository.ItemRepository {
 	return &mongoItemRepository{
 		collection: db.Collection("items"),
 	}
 }
 
-func (r *mongoItemRepository) Insert(ctx context.Context, item entity.Item) (*entity.ID, error) {
-	if item.GetSimpleItem().ID.String() == "" {
-		item.GetSimpleItem().ID = entity.ID(uuid.New().String())
-	}
+func (r *mongoItemRepository) Insert(ctx context.Context, item *entity.Item) (*entity.ID, error) {
+	item.GetSimpleItem().ID = entity.ID(uuid.New().String())
 	res, err := r.collection.InsertOne(ctx, item)
 	if err != nil {
 		return nil, err
@@ -37,17 +36,14 @@ func (r *mongoItemRepository) Insert(ctx context.Context, item entity.Item) (*en
 	return &id, nil
 }
 
-func (r *mongoItemRepository) GetByID(ctx context.Context, id entity.ID) (entity.Item, error) {
-	oid, err := primitive.ObjectIDFromHex(string(id))
-	if err != nil {
-		return nil, err
-	}
+func (r *mongoItemRepository) GetByID(ctx context.Context, id entity.ID) (*entity.Item, error) {
+
 	var result entity.Item
-	err = r.collection.FindOne(ctx, bson.M{"_id": oid}).Decode(&result)
+	err := r.collection.FindOne(ctx, bson.M{"_id": id}).Decode(&result)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return &result, nil
 }
 
 func (r *mongoItemRepository) GetArray(ctx context.Context, ids []entity.ID) ([]entity.Item, error) {
@@ -59,7 +55,7 @@ func (r *mongoItemRepository) GetArray(ctx context.Context, ids []entity.ID) ([]
 		}
 		objectIDs[i] = oid
 	}
-	cursor, err := r.collection.Find(ctx, bson.M{"_id": bson.M{"$in": objectIDs}})
+	cursor, err := r.collection.Find(ctx, bson.M{"_id": bson.M{"$in": ids}})
 	if err != nil {
 		return nil, err
 	}
@@ -82,12 +78,8 @@ func (r *mongoItemRepository) GetAll(ctx context.Context) ([]entity.Item, error)
 	return results, nil
 }
 
-func (r *mongoItemRepository) Update(ctx context.Context, item entity.Item) error {
-	oid, err := primitive.ObjectIDFromHex(item.GetSimpleItem().ID.String())
-	if err != nil {
-		return err
-	}
-	_, err = r.collection.ReplaceOne(ctx, bson.M{"_id": oid}, item)
+func (r *mongoItemRepository) Update(ctx context.Context, item *entity.Item) error {
+	_, err := r.collection.ReplaceOne(ctx, bson.M{"_id": item.GetSimpleItem().ID}, item)
 	return err
 }
 

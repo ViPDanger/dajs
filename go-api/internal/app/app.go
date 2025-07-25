@@ -49,7 +49,7 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) *http.Server {
 	}
 
 	//			CHARACTER HANDLER
-	characterHandler := handler.NewCharacterHandler(usecase.NewCharacterUseCase(mongodb.NewCharacterRepository(conf.DB)))
+	characterHandler := handler.NewCharacterHandler(usecase.NewCharacterUsecase(mongodb.NewCharacterRepository(conf.DB)))
 	characterRouter := protectedRouter.Group("/char")
 	characterRouter.GET("/all", characterHandler.GetAll)
 	characterRouter.GET("/:id", characterHandler.Get)
@@ -58,15 +58,48 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) *http.Server {
 	characterRouter.PUT("/", characterHandler.Set)
 	characterRouter.DELETE("/:id", characterHandler.Delete)
 	//			PLAYER CHARACTER HANDLER
-	playerCharacterHandler := handler.NewPlayerCharacterHandler(usecase.NewPlayerCharacterUsecase(mongodb.NewPlayerCharacterRepository(conf.DB)))
+	playerCharHandler := handler.NewPlayerCharHandler(usecase.NewPlayerCharUsecase(mongodb.NewPlayerCharRepository(conf.DB)))
 	pcharacterRouter := protectedRouter.Group("/pchar")
-	pcharacterRouter.GET("/", playerCharacterHandler.GetAll)
-	pcharacterRouter.GET("/:id", playerCharacterHandler.Get)
-	pcharacterRouter.GET("/my", playerCharacterHandler.GetByCreatorID)
-	pcharacterRouter.POST("/", playerCharacterHandler.New)
-	pcharacterRouter.PUT("/", playerCharacterHandler.Set)
-	pcharacterRouter.DELETE("/:id", playerCharacterHandler.Delete)
-	//
+	pcharacterRouter.GET("/all", playerCharHandler.GetAll)
+	pcharacterRouter.GET("/:id", playerCharHandler.Get)
+	pcharacterRouter.GET("/", playerCharHandler.GetByCreatorID)
+	pcharacterRouter.POST("/", playerCharHandler.New)
+	pcharacterRouter.PUT("/", playerCharHandler.Set)
+	pcharacterRouter.DELETE("/:id", playerCharHandler.Delete)
+	//			NPC HANDLER
+	npcHandler := handler.NewNPCHandler(usecase.NewNPCUseCase(mongodb.NewNPCRepository(conf.DB)))
+	npcRouter := protectedRouter.Group("/npc")
+	npcRouter.GET("/all", npcHandler.GetAll)
+	npcRouter.GET("/:id", npcHandler.Get)
+	npcRouter.GET("/", npcHandler.GetByCreatorID)
+	npcRouter.POST("/", npcHandler.New)
+	npcRouter.PUT("/", npcHandler.Set)
+	npcRouter.DELETE("/:id", npcHandler.Delete)
+	//			MONSTER HANDLER
+	monsterHandler := handler.NewMonsterHandler(usecase.NewMonsterUseCase(mongodb.NewMonsterRepository(conf.DB)))
+	monsterRouter := protectedRouter.Group("/monster")
+	monsterRouter.GET("/all", monsterHandler.GetAll)
+	monsterRouter.GET("/:id", monsterHandler.Get)
+	monsterRouter.GET("/", monsterHandler.GetByCreatorID)
+	monsterRouter.POST("/", monsterHandler.New)
+	monsterRouter.PUT("/", monsterHandler.Set)
+	monsterRouter.DELETE("/:id", monsterHandler.Delete)
+	//			MONSTER HANDLER
+	glossaryHandler := handler.NewGlossaryHandler(usecase.NewGlossaryUseCase(mongodb.NewGlossaryRepository(conf.DB)))
+	glossaryRouter := protectedRouter.Group("/glossary")
+	glossaryRouter.GET("/all", glossaryHandler.GetAll)
+	glossaryRouter.GET("/:id", glossaryHandler.Get)
+	glossaryRouter.POST("/", glossaryHandler.New)
+	glossaryRouter.PUT("/", glossaryHandler.Set)
+	glossaryRouter.DELETE("/:id", glossaryHandler.Delete)
+	//			ITEM
+	itemHandler := handler.NewItemHandler(usecase.NewItemUseCase(mongodb.NewItemRepository(conf.DB)))
+	itemRouter := protectedRouter.Group("/item")
+	itemRouter.GET("/all", itemHandler.GetAll)
+	itemRouter.GET("/:id", itemHandler.Get)
+	itemRouter.POST("/", itemHandler.New)
+	itemRouter.PUT("/", itemHandler.Set)
+	itemRouter.DELETE("/:id", itemHandler.Delete)
 	// GRACEFULL SHUTDOWN CTX---------
 
 	ctx, cancel := context.WithCancel(ctx)

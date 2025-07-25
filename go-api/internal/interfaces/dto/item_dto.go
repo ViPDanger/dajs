@@ -1,15 +1,15 @@
 package dto
 
 type ItemDTO struct {
-	Id       string  `json:"Id"`
-	Name     string  `json:"Name"`
-	OrigName string  `json:"OrigName"`
-	Comment  string  `json:"Comment"`
-	Price    float64 `json:"Price"`
-	Money    int     `json:"Money"`
-	Weight   float64 `json:"Weight"`
-	HtmlText string  `json:"HtmlText"`
-	Tags     string  `json:"Tags"`
+	Id       string   `json:"id"`
+	Name     string   `json:"Name"`
+	OrigName string   `json:"OrigName"`
+	Comment  string   `json:"Comment"`
+	Price    float64  `json:"Price"`
+	Money    int      `json:"Money"`
+	Weight   float64  `json:"Weight"`
+	HtmlText string   `json:"HtmlText"`
+	Tags     []string `json:"tags"`
 
 	ArmorInt      int    `json:"ArmorInt"`
 	StealthDis    bool   `json:"StealthDis"`

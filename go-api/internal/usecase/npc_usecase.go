@@ -10,16 +10,16 @@ import (
 )
 
 type NPCUsecase interface {
-	New(ctx context.Context, NPC *entity.NPC) (*entity.ID, error)
+	New(ctx context.Context, npc *entity.NPC) (*entity.ID, error)
+	GetByCreatorID(ctx context.Context, id entity.ID) ([]entity.NPC, error)
 	GetByID(ctx context.Context, id entity.ID) (*entity.NPC, error)
-	GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.NPC, error)
-	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.NPC, error)
-	GetAll(ctx context.Context) ([]*entity.NPC, error)
-	Set(ctx context.Context, NPC *entity.NPC) error
+	GetArray(ctx context.Context, ids []entity.ID) ([]entity.NPC, error)
+	GetAll(ctx context.Context) ([]entity.NPC, error)
+	Set(ctx context.Context, npc *entity.NPC) error
 	Delete(ctx context.Context, id entity.ID) error
 }
 
-func NewNPCUsecase(Repository repository.NPCRepository) NPCUsecase {
+func NewNPCUseCase(Repository repository.NPCRepository) NPCUsecase {
 	return &npcUsecase{NPCRepository: Repository}
 }
 
@@ -28,7 +28,7 @@ type npcUsecase struct {
 }
 
 func (u *npcUsecase) New(ctx context.Context, item *entity.NPC) (id *entity.ID, err error) {
-	if u.NPCRepository == nil {
+	if u.NPCRepository == nil || ctx == nil {
 		return nil, errors.New("npcUsecase.New(): Nill pointer repository")
 
 	}
@@ -38,7 +38,7 @@ func (u *npcUsecase) New(ctx context.Context, item *entity.NPC) (id *entity.ID, 
 	return
 }
 func (u *npcUsecase) GetByID(ctx context.Context, id entity.ID) (item *entity.NPC, err error) {
-	if u.NPCRepository == nil {
+	if u.NPCRepository == nil || ctx == nil {
 		return nil, errors.New("npcUsecase.GetByID(): Nill pointer repository")
 
 	}
@@ -47,8 +47,18 @@ func (u *npcUsecase) GetByID(ctx context.Context, id entity.ID) (item *entity.NP
 	}
 	return
 }
-func (u *npcUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*entity.NPC, err error) {
-	if u.NPCRepository == nil {
+func (u *npcUsecase) GetByCreatorID(ctx context.Context, id entity.ID) (items []entity.NPC, err error) {
+	if u.NPCRepository == nil || ctx == nil {
+		return nil, errors.New("npcUsecase.GetByID(): Nill pointer repository")
+
+	}
+	if items, err = u.NPCRepository.GetByCreatorID(ctx, id); err != nil {
+		err = fmt.Errorf("npcUsecase.GetByID()/%w", err)
+	}
+	return
+}
+func (u *npcUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []entity.NPC, err error) {
+	if u.NPCRepository == nil || ctx == nil {
 		return nil, errors.New("npcUsecase.GetArray(): Nill pointer repository")
 
 	}
@@ -57,8 +67,8 @@ func (u *npcUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*en
 	}
 	return
 }
-func (u *npcUsecase) GetAll(ctx context.Context) (items []*entity.NPC, err error) {
-	if u.NPCRepository == nil {
+func (u *npcUsecase) GetAll(ctx context.Context) (items []entity.NPC, err error) {
+	if u.NPCRepository == nil || ctx == nil {
 		return nil, errors.New("npcUsecase.GetAll(): Nill pointer repository")
 
 	}
@@ -68,7 +78,7 @@ func (u *npcUsecase) GetAll(ctx context.Context) (items []*entity.NPC, err error
 	return
 }
 func (u *npcUsecase) Set(ctx context.Context, item *entity.NPC) (err error) {
-	if u.NPCRepository == nil {
+	if u.NPCRepository == nil || ctx == nil {
 		return errors.New("npcUsecase.Set(): Nill pointer repository")
 
 	}
@@ -78,12 +88,12 @@ func (u *npcUsecase) Set(ctx context.Context, item *entity.NPC) (err error) {
 	return
 }
 func (u *npcUsecase) Delete(ctx context.Context, id entity.ID) (err error) {
-	if u.NPCRepository == nil {
+	if u.NPCRepository == nil || ctx == nil {
 		return errors.New("npcUsecase.Delete(): Nill pointer repository")
 
 	}
 	if err = u.NPCRepository.Delete(ctx, id); err != nil {
-		err = fmt.Errorf("npcUsecase.Delete(ctx context.Context,)/%w", err)
+		err = fmt.Errorf("npcUsecase.Delete()/%w", err)
 	}
 	return
 }
