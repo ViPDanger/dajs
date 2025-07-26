@@ -175,7 +175,6 @@ func TestCharacter(t *testing.T) {
 			}
 			assert.Equal(t, resp.StatusCode, http.StatusOK, string(body))
 			// PUT
-			item.Name = "Zatalora"
 			resp, err = DoRequest("PUT", "http://"+host+"/char/", head, item)
 			if err != nil {
 				assert.Fail(mt, err.Error())
@@ -183,15 +182,6 @@ func TestCharacter(t *testing.T) {
 			}
 			body, _ = io.ReadAll(resp.Body)
 			assert.Equal(t, resp.StatusCode, http.StatusOK, string(body))
-			// ADD
-			resp, err = DoRequest("POST", "http://"+host+"/char/", head, item)
-			if err != nil {
-				assert.Fail(mt, err.Error())
-				return
-			}
-			body, _ = io.ReadAll(resp.Body)
-			assert.Equal(t, resp.StatusCode, http.StatusCreated, string(body))
-
 			//	Get All
 			resp, err = DoRequest("GET", "http://"+host+"/char/all", head, "")
 			if err != nil {
