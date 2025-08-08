@@ -15,8 +15,8 @@ const (
 )
 
 type Character struct {
-	ID         ID              `json:"id" bson:"_id"`
-	CreatorID  ID              `json:"creator_id" bson:"creator_id"`
+	ID         string          `json:"_id" bson:"_id"`
+	CreatorID  string          `json:"creator_id" bson:"creator_id"`
 	Name       string          `json:"name"`
 	Status     CharacterStatus `json:"status"`
 	Attributes Attributes      `json:"attributes"`
@@ -27,7 +27,7 @@ type Character struct {
 }
 
 type CharacterClass struct {
-	ID          ID                     `json:"id" bson:"_id"`
+	ID          string                 `json:"_id"`
 	Name        string                 `json:"name"`
 	Level       int                    `json:"level"`
 	HitDice     string                 `json:"hit_dice"`
@@ -36,7 +36,7 @@ type CharacterClass struct {
 }
 
 type CharacterRace struct {
-	ID          ID                     `json:"id" bson:"_id"`
+	ID          string                 `json:"_id"`
 	Name        string                 `json:"name"`
 	Subrace     string                 `json:"subrace"`
 	Traits      []string               `json:"traits"`
@@ -45,7 +45,7 @@ type CharacterRace struct {
 }
 
 type Background struct {
-	ID            ID                     `json:"id" bson:"_id"`
+	ID            string                 `json:"_id" `
 	Name          string                 `json:"name"`
 	Abilities     []Ability              `json:"abilities"`
 	Proficiencies []string               `json:"proficiencies"`
@@ -53,14 +53,14 @@ type Background struct {
 }
 
 type Ability struct {
-	ID          ID     `json:"id" bson:"_id"`
+	ID          string `json:"_id" `
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	LevelGained int    `json:"level_gained"`
 }
 
 type Spell struct {
-	ID          ID     `json:"id" bson:"_id"`
+	ID          string `json:"_id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Level       int    `json:"level"`
