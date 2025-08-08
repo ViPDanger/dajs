@@ -58,14 +58,14 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) *http.Server {
 	}
 
 	//			CHARACTER HANDLER
-	characterHandler := handler.NewCharacterHandler(usecase.NewCharacterUseCase(mongodb.NewCharacterRepository(conf.DB)))
+	characterHandler := handler.NewCharacterHandler(usecase.NewCharacterUsecase(mongodb.NewCharacterRepository(conf.DB)))
 	characterRouter := protectedRouter.Group("/char")
 	characterRouter.GET("/", characterHandler.Get)
 	characterRouter.POST("/", characterHandler.New)
 	characterRouter.PUT("/", characterHandler.Set)
 	characterRouter.DELETE("/", characterHandler.Delete)
 	//			PLAYER CHARACTER HANDLER
-	playerCharacterHandler := handler.NewPlayerCharacterHandler(usecase.NewPlayerCharacterUsecase(mongodb.NewPlayerCharacterRepository(conf.DB)))
+	playerCharHandler := handler.NewPlayerCharHandler(usecase.NewPlayerCharUsecase(mongodb.NewPlayerCharRepository(conf.DB)))
 	pcharacterRouter := protectedRouter.Group("/pchar")
 	pcharacterRouter.GET("/", playerCharacterHandler.Get)
 	pcharacterRouter.POST("/", playerCharacterHandler.New)

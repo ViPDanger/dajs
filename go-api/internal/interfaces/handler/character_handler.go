@@ -52,7 +52,7 @@ func (h *characterHandler) Get(c *gin.Context) {
 	dtos := make([]dto.CharacterDTO, len(objects))
 
 	for i := range objects {
-		dtos[i] = mapper.ToCharacterDTO(*(objects[i]))
+		dtos[i] = mapper.ToCharacterDTO((objects[i]))
 	}
 	// ВЫВОД
 	c.JSON(http.StatusOK, dtos)

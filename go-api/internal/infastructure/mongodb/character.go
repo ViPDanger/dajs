@@ -3,6 +3,7 @@ package mongodb
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/ViPDanger/dajs/go-api/internal/domain/entity"
 	"github.com/ViPDanger/dajs/go-api/internal/domain/repository"
@@ -27,7 +28,7 @@ func (r *mongoCharacterRepository) Insert(ctx context.Context, item *entity.Char
 	}
 	res, err := r.collection.InsertOne(ctx, item)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("CharcterRepository.Insert(): %w", err)
 	}
 	oid, ok := res.InsertedID.(string)
 	if !ok {
@@ -41,7 +42,7 @@ func (r *mongoCharacterRepository) Get(ctx context.Context, creator_id string, i
 	cursor, err := r.collection.Find(ctx, bson.M{"creator_id": creator_id, "_id": bson.M{"$in": ids}})
 	defer cursor.Close(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("CharcterRepository.GetArray():  %w", err)
 	}
 	var results []*entity.Character
 

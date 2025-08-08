@@ -16,7 +16,7 @@ type CharacterUsecase interface {
 	Delete(ctx context.Context, id string) error
 }
 
-func NewCharacterUseCase(Repository repository.CharacterRepository) CharacterUsecase {
+func NewCharacterUsecase(Repository repository.CharacterRepository) CharacterUsecase {
 	return &characterUsecase{CharacterRepository: Repository}
 }
 
@@ -45,7 +45,6 @@ func (u *characterUsecase) Get(ctx context.Context, creator_id string, ids ...st
 	}
 	return
 }
-
 func (u *characterUsecase) Set(ctx context.Context, item *entity.Character) (err error) {
 	if u.CharacterRepository == nil || ctx == nil {
 		return errors.New("characterUsecase.Set(): Nill pointer repository")

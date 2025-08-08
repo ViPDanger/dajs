@@ -8,3 +8,4 @@ telegram-bot/venv
 go-api/bin/*
 *__pycache__*
 *__debug_*
+examples/do
