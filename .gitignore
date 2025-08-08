@@ -5,5 +5,6 @@ go-api/cmd/api/*.ini
 telegram-bot/options.py
 telegram-bot/venv
 *log*.txt
+go-api/bin/*
 *__pycache__*
 *__debug_*

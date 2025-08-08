@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Character</title>
+  <script src="character/config.js" ></script>
+  <script src="character/main.js" defer></script>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
+    input { width: 100%; margin-bottom: 10px; }
+    label { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>🛠️ Edit Character</h1>
+  <div>
+    <label>Character ID</label>
+    <input id="charId" placeholder="Enter ID pls">
+    <button onclick="loadCharacter()">Load</button>
+  </div>
+  <hr>
+  <div>
+    <label>Name</label>
+    <input id="name">
+
+    <label>Alignment</label>
+    <input id="alignment">
+
+    <label>HP</label>
+    <input type="number" id="hp">
+
+    <label>Max HP</label>
+    <input type="number" id="max_hp">
+
+    <label>Armor Class</label>
+    <input type="number" id="armor_class">
+
+    <label>Initiative</label>
+    <input type="number" id="initiative">
+
+    <label>Speed</label>
+    <input type="number" id="speed">
+
+    <label>Strength</label>
+    <input type="number" id="strength">
+
+    <label>Dexterity</label>
+    <input type="number" id="dexterity">
+
+    <label>Constitution</label>
+    <input type="number" id="constitution">
+
+    <label>Intelligence</label>
+    <input type="number" id="intelligence">
+
+    <label>Wisdom</label>
+    <input type="number" id="wisdom">
+
+    <label>Charisma</label>
+    <input type="number" id="charisma">
+
+    <button onclick="saveCharacter()">💾 Save</button>
+  </div>
+</body>
+</html>

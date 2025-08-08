@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/ViPDanger/dajs/go-api/internal/domain/entity"
 	"github.com/ViPDanger/dajs/go-api/internal/interfaces/dto"
 	"github.com/ViPDanger/dajs/go-api/internal/interfaces/mapper"
 	"github.com/ViPDanger/dajs/go-api/internal/usecase"
@@ -21,43 +20,33 @@ func NewCharacterHandler(uc usecase.CharacterUsecase) *characterHandler {
 }
 
 // GET object
+
 func (h *characterHandler) Get(c *gin.Context) {
-	// проверка id header
-	id := c.GetHeader("id")
-	if id == "" {
-		err := errors.New("characterHandler.Get():No id header in request")
-		_ = c.Error(err)
-		c.JSON(http.StatusBadRequest, err)
-		return
-	}
-
-	// обращение к Usecase
-	object, err := h.Usecase.GetByID(c.Request.Context(), entity.ID(id))
-	if err != nil {
-		err = fmt.Errorf("characterHandler.Get()/%w", err)
-		_ = c.Error(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	// ВЫВОД
-	c.JSON(http.StatusOK, mapper.ToCharacterDTO(*object))
-}
-
-func (h *characterHandler) GetByCreatorID(c *gin.Context) {
 	// проверка clientId header
-	clientId, ok := c.Get("client_id")
-	if !ok {
+	var creator_id string
+	if clientId, ok := c.Get("client_id"); !ok {
 		err := errors.New("characterHandler.Get(): client_id не найден")
 		_ = c.Error(err)
-		c.JSON(http.StatusBadRequest, err)
-		return
+		//c.JSON(http.StatusBadRequest, err)
+		//return
+	} else {
+		creator_id = clientId.(string)
 	}
+	var ids []string
+	for _, s := range c.QueryArray("id") {
+		ids = append(ids, string(s))
+	}
+
 	// обращение к Usecase
-	objects, err := h.Usecase.GetByCreatorID(c.Request.Context(), clientId.(entity.ID))
+	objects, err := h.Usecase.Get(c.Request.Context(), creator_id, ids...)
 	if err != nil {
 		err = fmt.Errorf("characterHandler.Get()/%w", err)
 		_ = c.Error(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	if len(objects) == 0 {
+		c.JSON(http.StatusNoContent, gin.H{"error": "No Content"})
 		return
 	}
 	dtos := make([]dto.CharacterDTO, len(objects))
@@ -81,7 +70,7 @@ func (h *characterHandler) New(c *gin.Context) {
 	}
 	object := mapper.ToCharacterEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(entity.ID).String()
+	object.CreatorID, _ = clientID.(string)
 	// Обращение к Usecase
 	id, err := h.Usecase.New(c.Request.Context(), &object)
 	if err != nil || id == nil {
@@ -92,24 +81,8 @@ func (h *characterHandler) New(c *gin.Context) {
 	}
 	// ВЫВОД
 	c.JSON(http.StatusCreated, gin.H{
-		"id": id.String(),
+		"id": id,
 	})
-}
-
-// GET all objects
-func (h *characterHandler) GetAll(c *gin.Context) {
-	Objects, err := h.Usecase.GetAll(c.Request.Context())
-	if err != nil {
-		err = fmt.Errorf("characterHandler.GetAll()/%w", err)
-		_ = c.Error(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	ObjectsDTO := make([]dto.CharacterDTO, len(Objects))
-	for i := range Objects {
-		ObjectsDTO[i] = mapper.ToCharacterDTO(*Objects[i])
-	}
-	c.JSON(http.StatusOK, ObjectsDTO)
 }
 
 // DELETE object
@@ -121,7 +94,7 @@ func (h *characterHandler) Delete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	err := h.Usecase.Delete(c.Request.Context(), entity.ID(id))
+	err := h.Usecase.Delete(c.Request.Context(), string(id))
 	if err != nil {
 		err = fmt.Errorf("characterHandler.Delete()/%w", err)
 		_ = c.Error(err)
@@ -142,7 +115,7 @@ func (h *characterHandler) Set(c *gin.Context) {
 	}
 	object := mapper.ToCharacterEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(entity.ID).String()
+	object.CreatorID = clientID.(string)
 	err := h.Usecase.Set(c.Request.Context(), &object)
 	if err != nil {
 		_ = c.Error(err)

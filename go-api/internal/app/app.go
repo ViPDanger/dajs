@@ -9,6 +9,7 @@ import (
 	"github.com/ViPDanger/dajs/go-api/internal/interfaces/handler"
 	"github.com/ViPDanger/dajs/go-api/internal/usecase"
 	logger "github.com/ViPDanger/dajs/go-api/pkg/logger/v2"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -25,6 +26,14 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) *http.Server {
 	// SETUP GIN engine --------------
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"}, // Разрешить все (в проде использовать конкретные)
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	// MIDLEWARE ---------------------
 	ginLogAdapter := logger.NewGinLoggerAdapter(log)
 	r.Use(ginLogAdapter.HandlerFunc)
@@ -51,21 +60,17 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) *http.Server {
 	//			CHARACTER HANDLER
 	characterHandler := handler.NewCharacterHandler(usecase.NewCharacterUseCase(mongodb.NewCharacterRepository(conf.DB)))
 	characterRouter := protectedRouter.Group("/char")
-	characterRouter.GET("/all", characterHandler.GetAll)
-	characterRouter.GET("/:id", characterHandler.Get)
-	characterRouter.GET("/", characterHandler.GetByCreatorID)
+	characterRouter.GET("/", characterHandler.Get)
 	characterRouter.POST("/", characterHandler.New)
 	characterRouter.PUT("/", characterHandler.Set)
-	characterRouter.DELETE("/:id", characterHandler.Delete)
+	characterRouter.DELETE("/", characterHandler.Delete)
 	//			PLAYER CHARACTER HANDLER
 	playerCharacterHandler := handler.NewPlayerCharacterHandler(usecase.NewPlayerCharacterUsecase(mongodb.NewPlayerCharacterRepository(conf.DB)))
 	pcharacterRouter := protectedRouter.Group("/pchar")
-	pcharacterRouter.GET("/", playerCharacterHandler.GetAll)
-	pcharacterRouter.GET("/:id", playerCharacterHandler.Get)
-	pcharacterRouter.GET("/my", playerCharacterHandler.GetByCreatorID)
+	pcharacterRouter.GET("/", playerCharacterHandler.Get)
 	pcharacterRouter.POST("/", playerCharacterHandler.New)
 	pcharacterRouter.PUT("/", playerCharacterHandler.Set)
-	pcharacterRouter.DELETE("/:id", playerCharacterHandler.Delete)
+	pcharacterRouter.DELETE("/", playerCharacterHandler.Delete)
 	//
 	// GRACEFULL SHUTDOWN CTX---------
 

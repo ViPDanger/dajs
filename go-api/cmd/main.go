@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 
 	"github.com/ViPDanger/dajs/go-api/internal/app"
@@ -15,7 +16,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const cfgPath = "./config.ini"
+var cfgPath = "/config.ini"
+
+func init() {
+	exePath, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exeDir := filepath.Dir(exePath)
+	cfgPath = exeDir + cfgPath
+}
 
 func main() {
 
@@ -48,8 +58,9 @@ func main() {
 	}
 	//
 	appConf := app.APIConfig{
-		Host: cfg.String("server.host", ":8080"),
-		DB:   mongoDB,
+		Host:           cfg.String("server.host", ":8080"),
+		DB:             mongoDB,
+		AuthMiddleware: false,
 	}
 	log.Logln(logV2.Debug, appConf)
 	app.Run(ctx, log, appConf)

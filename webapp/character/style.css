@@ -1,0 +1,39 @@
+
+body {
+  font-family: sans-serif;
+  padding: 2rem;
+  background-color: #f4f4f4;
+}
+
+.container {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  max-width: 800px;
+  margin: auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+input {
+  padding: 0.5rem;
+  margin-right: 1rem;
+  width: 200px;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+pre {
+  margin-top: 2rem;
+  background: #eee;
+  padding: 1rem;
+  border-radius: 8px;
+  white-space: pre-wrap;
+}
+
+.loader {
+  font-style: italic;
+  color: #888;
+}

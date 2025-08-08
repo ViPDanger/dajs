@@ -10,13 +10,10 @@ import (
 )
 
 type CharacterUsecase interface {
-	New(ctx context.Context, character *entity.Character) (*entity.ID, error)
-	GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.Character, error)
-	GetByID(ctx context.Context, id entity.ID) (*entity.Character, error)
-	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.Character, error)
-	GetAll(ctx context.Context) ([]*entity.Character, error)
+	New(ctx context.Context, character *entity.Character) (*string, error)
+	Get(ctx context.Context, creator_id string, ids ...string) ([]*entity.Character, error)
 	Set(ctx context.Context, character *entity.Character) error
-	Delete(ctx context.Context, id entity.ID) error
+	Delete(ctx context.Context, id string) error
 }
 
 func NewCharacterUseCase(Repository repository.CharacterRepository) CharacterUsecase {
@@ -24,10 +21,10 @@ func NewCharacterUseCase(Repository repository.CharacterRepository) CharacterUse
 }
 
 type characterUsecase struct {
-	repository.CharacterRepository
+	CharacterRepository repository.CharacterRepository
 }
 
-func (u *characterUsecase) New(ctx context.Context, item *entity.Character) (id *entity.ID, err error) {
+func (u *characterUsecase) New(ctx context.Context, item *entity.Character) (id *string, err error) {
 	if u.CharacterRepository == nil || ctx == nil {
 		return nil, errors.New("characterUsecase.New(): Nill pointer repository")
 
@@ -37,36 +34,18 @@ func (u *characterUsecase) New(ctx context.Context, item *entity.Character) (id 
 	}
 	return
 }
-func (u *characterUsecase) GetByID(ctx context.Context, id entity.ID) (item *entity.Character, err error) {
+
+func (u *characterUsecase) Get(ctx context.Context, creator_id string, ids ...string) (items []*entity.Character, err error) {
 	if u.CharacterRepository == nil || ctx == nil {
 		return nil, errors.New("characterUsecase.GetByID(): Nill pointer repository")
 
 	}
-	if item, err = u.CharacterRepository.GetByID(ctx, id); err != nil {
+	if items, err = u.CharacterRepository.Get(ctx, creator_id, ids...); err != nil {
 		err = fmt.Errorf("characterUsecase.GetByID()/%w", err)
 	}
 	return
 }
-func (u *characterUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*entity.Character, err error) {
-	if u.CharacterRepository == nil || ctx == nil {
-		return nil, errors.New("characterUsecase.GetArray(): Nill pointer repository")
 
-	}
-	if items, err = u.CharacterRepository.GetArray(ctx, ids); err != nil {
-		err = fmt.Errorf("characterUsecase.GetArray()/%w", err)
-	}
-	return
-}
-func (u *characterUsecase) GetAll(ctx context.Context) (items []*entity.Character, err error) {
-	if u.CharacterRepository == nil || ctx == nil {
-		return nil, errors.New("characterUsecase.GetAll(): Nill pointer repository")
-
-	}
-	if items, err = u.CharacterRepository.GetAll(ctx); err != nil {
-		err = fmt.Errorf("characterUsecase.GetAll()/%w", err)
-	}
-	return
-}
 func (u *characterUsecase) Set(ctx context.Context, item *entity.Character) (err error) {
 	if u.CharacterRepository == nil || ctx == nil {
 		return errors.New("characterUsecase.Set(): Nill pointer repository")
@@ -77,7 +56,7 @@ func (u *characterUsecase) Set(ctx context.Context, item *entity.Character) (err
 	}
 	return
 }
-func (u *characterUsecase) Delete(ctx context.Context, id entity.ID) (err error) {
+func (u *characterUsecase) Delete(ctx context.Context, id string) (err error) {
 	if u.CharacterRepository == nil || ctx == nil {
 		return errors.New("characterUsecase.Delete(): Nill pointer repository")
 

@@ -21,23 +21,7 @@ func NewPlayerCharacterRepository(db *mongo.Database) repository.PlayerCharacter
 	}
 }
 
-func (r *mongoPCRepository) GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.PlayerCharacter, error) {
-	oid, err := primitive.ObjectIDFromHex(string(id))
-	if err != nil {
-		return nil, err
-	}
-	cursor, err := r.collection.Find(ctx, bson.M{"_id": bson.M{"$in": oid}})
-	if err != nil {
-		return nil, err
-	}
-	var results []*entity.PlayerCharacter
-	if err = cursor.All(ctx, &results); err != nil {
-		return nil, err
-	}
-	return results, nil
-}
-
-func (r *mongoPCRepository) Insert(ctx context.Context, item *entity.PlayerCharacter) (*entity.ID, error) {
+func (r *mongoPCRepository) Insert(ctx context.Context, item *entity.PlayerCharacter) (*string, error) {
 	res, err := r.collection.InsertOne(ctx, item)
 	if err != nil {
 		return nil, err
@@ -46,45 +30,12 @@ func (r *mongoPCRepository) Insert(ctx context.Context, item *entity.PlayerChara
 	if !ok {
 		return nil, errors.New("failed to cast inserted ID to ObjectID")
 	}
-	id := entity.ID(oid)
+	id := string(oid)
 	return &id, nil
 }
 
-func (r *mongoPCRepository) GetByID(ctx context.Context, id entity.ID) (*entity.PlayerCharacter, error) {
-	oid, err := primitive.ObjectIDFromHex(string(id))
-	if err != nil {
-		return nil, err
-	}
-	var result entity.PlayerCharacter
-	err = r.collection.FindOne(ctx, bson.M{"_id": oid}).Decode(&result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-func (r *mongoPCRepository) GetArray(ctx context.Context, ids []entity.ID) ([]*entity.PlayerCharacter, error) {
-	objectIDs := make([]primitive.ObjectID, len(ids))
-	for i, id := range ids {
-		oid, err := primitive.ObjectIDFromHex(string(id))
-		if err != nil {
-			return nil, err
-		}
-		objectIDs[i] = oid
-	}
-	cursor, err := r.collection.Find(ctx, bson.M{"_id": bson.M{"$in": objectIDs}})
-	if err != nil {
-		return nil, err
-	}
-	var results []*entity.PlayerCharacter
-	if err = cursor.All(ctx, &results); err != nil {
-		return nil, err
-	}
-	return results, nil
-}
-
-func (r *mongoPCRepository) GetAll(ctx context.Context) ([]*entity.PlayerCharacter, error) {
-	cursor, err := r.collection.Find(ctx, bson.M{})
+func (r *mongoPCRepository) Get(ctx context.Context, creator_id string, ids ...string) ([]*entity.PlayerCharacter, error) {
+	cursor, err := r.collection.Find(ctx, bson.M{"creator_id": creator_id, "_id": bson.M{"$in": ids}})
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +47,7 @@ func (r *mongoPCRepository) GetAll(ctx context.Context) ([]*entity.PlayerCharact
 }
 
 func (r *mongoPCRepository) Update(ctx context.Context, item *entity.PlayerCharacter) error {
-	oid, err := primitive.ObjectIDFromHex(item.Character.ID.String())
+	oid, err := primitive.ObjectIDFromHex(item.Character.ID)
 	if err != nil {
 		return err
 	}
@@ -104,7 +55,7 @@ func (r *mongoPCRepository) Update(ctx context.Context, item *entity.PlayerChara
 	return err
 }
 
-func (r *mongoPCRepository) Delete(ctx context.Context, id entity.ID) error {
+func (r *mongoPCRepository) Delete(ctx context.Context, id string) error {
 	oid, err := primitive.ObjectIDFromHex(string(id))
 	if err != nil {
 		return err

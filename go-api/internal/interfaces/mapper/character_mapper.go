@@ -8,7 +8,7 @@ import (
 // CHARACTER
 func ToCharacterEntity(d dto.CharacterDTO) entity.Character {
 	return entity.Character{
-		ID:         entity.ID(d.ID),
+		ID:         d.ID,
 		Name:       d.Name,
 		Status:     ToCharacterStatusEntity(d.Status),
 		Attributes: ToAttributesEntity(d.Attributes),
@@ -21,7 +21,7 @@ func ToCharacterEntity(d dto.CharacterDTO) entity.Character {
 
 func ToCharacterDTO(e entity.Character) dto.CharacterDTO {
 	return dto.CharacterDTO{
-		ID:         e.ID.String(),
+		ID:         e.ID,
 		Name:       e.Name,
 		Status:     ToCharacterStatusDTO(e.Status),
 		Attributes: ToAttributesDTO(e.Attributes),
@@ -51,7 +51,7 @@ func ToCharacterClassDTOList(list []entity.CharacterClass) []dto.CharacterClassD
 }
 func ToCharacterClassEntity(d dto.CharacterClassDTO) entity.CharacterClass {
 	return entity.CharacterClass{
-		ID:          entity.ID(d.ID),
+		ID:          d.ID,
 		Name:        d.Name,
 		Level:       d.Level,
 		HitDice:     d.HitDice,
@@ -62,7 +62,7 @@ func ToCharacterClassEntity(d dto.CharacterClassDTO) entity.CharacterClass {
 
 func ToCharacterClassDTO(e entity.CharacterClass) dto.CharacterClassDTO {
 	return dto.CharacterClassDTO{
-		ID:          e.ID.String(),
+		ID:          e.ID,
 		Name:        e.Name,
 		Level:       e.Level,
 		HitDice:     e.HitDice,
@@ -75,7 +75,7 @@ func ToCharacterClassDTO(e entity.CharacterClass) dto.CharacterClassDTO {
 
 func ToCharacterRaceEntity(d dto.CharacterRaceDTO) entity.CharacterRace {
 	return entity.CharacterRace{
-		ID:          entity.ID(d.ID),
+		ID:          d.ID,
 		Name:        d.Name,
 		Subrace:     d.Subrace,
 		Traits:      d.Traits,
@@ -86,7 +86,7 @@ func ToCharacterRaceEntity(d dto.CharacterRaceDTO) entity.CharacterRace {
 
 func ToCharacterRaceDTO(e entity.CharacterRace) dto.CharacterRaceDTO {
 	return dto.CharacterRaceDTO{
-		ID:          e.ID.String(),
+		ID:          e.ID,
 		Name:        e.Name,
 		Subrace:     e.Subrace,
 		Traits:      e.Traits,
@@ -98,7 +98,7 @@ func ToCharacterRaceDTO(e entity.CharacterRace) dto.CharacterRaceDTO {
 // BACKGROUND
 func ToBackgroundEntity(d dto.BackgroundDTO) entity.Background {
 	return entity.Background{
-		ID:            entity.ID(d.ID),
+		ID:            d.ID,
 		Name:          d.Name,
 		Abilities:     ToAbilityEntityList(d.Abilities),
 		Proficiencies: d.Proficiencies,
@@ -108,7 +108,7 @@ func ToBackgroundEntity(d dto.BackgroundDTO) entity.Background {
 
 func ToBackgroundDTO(e entity.Background) dto.BackgroundDTO {
 	return dto.BackgroundDTO{
-		ID:            e.ID.String(),
+		ID:            e.ID,
 		Name:          e.Name,
 		Abilities:     ToAbilityDTOList(e.Abilities),
 		Proficiencies: e.Proficiencies,
@@ -120,7 +120,7 @@ func ToBackgroundDTO(e entity.Background) dto.BackgroundDTO {
 
 func ToAbilityEntity(d dto.AbilityDTO) entity.Ability {
 	return entity.Ability{
-		ID:          entity.ID(d.ID),
+		ID:          d.ID,
 		Name:        d.Name,
 		Description: d.Description,
 		LevelGained: d.LevelGained,
@@ -129,7 +129,7 @@ func ToAbilityEntity(d dto.AbilityDTO) entity.Ability {
 
 func ToAbilityDTO(e entity.Ability) dto.AbilityDTO {
 	return dto.AbilityDTO{
-		ID:          e.ID.String(),
+		ID:          e.ID,
 		Name:        e.Name,
 		Description: e.Description,
 		LevelGained: e.LevelGained,
@@ -156,7 +156,7 @@ func ToAbilityDTOList(list []entity.Ability) []dto.AbilityDTO {
 
 func ToSpellEntity(d dto.SpellDTO) entity.Spell {
 	return entity.Spell{
-		ID:          entity.ID(d.ID),
+		ID:          d.ID,
 		Name:        d.Name,
 		Description: d.Description,
 		Level:       d.Level,
@@ -165,7 +165,7 @@ func ToSpellEntity(d dto.SpellDTO) entity.Spell {
 
 func ToSpellDTO(e entity.Spell) dto.SpellDTO {
 	return dto.SpellDTO{
-		ID:          e.ID.String(),
+		ID:          e.ID,
 		Name:        e.Name,
 		Description: e.Description,
 		Level:       e.Level,

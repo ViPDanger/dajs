@@ -10,13 +10,10 @@ import (
 )
 
 type PlayerUsecase interface {
-	New(ctx context.Context, Player *entity.PlayerCharacter) (*entity.ID, error)
-	GetByID(ctx context.Context, id entity.ID) (*entity.PlayerCharacter, error)
-	GetByCreatorID(ctx context.Context, id entity.ID) ([]*entity.PlayerCharacter, error)
-	GetArray(ctx context.Context, ids []entity.ID) ([]*entity.PlayerCharacter, error)
-	GetAll(ctx context.Context) ([]*entity.PlayerCharacter, error)
+	New(ctx context.Context, Player *entity.PlayerCharacter) (*string, error)
+	Get(ctx context.Context, id string) ([]*entity.PlayerCharacter, error)
 	Set(ctx context.Context, Player *entity.PlayerCharacter) error
-	Delete(ctx context.Context, id entity.ID) error
+	Delete(ctx context.Context, id string) error
 }
 
 func NewPlayerCharacterUsecase(Repository repository.PlayerCharacterRepository) PlayerUsecase {
@@ -27,7 +24,7 @@ type playerUsecase struct {
 	repository.PlayerCharacterRepository
 }
 
-func (u *playerUsecase) New(ctx context.Context, item *entity.PlayerCharacter) (id *entity.ID, err error) {
+func (u *playerUsecase) New(ctx context.Context, item *entity.PlayerCharacter) (id *string, err error) {
 	if u.PlayerCharacterRepository == nil {
 		return nil, errors.New("playerUsecase.New(): Nill pointer repository")
 
@@ -37,33 +34,12 @@ func (u *playerUsecase) New(ctx context.Context, item *entity.PlayerCharacter) (
 	}
 	return
 }
-func (u *playerUsecase) GetByID(ctx context.Context, id entity.ID) (item *entity.PlayerCharacter, err error) {
+func (u *playerUsecase) Get(ctx context.Context, id string) (item []*entity.PlayerCharacter, err error) {
 	if u.PlayerCharacterRepository == nil {
 		return nil, errors.New("playerUsecase.GetByID(): Nill pointer repository")
-
 	}
-	if item, err = u.PlayerCharacterRepository.GetByID(ctx, id); err != nil {
+	if item, err = u.PlayerCharacterRepository.Get(ctx, id); err != nil {
 		err = fmt.Errorf("playerUsecase.GetByID()/%w", err)
-	}
-	return
-}
-func (u *playerUsecase) GetArray(ctx context.Context, ids []entity.ID) (items []*entity.PlayerCharacter, err error) {
-	if u.PlayerCharacterRepository == nil {
-		return nil, errors.New("playerUsecase.GetArray(): Nill pointer repository")
-
-	}
-	if items, err = u.PlayerCharacterRepository.GetArray(ctx, ids); err != nil {
-		err = fmt.Errorf("playerUsecase.GetArray()/%w", err)
-	}
-	return
-}
-func (u *playerUsecase) GetAll(ctx context.Context) (items []*entity.PlayerCharacter, err error) {
-	if u.PlayerCharacterRepository == nil {
-		return nil, errors.New("playerUsecase.GetAll(): Nill pointer repository")
-
-	}
-	if items, err = u.PlayerCharacterRepository.GetAll(ctx); err != nil {
-		err = fmt.Errorf("playerUsecase.GetAll()/%w", err)
 	}
 	return
 }
@@ -77,7 +53,7 @@ func (u *playerUsecase) Set(ctx context.Context, item *entity.PlayerCharacter) (
 	}
 	return
 }
-func (u *playerUsecase) Delete(ctx context.Context, id entity.ID) (err error) {
+func (u *playerUsecase) Delete(ctx context.Context, id string) (err error) {
 	if u.PlayerCharacterRepository == nil {
 		return errors.New("playerUsecase.Delete(): Nill pointer repository")
 
