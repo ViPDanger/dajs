@@ -19,7 +19,7 @@ func NewPlayerCharHandler(uc usecase.PlayerCharUsecase) *playerCharHandler {
 	return &playerCharHandler{Usecase: uc}
 }
 
-func (h *playerHandler) Get(c *gin.Context) {
+func (h *playerCharHandler) Get(c *gin.Context) {
 	// проверка id header
 	clientId, ok := c.Get("client_id")
 	if !ok {
@@ -29,7 +29,7 @@ func (h *playerHandler) Get(c *gin.Context) {
 		return
 	}
 	// обращение к Usecase
-	objects, err := h.UC.Get(c.Request.Context(), string(clientId.(string)))
+	objects, err := h.Usecase.Get(c.Request.Context(), string(clientId.(string)))
 	if err != nil {
 		err = fmt.Errorf("playerCharHandler.Get()/%w", err)
 		_ = c.Error(err)
@@ -39,7 +39,7 @@ func (h *playerHandler) Get(c *gin.Context) {
 	dtos := make([]dto.PlayerCharDTO, len(objects))
 
 	for i := range objects {
-		dtos[i] = mapper.ToPlayerCharDTO((objects[i]))
+		dtos[i] = mapper.ToPlayerCharDTO((*objects[i]))
 	}
 	// ВЫВОД
 	c.JSON(http.StatusOK, dtos)
@@ -81,7 +81,7 @@ func (h *playerCharHandler) Delete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	err := h.UC.Delete(c.Request.Context(), id)
+	err := h.Usecase.Delete(c.Request.Context(), id)
 	if err != nil {
 		err = fmt.Errorf("playerCharHandler.Delete()/%w", err)
 		_ = c.Error(err)

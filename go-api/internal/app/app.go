@@ -67,10 +67,10 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) *http.Server {
 	//			PLAYER CHARACTER HANDLER
 	playerCharHandler := handler.NewPlayerCharHandler(usecase.NewPlayerCharUsecase(mongodb.NewPlayerCharRepository(conf.DB)))
 	pcharacterRouter := protectedRouter.Group("/pchar")
-	pcharacterRouter.GET("/", playerCharacterHandler.Get)
-	pcharacterRouter.POST("/", playerCharacterHandler.New)
-	pcharacterRouter.PUT("/", playerCharacterHandler.Set)
-	pcharacterRouter.DELETE("/", playerCharacterHandler.Delete)
+	pcharacterRouter.GET("/", playerCharHandler.Get)
+	pcharacterRouter.POST("/", playerCharHandler.New)
+	pcharacterRouter.PUT("/", playerCharHandler.Set)
+	pcharacterRouter.DELETE("/", playerCharHandler.Delete)
 	//
 	// GRACEFULL SHUTDOWN CTX---------
 
