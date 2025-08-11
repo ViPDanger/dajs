@@ -27,18 +27,18 @@ const (
 
 type Ilogger log.Ilogger
 
-func newLog() (Ilogger, error) {
+func newLog(format string) (Ilogger, error) {
 	// Debug Logger
 	debugLogger := log.NewLogger(
 		log.Debug,
-		log.NewDefaultFormatter("[DEBUG]	%v"),
+		log.NewDefaultFormatter(format+"[DEBUG]	%v"),
 		os.Stdout)
 
 	// Release Logger
 	releaseLogger1 := log.NewLogger(
 		log.Release,
 		log.NewMultyFormatter(
-			log.NewDefaultFormatter("	%v"),
+			log.NewDefaultFormatter(format+"	%v"),
 			log.NewColorFormatter(log.White)),
 		os.Stdout)
 
@@ -46,21 +46,21 @@ func newLog() (Ilogger, error) {
 	ginLogger := log.NewLogger(
 		log.GIN,
 		log.NewMultyFormatter(
-			log.NewDefaultFormatter("[GIN]	%v"),
+			log.NewDefaultFormatter(format+"[GIN]	%v"),
 			log.NewColorFormatter(log.Green)),
 		os.Stdout)
 	// Error
 	errorLogger := log.NewLogger(
 		log.Error,
 		log.NewMultyFormatter(
-			log.NewDefaultFormatter("[ERROR]	%v"),
+			log.NewDefaultFormatter(format+"[ERROR]	%v"),
 			log.NewColorFormatter(log.Red)),
 		os.Stdout)
 
 	warningLogger := log.NewLogger(
 		log.Warning,
 		log.NewMultyFormatter(
-			log.NewDefaultFormatter("[WARNING]	%v"),
+			log.NewDefaultFormatter(format+"[WARNING]	%v"),
 			log.NewColorFormatter(log.Red)),
 		os.Stdout)
 	// MultyLogger
@@ -70,19 +70,19 @@ func newLog() (Ilogger, error) {
 	if w, err := logFile("errors"); err != nil {
 		m.Logln(Warning, err)
 	} else {
-		errorErrorLogger := log.NewLogger(Error, log.NewDefaultFormatter("[ERROR]	%v"), w)
-		errorWarningLogger := log.NewLogger(Warning, log.NewDefaultFormatter("[WARNING]	%v"), w)
+		errorErrorLogger := log.NewLogger(Error, log.NewDefaultFormatter(format+"[ERROR]	%v"), w)
+		errorWarningLogger := log.NewLogger(Warning, log.NewDefaultFormatter(format+"[WARNING]	%v"), w)
 		m.AddLoggers(errorErrorLogger, errorWarningLogger)
 	}
 	// Log File
 	if w, err := logFile("log" + time.Now().Format("2006-01-02")); err != nil {
 		m.Logln(Warning, err)
 	} else {
-		logErrorLogger := log.NewLogger(Error, log.NewDefaultFormatter("[ERROR]	%v"), w)
-		logWarningLogger := log.NewLogger(Warning, log.NewDefaultFormatter("[WARNING]	%v"), w)
-		logDebugLogger := log.NewLogger(Debug, log.NewDefaultFormatter("[DEBUG]	%v"), w)
-		logGINLogger := log.NewLogger(GIN, log.NewDefaultFormatter("[GIN]	%v"), w)
-		logReleaseLogger := log.NewLogger(Release, log.NewDefaultFormatter("	%v"), w)
+		logErrorLogger := log.NewLogger(Error, log.NewDefaultFormatter(format+"[ERROR]	%v"), w)
+		logWarningLogger := log.NewLogger(Warning, log.NewDefaultFormatter(format+"[WARNING]	%v"), w)
+		logDebugLogger := log.NewLogger(Debug, log.NewDefaultFormatter(format+"[DEBUG]	%v"), w)
+		logGINLogger := log.NewLogger(GIN, log.NewDefaultFormatter(format+"[GIN]	%v"), w)
+		logReleaseLogger := log.NewLogger(Release, log.NewDefaultFormatter(format+"	%v"), w)
 		m.AddLoggers(logErrorLogger, logWarningLogger, logDebugLogger, logGINLogger, logReleaseLogger)
 	}
 
@@ -102,15 +102,12 @@ func Logln(n ...any) {
 func Initialization(path string, format string) Ilogger {
 	once.Do(func() {
 		logPath = path
-		logType = format
+		logType = defaultFileType
 		if logPath == "" {
 			logPath = defaultPath
 		}
-		if logType == "" {
-			logType = defaultFileType
-		}
 		var err error
-		logger, err = newLog()
+		logger, err = newLog(format)
 		if err != nil {
 			panic(err)
 		}

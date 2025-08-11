@@ -13,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	logger "github.com/ViPDanger/dajs/go-api/pkg/logger/v3"
@@ -27,15 +28,19 @@ var keyFile = "/etc/letsencrypt/live/dajs.vipdanger.keenetic.pro/privkey.pem"
 var exeDir string
 
 func init() {
+	fmt.Println(os.Hostname())
 	exePath, err := os.Executable()
 	if err != nil {
 		panic(err)
 	}
 	exeDir = filepath.Dir(exePath)
+	if strings.Contains(exeDir, "/tmp/go-build") {
+		exeDir = "."
+	}
 }
 
 func main() {
-	logger.Initialization(exeDir+"log.txt", "[WEB APP] ")
+	logger.Initialization(exeDir+"/log/", "[WEB APP] ")
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
