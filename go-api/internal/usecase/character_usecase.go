@@ -13,7 +13,7 @@ type CharacterUsecase interface {
 	New(ctx context.Context, character *entity.Character) (*string, error)
 	Get(ctx context.Context, creator_id string, ids ...string) ([]*entity.Character, error)
 	Set(ctx context.Context, character *entity.Character) error
-	Delete(ctx context.Context, id string) error
+	Delete(ctx context.Context, id ...string) error
 }
 
 func NewCharacterUsecase(Repository repository.CharacterRepository) CharacterUsecase {
@@ -55,12 +55,12 @@ func (u *characterUsecase) Set(ctx context.Context, item *entity.Character) (err
 	}
 	return
 }
-func (u *characterUsecase) Delete(ctx context.Context, id string) (err error) {
+func (u *characterUsecase) Delete(ctx context.Context, id ...string) (err error) {
 	if u.CharacterRepository == nil || ctx == nil {
 		return errors.New("characterUsecase.Delete(): Nill pointer repository")
 
 	}
-	if err = u.CharacterRepository.Delete(ctx, id); err != nil {
+	if err = u.CharacterRepository.Delete(ctx, id...); err != nil {
 		err = fmt.Errorf("characterUsecase.Delete()/%w", err)
 	}
 	return

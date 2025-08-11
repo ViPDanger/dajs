@@ -29,7 +29,7 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) *http.Server {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"}, // Разрешить все (в проде использовать конкретные)
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
@@ -82,7 +82,6 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) *http.Server {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Logln(logger.Error, "server error: %v", err)
 		}
-
 	}()
 	go func() {
 		<-ctx.Done()

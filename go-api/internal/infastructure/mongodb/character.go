@@ -39,7 +39,11 @@ func (r *mongoCharacterRepository) Insert(ctx context.Context, item *entity.Char
 }
 
 func (r *mongoCharacterRepository) Get(ctx context.Context, creator_id string, ids ...string) ([]*entity.Character, error) {
-	cursor, err := r.collection.Find(ctx, bson.M{"creator_id": creator_id, "_id": bson.M{"$in": ids}})
+	filter := bson.M{"creator_id": creator_id, "_id": bson.M{"$in": ids}}
+	if len(ids) == 0 {
+		filter = bson.M{"creator_id": creator_id}
+	}
+	cursor, err := r.collection.Find(ctx, filter)
 	defer cursor.Close(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("CharcterRepository.GetArray():  %w", err)
@@ -57,7 +61,7 @@ func (r *mongoCharacterRepository) Update(ctx context.Context, item *entity.Char
 	return err
 }
 
-func (r *mongoCharacterRepository) Delete(ctx context.Context, id string) error {
-	_, err := r.collection.DeleteOne(ctx, bson.M{"_id": id})
+func (r *mongoCharacterRepository) Delete(ctx context.Context, ids ...string) error {
+	_, err := r.collection.DeleteOne(ctx, bson.M{"_id": bson.M{"$in": ids}})
 	return err
 }

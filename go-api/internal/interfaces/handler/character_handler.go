@@ -49,8 +49,8 @@ func (h *characterHandler) Get(c *gin.Context) {
 		c.JSON(http.StatusNoContent, gin.H{"error": "No Content"})
 		return
 	}
-	dtos := make([]dto.CharacterDTO, len(objects))
 
+	dtos := make([]dto.CharacterDTO, len(objects))
 	for i := range objects {
 		dtos[i] = mapper.ToCharacterDTO((*objects[i]))
 	}
@@ -87,14 +87,14 @@ func (h *characterHandler) New(c *gin.Context) {
 
 // DELETE object
 func (h *characterHandler) Delete(c *gin.Context) {
-	id := c.GetHeader("id")
-	if id == "" {
-		err := errors.New("characterHandler.Delete(): No ID header in request")
+	id := c.QueryArray("id")
+	if len(id) == 0 {
+		err := errors.New("characterHandler.Delete(): No id in request query")
 		_ = c.Error(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	err := h.Usecase.Delete(c.Request.Context(), string(id))
+	err := h.Usecase.Delete(c.Request.Context(), id...)
 	if err != nil {
 		err = fmt.Errorf("characterHandler.Delete()/%w", err)
 		_ = c.Error(err)
@@ -115,7 +115,7 @@ func (h *characterHandler) Set(c *gin.Context) {
 	}
 	object := mapper.ToCharacterEntity(DTO)
 	clientID, _ := c.Get("client_id")
-	object.CreatorID = clientID.(string)
+	object.CreatorID, _ = clientID.(string)
 	err := h.Usecase.Set(c.Request.Context(), &object)
 	if err != nil {
 		_ = c.Error(err)

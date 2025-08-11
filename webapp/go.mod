@@ -1,10 +1,13 @@
-module github.com/ViPDanger/dajs/webapp
+module github.com/ViPDanger/dajs/webapp 
 
 go 1.23.0
 
 toolchain go1.23.12
 
-require github.com/gin-gonic/gin v1.10.1
+require (
+github.com/gin-gonic/gin v1.10.1
+github.com/ViPDanger/dajs/go-api v1.0.0
+)		
 
 require (
 	github.com/bytedance/sonic v1.13.3 // indirect

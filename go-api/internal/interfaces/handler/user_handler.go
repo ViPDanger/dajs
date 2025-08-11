@@ -79,8 +79,8 @@ func (userHandler *userHandler) Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, dto.TokensDTO{
-		Access:  mapper.ToAccessTokenDTO(accessToken),
-		Refresh: mapper.ToRefreshTokenDTO(refreshToken),
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
 	})
 }
 
@@ -93,8 +93,7 @@ func (userHandler *userHandler) Refresh(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	refreshToken := mapper.ToRefreshTokenEntity(refreshDTO)
-	token, err := jwt.ParseRefreshToken(refreshToken.Str)
+	token, err := jwt.ParseRefreshToken(refreshDTO.RefreshToken)
 	if err != nil || !token.Valid {
 		err = errors.New("Invalid token")
 		err = fmt.Errorf("userHandler.Refresh()/%w", err)
@@ -102,14 +101,14 @@ func (userHandler *userHandler) Refresh(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	accessToken, err := jwt.RefreshAccessToken(refreshToken.Str)
+	accessToken, err := jwt.RefreshAccessToken(string(refreshDTO.RefreshToken))
 	if err != nil {
 		_ = c.Error(err)
 		err = fmt.Errorf("userHandler.Refresh()/%w", err)
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	c.JSON(http.StatusOK, mapper.ToAccessTokenDTO(accessToken))
+	c.JSON(http.StatusOK, gin.H{"accessToken": accessToken})
 }
 
 // MiddleWare access token check

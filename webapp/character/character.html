@@ -1,66 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Character</title>
-  <script src="character/config.js" ></script>
-  <script src="character/main.js" defer></script>
+  <title>Characters CRUD</title>
   <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 20px auto; }
-    input { width: 100%; margin-bottom: 10px; }
-    label { font-weight: bold; }
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .char-card { border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 5px; }
+    .btn { margin: 3px; padding: 5px 10px; }
   </style>
 </head>
 <body>
-  <h1>🛠️ Edit Character</h1>
-  <div>
-    <label>Character ID</label>
-    <input id="charId" placeholder="Enter ID pls">
-    <button onclick="loadCharacter()">Load</button>
+  <h1>Список персонажей</h1>
+  <div id="characterList"></div>
+   
+
+  <button name="addBtn" class="btn" onclick="addCharacter()">Добавить персонажа</button>
+  
+
+    <div id="editor">
+    <h2>Редактировать персонажа</h2>
+    <form id="editForm" onsubmit="saveCharacter(event)">
+      <input type="hidden" id="editId">
+
+      <label>Имя: <input type="text" id="editName"></label>
+      <label>HP: <input type="number" id="editHp"></label>
+      <label>Max HP: <input type="number" id="editMaxHp"></label>
+      <label>AC: <input type="number" id="editAC"></label>
+      <label>Скорость: <input type="number" id="editSpeed"></label>
+      <label>Инициатива: <input type="number" id="editInitiative"></label>
+
+      <h3>Характеристики</h3>
+      <label>Сила: <input type="number" id="attrStrength"></label>
+      <label>Ловкость: <input type="number" id="attrDexterity"></label>
+      <label>Телосложение: <input type="number" id="attrConstitution"></label>
+      <label>Интеллект: <input type="number" id="attrIntelligence"></label>
+      <label>Мудрость: <input type="number" id="attrWisdom"></label>
+      <label>Харизма: <input type="number" id="attrCharisma"></label>
+
+      <br>
+      
+      <button type="submit" class="btn">Сохранить</button>
+
+      <button name="deleteBtn" type="button" class="btn" onclick="deleteCharacter()">Удалить</button>
+      <button name="cancelBtn" type="button" class="btn" name="" onclick="cancelEdit()">Отмена</button>
+      <br>
+    </form>
   </div>
-  <hr>
-  <div>
-    <label>Name</label>
-    <input id="name">
 
-    <label>Alignment</label>
-    <input id="alignment">
 
-    <label>HP</label>
-    <input type="number" id="hp">
 
-    <label>Max HP</label>
-    <input type="number" id="max_hp">
+  <script>
+        window.__TOKENS__ = {
+            access_token: "{{ .access_token }}",
+            refresh_token: "{{ .refresh_token }}"
+        };
+  </script>
+  <script src="character/config.js"></script>
+  <script src="character/main.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
 
-    <label>Armor Class</label>
-    <input type="number" id="armor_class">
+    // Заменим alert и confirm на Telegram API аналоги
+    window.alert = (msg) => tg.showAlert(msg);
+    window.confirm = (msg) => new Promise((resolve) => {
+      // Telegram WebApp не имеет нативного confirm, сделаем простейший через showConfirm, 
+      // но если его нет - fallback на true (или лучше своё модальное окно)
+      if (tg.showConfirm) {
+        resolve(tg.showConfirm(msg));
+      } else {
+        resolve(window.confirm(msg));
+      }
+    });
 
-    <label>Initiative</label>
-    <input type="number" id="initiative">
+    // Обработчики кнопок и вызовы функций из main.js
+    
+    document.getElementById("addBtn").onclick = () => {
+      const name = prompt("Имя нового персонажа:");
+      if (!name) return;
+      addCharacter(name);
+    };
 
-    <label>Speed</label>
-    <input type="number" id="speed">
+    document.getElementById("deleteBtn").onclick = async () => {
+      const id = document.getElementById("editId").value;
+      if (!id) {
+        tg.showAlert("Нет персонажа для удаления");
+        return;
+      }
+      const name = document.getElementById("editName").value;
+      if (await window.confirm(`Удалить персонажа ${name}?`)) {
+        await deleteCharacter();
+        cancelEdit();
+      }
+    };
 
-    <label>Strength</label>
-    <input type="number" id="strength">
+    document.getElementById("cancelBtn").onclick = () => {
+      cancelEdit();
+    };
 
-    <label>Dexterity</label>
-    <input type="number" id="dexterity">
+    // При загрузке страницы инициализируем токены из Telegram, если есть
+    if (window.__TOKENS__) {
+      localStorage.setItem("accessToken", window.__TOKENS__.access_token);
+      localStorage.setItem("refreshToken", window.__TOKENS__.refresh_token);
+      delete window.__TOKENS__;
+    }
+    
+    // Загружаем персонажей
+    loadCharacters();
 
-    <label>Constitution</label>
-    <input type="number" id="constitution">
-
-    <label>Intelligence</label>
-    <input type="number" id="intelligence">
-
-    <label>Wisdom</label>
-    <input type="number" id="wisdom">
-
-    <label>Charisma</label>
-    <input type="number" id="charisma">
-
-    <button onclick="saveCharacter()">💾 Save</button>
-  </div>
+  </script>
 </body>
 </html>

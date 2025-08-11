@@ -14,7 +14,7 @@ async def post_character(authorizator: Authorizator,character: Character, base_u
     headers = {"Content-Type": "application/json","Authorization":authorizator.GetAccessToken()}
     async with aiohttp.ClientSession() as session:
         async with session.post(url, data=character.model_dump_json(by_alias=True), headers=headers) as resp:
-            if resp.status == 200:
+            if resp.status == 201:
                 data = await resp.json()
                 print(data)
                 return data.get("message")
@@ -22,7 +22,7 @@ async def post_character(authorizator: Authorizator,character: Character, base_u
                 text = await resp.text()
                 raise Exception(f"Ошибка отправки персонажа: {resp.status} — {text}")
             
-async def get_creator_characters(authorizator: Authorizator,base_url: str = BASE_URL) -> Optional[list[Character]]:
+async def characters(authorizator: Authorizator,base_url: str = BASE_URL) -> Optional[list[Character]]:
     url = f"{base_url}{CHARACTER_PATH}"
     headers = {"Content-Type": "application/json","Authorization":authorizator.GetAccessToken()}
     async with aiohttp.ClientSession() as session:

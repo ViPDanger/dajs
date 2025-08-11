@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/gookit/config/v2"
 	"github.com/gookit/config/v2/ini"
 )
@@ -10,6 +12,7 @@ func NewConfig(name string) Config {
 	c.AddDriver(ini.Driver)
 	err := c.LoadFiles(name)
 	if err != nil {
+		err = fmt.Errorf("NewConfig(): %s - %w", name, err)
 		panic(err)
 	}
 	return c

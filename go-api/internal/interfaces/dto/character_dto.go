@@ -1,14 +1,14 @@
 package dto
 
 type CharacterDTO struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	Status     CharacterStatusDTO
-	Attributes AttributesDTO
-	Alignment  string       `json:"alignment"`
-	Abilities  []AbilityDTO `json:"abilities"`
-	Spells     []SpellDTO   `json:"spells"`
-	Tags       []string     `json:"tags"`
+	ID         string             `json:"id"`
+	Name       string             `json:"name"`
+	Status     CharacterStatusDTO `json:"status"`
+	Attributes AttributesDTO      `json:"attributes"`
+	Alignment  string             `json:"alignment"`
+	Abilities  []AbilityDTO       `json:"abilities"`
+	Spells     []SpellDTO         `json:"spells"`
+	Tags       []string           `json:"tags"`
 }
 
 type CharacterClassDTO struct {

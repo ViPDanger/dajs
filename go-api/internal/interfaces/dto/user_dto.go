@@ -1,20 +1,17 @@
 package dto
 
-import "time"
-
 type UserDTO struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 type AccessTokenDTO struct {
-	Str        string    `json:"access_token"`
-	ExpireTime time.Time `json:"access_exp"`
+	AccessToken string `json:"access_token"`
 }
 type RefreshTokenDTO struct {
-	Str        string    `json:"refresh_token"`
-	ExpireTime time.Time `json:"refresh_exp"`
+	RefreshToken string `json:"refresh_token"`
 }
+
 type TokensDTO struct {
-	Access  AccessTokenDTO
-	Refresh RefreshTokenDTO
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }

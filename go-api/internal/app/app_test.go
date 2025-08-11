@@ -82,9 +82,9 @@ func TestRegistration(t *testing.T) {
 		assert.Equal(t, resp.StatusCode, http.StatusOK, string(body))
 		//=====	get tokens
 		_ = json.Unmarshal(body, &tokens)
-		refreshToken, _ := json.Marshal(tokens.Refresh)
+
 		// refresh
-		resp, err = http.Post("http://"+host+"/refresh", "application/json", bytes.NewBuffer(refreshToken))
+		resp, err = http.Post("http://"+host+"/refresh", "application/json", bytes.NewBuffer([]byte(tokens.RefreshToken)))
 		if err != nil {
 			assert.Fail(t, err.Error())
 			return
@@ -143,7 +143,7 @@ func TestCharacter(t *testing.T) {
 		_ = json.Unmarshal(body, &tokens)
 		for _, item := range characters {
 			// POST
-			head.Add("Authorization", tokens.Access.Str)
+			head.Add("Authorization", string(tokens.AccessToken))
 			resp, err = DoRequest("POST", "http://"+host+"/char/", head, item)
 			if err != nil {
 				assert.Fail(mt, err.Error())
@@ -250,7 +250,7 @@ func TestPlayerChar(t *testing.T) {
 		_ = json.Unmarshal(body, &tokens)
 		for _, item := range playerChars {
 			// POST
-			head.Add("Authorization", tokens.Access.Str)
+			head.Add("Authorization", string(tokens.AccessToken))
 			resp, err = DoRequest("POST", "http://"+host+"/pchar/", head, item)
 			if err != nil {
 				assert.Fail(mt, err.Error())
@@ -355,7 +355,7 @@ func TestNPCChar(t *testing.T) {
 		_ = json.Unmarshal(body, &tokens)
 		for _, item := range npcs {
 			// POST
-			head.Add("Authorization", tokens.Access.Str)
+			head.Add("Authorization", string(tokens.AccessToken))
 			resp, err = DoRequest("POST", "http://"+host+"/npc/", head, item)
 			if err != nil {
 				assert.Fail(mt, err.Error())
@@ -459,7 +459,7 @@ func TestMonsterChar(t *testing.T) {
 		_ = json.Unmarshal(body, &tokens)
 		for _, item := range monsters {
 			// POST
-			head.Add("Authorization", tokens.Access.Str)
+			head.Add("Authorization", string(tokens.AccessToken))
 			resp, err = DoRequest("POST", "http://"+host+"/monster/", head, item)
 			if err != nil {
 				assert.Fail(mt, err.Error())
@@ -563,7 +563,7 @@ func TestItem(t *testing.T) {
 		_ = json.Unmarshal(body, &tokens)
 		for _, item := range items {
 			// POST
-			head.Add("Authorization", tokens.Access.Str)
+			head.Add("Authorization", string(tokens.AccessToken))
 			resp, err = DoRequest("POST", "http://"+host+"/item/", head, item)
 			if err != nil {
 				assert.Fail(mt, err.Error())
@@ -660,7 +660,7 @@ func TestGlossary(t *testing.T) {
 		_ = json.Unmarshal(body, &tokens)
 		for _, item := range glossarys {
 			// POST
-			head.Add("Authorization", tokens.Access.Str)
+			head.Add("Authorization", string(tokens.AccessToken))
 			resp, err = DoRequest("POST", "http://"+host+"/item/", head, item)
 			if err != nil {
 				assert.Fail(mt, err.Error())

@@ -7,6 +7,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"syscall"
+	"time"
 
 	"github.com/ViPDanger/dajs/go-api/internal/app"
 	"github.com/ViPDanger/dajs/go-api/pkg/config"
@@ -24,6 +25,9 @@ func init() {
 		panic(err)
 	}
 	exeDir := filepath.Dir(exePath)
+	if _, err = os.Open(exeDir + cfgPath); err != nil {
+		exeDir = "./cmd"
+	}
 	cfgPath = exeDir + cfgPath
 }
 
@@ -65,4 +69,5 @@ func main() {
 	log.Logln(logV2.Debug, appConf)
 	app.Run(ctx, log, appConf)
 	<-ctx.Done()
+	time.Sleep(1 * time.Second)
 }
