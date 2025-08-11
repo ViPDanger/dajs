@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"syscall"
 	"time"
 
@@ -13,9 +14,11 @@ import (
 	"github.com/ViPDanger/dajs/go-api/pkg/config"
 	logV2 "github.com/ViPDanger/dajs/go-api/pkg/logger/v2"
 	logger "github.com/ViPDanger/dajs/go-api/pkg/logger/v3"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+const TimeouterMaxTime = 10 * time.Second     // время до автоматического TimeOut <-ctx.Done
+const MongoRetry = 20                         // число попыток подключения к MongoDB
+const MongoRetryTime = 500 * time.Millisecond // время между попытками подключения к MongoDB
 
 var cfgPath = "/config.ini"
 
@@ -25,7 +28,7 @@ func init() {
 		panic(err)
 	}
 	exeDir := filepath.Dir(exePath)
-	if _, err = os.Open(exeDir + cfgPath); err != nil {
+	if strings.Contains(exeDir, "/tmp/go-build") {
 		exeDir = "./cmd"
 	}
 	cfgPath = exeDir + cfgPath
@@ -38,35 +41,24 @@ func main() {
 	defer cancel()
 	cfg := config.NewConfig(cfgPath)
 	logPath := cfg.String("log.path", "log_")
-	logFormat := cfg.String("log.Format", "txt")
+	logFormat := cfg.String("log.format", "")
 	log := logger.Initialization(logPath, logFormat)
 
-	log.Logln(logV2.Debug, "Starting the app...")
-	log.Logln(logV2.Release, "Starting the app...")
-	//
-	cred := options.Credential{
-		Username: cfg.String("mongo.user", "user"),
-		Password: cfg.String("mongo.password", "password"),
-	}
-	clientOpts := options.Client().
-		ApplyURI("mongodb://" + cfg.String("mongo.host", ":27017")).
-		SetAuth(cred)
-
-	client, err := mongo.Connect(ctx, clientOpts)
-	if err != nil {
-		log.Logln(logger.Error, fmt.Errorf("Run(): %w", err))
-	}
-	mongoDB := client.Database(cfg.String("mongo.name", "database"))
-	if mongoDB == nil {
-		log.Logln(logger.Error, "Main(): mongoDB nil pointer")
-	}
+	log.Logln(logV2.Release, "Starting the GO-API...")
 	//
 	appConf := app.APIConfig{
-		Host:           cfg.String("server.host", ":8080"),
-		DB:             mongoDB,
+		Host: cfg.String("server.host", ":8080"),
+		MongoConfig: app.MongoConfig{
+			URI:         "mongodb://" + cfg.String("mongo.host", ":27017"),
+			Username:    cfg.String("mongo.user", "user"),
+			Password:    cfg.String("mongo.password", "password"),
+			Name:        cfg.String("mongo.name", "database"),
+			RetryCount:  3,
+			RetryPeriod: 2 * time.Second,
+		},
 		AuthMiddleware: false,
 	}
-	log.Logln(logV2.Debug, appConf)
+	log.Logln(logV2.Debug, fmt.Sprintf("%+v", appConf))
 	app.Run(ctx, log, appConf)
 	<-ctx.Done()
 	time.Sleep(1 * time.Second)

@@ -57,9 +57,9 @@ func TestRegistration(t *testing.T) {
 			cancel()
 			time.Sleep(500 * time.Millisecond)
 		}()
-		app.Run(ctx, log.Initialization("", ""), app.APIConfig{
+		_, _ = app.Run(ctx, log.Initialization("", ""), app.APIConfig{
 			Host:           cfg.String("server.host", ":8080"),
-			DB:             mt.DB,
+			MongoConfig:    app.MongoConfig{},
 			AuthMiddleware: true,
 		})
 		tokens := dto.TokensDTO{}
@@ -122,9 +122,9 @@ func TestCharacter(t *testing.T) {
 			cancel()
 			time.Sleep(500 * time.Millisecond)
 		}()
-		app.Run(ctx, log.Initialization("", ""), app.APIConfig{
+		_, _ = app.Run(ctx, log.Initialization("", ""), app.APIConfig{
 			Host:           cfg.String("server.host", ":8080"),
-			DB:             mt.DB,
+			MongoConfig:    app.MongoConfig{DB: mt.DB},
 			AuthMiddleware: true,
 		})
 
@@ -229,9 +229,9 @@ func TestPlayerChar(t *testing.T) {
 			cancel()
 			time.Sleep(500 * time.Millisecond)
 		}()
-		app.Run(ctx, log.Initialization("", ""), app.APIConfig{
+		_, _ = app.Run(ctx, log.Initialization("", ""), app.APIConfig{
 			Host:           cfg.String("server.host", ":8080"),
-			DB:             mt.DB,
+			MongoConfig:    app.MongoConfig{DB: mt.DB},
 			AuthMiddleware: true,
 		})
 
@@ -334,9 +334,9 @@ func TestNPCChar(t *testing.T) {
 			cancel()
 			time.Sleep(500 * time.Millisecond)
 		}()
-		app.Run(ctx, log.Initialization("", ""), app.APIConfig{
+		_, _ = app.Run(ctx, log.Initialization("", ""), app.APIConfig{
 			Host:           cfg.String("server.host", ":8080"),
-			DB:             mt.DB,
+			MongoConfig:    app.MongoConfig{DB: mt.DB},
 			AuthMiddleware: true,
 		})
 
@@ -439,9 +439,9 @@ func TestMonsterChar(t *testing.T) {
 			cancel()
 			time.Sleep(500 * time.Millisecond)
 		}()
-		app.Run(ctx, log.Initialization("", ""), app.APIConfig{
+		_, _ = app.Run(ctx, log.Initialization("", ""), app.APIConfig{
 			Host:           cfg.String("server.host", ":8080"),
-			DB:             mt.DB,
+			MongoConfig:    app.MongoConfig{DB: mt.DB},
 			AuthMiddleware: true,
 		})
 
@@ -542,9 +542,9 @@ func TestItem(t *testing.T) {
 			cancel()
 			time.Sleep(500 * time.Millisecond)
 		}()
-		app.Run(ctx, log.Initialization("", ""), app.APIConfig{
+		_, _ = app.Run(ctx, log.Initialization("", ""), app.APIConfig{
 			Host:           cfg.String("server.host", ":8080"),
-			DB:             mt.DB,
+			MongoConfig:    app.MongoConfig{DB: mt.DB},
 			AuthMiddleware: true,
 		})
 
@@ -639,9 +639,9 @@ func TestGlossary(t *testing.T) {
 			cancel()
 			time.Sleep(500 * time.Millisecond)
 		}()
-		app.Run(ctx, log.Initialization("", ""), app.APIConfig{
+		_, _ = app.Run(ctx, log.Initialization("", ""), app.APIConfig{
 			Host:           cfg.String("server.host", ":8080"),
-			DB:             mt.DB,
+			MongoConfig:    app.MongoConfig{DB: mt.DB},
 			AuthMiddleware: true,
 		})
 

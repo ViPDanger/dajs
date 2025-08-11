@@ -24,7 +24,7 @@ run:
 docker:
 	docker compose up -d
 webapp:
-	sudo .$(WEBAPP_DIR)/$(APP_NAME)
+	.$(WEBAPP_DIR)/$(APP_NAME)
 go-api:
 	.$(GOAPI_DIR)$(BUILD_DIR)/$(APP_NAME)
 tg-bot:

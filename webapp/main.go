@@ -1,19 +1,13 @@
 package main
 
 import (
-	"crypto/ecdsa"
-	"crypto/elliptic"
-	"crypto/rand"
-	"crypto/x509"
-	"crypto/x509/pkix"
-	"encoding/pem"
-	"fmt"
-	"log"
-	"math/big"
+	"context"
 	"net/http"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	logger "github.com/ViPDanger/dajs/go-api/pkg/logger/v3"
@@ -28,7 +22,6 @@ var keyFile = "/etc/letsencrypt/live/dajs.vipdanger.keenetic.pro/privkey.pem"
 var exeDir string
 
 func init() {
-	fmt.Println(os.Hostname())
 	exePath, err := os.Executable()
 	if err != nil {
 		panic(err)
@@ -40,6 +33,8 @@ func init() {
 }
 
 func main() {
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
+	defer cancel()
 	logger.Initialization(exeDir+"/log/", "[WEB APP] ")
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
@@ -67,93 +62,25 @@ func main() {
 			"refresh_token": tokens.RefreshToken,
 		})
 	})
-	fmt.Println("webapp started on ", host)
-	log.Println(r.RunTLS(host, certFile, keyFile))
-	//log.Println(srv.ListenAndServeTLS(exeDir+"/server_cert.pem", exeDir+"/server_key.pem"))
-}
-
-func CreateCA() (*x509.Certificate, *ecdsa.PrivateKey, error) {
-	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	server := &http.Server{
+		Addr:    host,
+		Handler: r.Handler(),
+	}
+	go func() {
+		defer cancel()
+		logger.Logln(logger.Debug, "WEB-APP is started on", host)
+		logger.Logln(logger.Error)
+		if err := server.ListenAndServeTLS(certFile, keyFile); err != nil && err != http.ErrServerClosed {
+			logger.Logln(logger.Error, "server error: %v", err)
+		}
+	}()
+	<-ctx.Done()
+	ctx, cancel = context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+	err := server.Shutdown(ctx)
 	if err != nil {
-		return nil, nil, err
+		logger.Logln(logger.Error, "Main()/"+err.Error())
 	}
+	logger.Logln(logger.Debug, "WEB-APP is closed")
 
-	serialNumber, _ := rand.Int(rand.Reader, big.NewInt(1<<62))
-
-	template := &x509.Certificate{
-		SerialNumber: serialNumber,
-		Subject: pkix.Name{
-			Organization: []string{"My CA Org"},
-			Country:      []string{"RU"},
-			CommonName:   "My Root CA",
-		},
-		NotBefore:             time.Now(),
-		NotAfter:              time.Now().AddDate(10, 0, 0), // 10 лет
-		KeyUsage:              x509.KeyUsageCertSign | x509.KeyUsageCRLSign,
-		BasicConstraintsValid: true,
-		IsCA:                  true,
-		MaxPathLen:            2,
-	}
-
-	certDER, err := x509.CreateCertificate(rand.Reader, template, template, &priv.PublicKey, priv)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	cert, err := x509.ParseCertificate(certDER)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	// Сохраняем CA сертификат и ключ в файлы (опционально)
-	pemEncode("/etc/letsencrypt/live/dajs/ca_cert.pem", "CERTIFICATE", certDER)
-	keyBytes, _ := x509.MarshalECPrivateKey(priv)
-	pemEncode(exeDir+"/ca_key.pem", "EC PRIVATE KEY", keyBytes)
-
-	return cert, priv, nil
-}
-
-// Создаём серверный сертификат, подписанный CA
-func CreateServerCert(caCert *x509.Certificate, caKey *ecdsa.PrivateKey) error {
-	priv, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	if err != nil {
-		return err
-	}
-
-	serialNumber, _ := rand.Int(rand.Reader, big.NewInt(1<<62))
-
-	template := &x509.Certificate{
-		SerialNumber: serialNumber,
-		Subject: pkix.Name{
-			Organization: []string{"My Server Org"},
-			Country:      []string{"RU"},
-			CommonName:   "localhost",
-		},
-		DNSNames:    []string{"localhost"},
-		NotBefore:   time.Now(),
-		NotAfter:    time.Now().AddDate(1, 0, 0), // 1 год
-		KeyUsage:    x509.KeyUsageDigitalSignature | x509.KeyUsageKeyEncipherment,
-		ExtKeyUsage: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth},
-	}
-
-	certDER, err := x509.CreateCertificate(rand.Reader, template, caCert, &priv.PublicKey, caKey)
-	if err != nil {
-		return err
-	}
-
-	pemEncode(exeDir+"/server_cert.pem", "CERTIFICATE", certDER)
-	keyBytes, _ := x509.MarshalECPrivateKey(priv)
-	pemEncode(exeDir+"/server_key.pem", "EC PRIVATE KEY", keyBytes)
-
-	return nil
-}
-
-func pemEncode(filename, blockType string, bytes []byte) error {
-	f, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	return pem.Encode(f, &pem.Block{Type: blockType, Bytes: bytes})
 }
