@@ -15,6 +15,7 @@ import (
 	"path/filepath"
 	"time"
 
+	logger "github.com/ViPDanger/dajs/go-api/pkg/logger/v3"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -34,6 +35,7 @@ func init() {
 }
 
 func main() {
+	logger.Initialization(exeDir+"log.txt", "[WEB APP] ")
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
