@@ -27,11 +27,15 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	exeDir := filepath.Dir(exePath)
-	if strings.Contains(exeDir, "/tmp/go-build") {
-		exeDir = "./cmd"
+	cmdDir := filepath.Dir(exePath)
+	if strings.Contains(cmdDir, "/tmp/go-build") {
+		wd, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
+		cmdDir = wd
 	}
-	cfgPath = exeDir + cfgPath
+	cfgPath = cmdDir + cfgPath
 }
 
 func main() {
@@ -44,7 +48,7 @@ func main() {
 	logFormat := cfg.String("log.format", "")
 	log := logger.Initialization(logPath, logFormat)
 
-	log.Logln(logV2.Release, "Starting the GO-API...")
+	log.Logln(logger.Release, "Starting the GO-API...")
 	//
 	appConf := app.APIConfig{
 		Host: cfg.String("server.host", ":8080"),
@@ -59,7 +63,10 @@ func main() {
 		AuthMiddleware: false,
 	}
 	log.Logln(logV2.Debug, fmt.Sprintf("%+v", appConf))
-	app.Run(ctx, log, appConf)
+	ctx, err := app.Run(ctx, log, appConf)
+	if err != nil {
+		log.Logln(logger.Error, err)
+		return
+	}
 	<-ctx.Done()
-	time.Sleep(1 * time.Second)
 }

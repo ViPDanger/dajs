@@ -2,12 +2,14 @@ package app
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/ViPDanger/dajs/go-api/internal/infastructure/mongodb"
 	"github.com/ViPDanger/dajs/go-api/internal/interfaces/handler"
+	"github.com/ViPDanger/dajs/go-api/internal/interfaces/handler/middleware"
 	"github.com/ViPDanger/dajs/go-api/internal/usecase"
 	logger "github.com/ViPDanger/dajs/go-api/pkg/logger/v2"
 	"github.com/gin-contrib/cors"
@@ -30,12 +32,17 @@ type APIConfig struct {
 	Host           string
 	MongoConfig    MongoConfig
 	AuthMiddleware bool
+	Timeout        time.Duration
 }
 
-func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) (srv *http.Server, err error) {
+const CircuitBreakerMax = 1000
+const CircuitBreakerMin = 500
+
+func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) (context.Context, error) {
 	//	Setup Mongo
 	if conf.MongoConfig.DB == nil {
 		var client *mongo.Client
+		var err error
 		cred := options.Credential{
 			Username: conf.MongoConfig.Username,
 			Password: conf.MongoConfig.Password,
@@ -59,6 +66,9 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) (srv *http.Ser
 			fmt.Println("Failed to connect to MongoDB, trying again")
 			time.Sleep(conf.MongoConfig.RetryPeriod)
 		}
+		if client == nil {
+			return nil, errors.New("app.Run(): No connection with mongoDB")
+		}
 
 		conf.MongoConfig.DB = client.Database(conf.MongoConfig.Name)
 	}
@@ -76,7 +86,11 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) (srv *http.Ser
 	}))
 	// MIDLEWARE ---------------------
 	ginLogAdapter := logger.NewGinLoggerAdapter(log)
-	r.Use(ginLogAdapter.HandlerFunc)
+	r.Use(ginLogAdapter.HandlerFunc,
+		middleware.NewCurcuitBreaker(CircuitBreakerMax, CircuitBreakerMin).CircuitBreakerHandler,
+		middleware.NewTimeouter(conf.Timeout).TimeoutHandler,
+		middleware.NewRetrier().RetryHandler,
+	)
 	// SETUP HANDLERS ----------------
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(404, gin.H{"error": "Route not found"})
@@ -116,6 +130,7 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) (srv *http.Ser
 
 	ctx, cancel := context.WithCancel(ctx)
 	server := &http.Server{Addr: conf.Host, Handler: r.Handler()}
+	srvctx, srvctxCancel := context.WithCancel(context.Background())
 	go func() {
 		defer cancel()
 		log.Logln(logger.Debug, "GO-API is started on", conf.Host)
@@ -130,7 +145,8 @@ func Run(ctx context.Context, log logger.Ilogger, conf APIConfig) (srv *http.Ser
 			log.Logln(logger.Error, "Run()/"+err.Error())
 		}
 		log.Logln(logger.Debug, "GO-API is closed")
+		srvctxCancel()
 	}()
 	time.Sleep(100 * time.Millisecond)
-	return server, nil
+	return srvctx, nil
 }

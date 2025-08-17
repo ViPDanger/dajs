@@ -33,6 +33,7 @@ func init() {
 }
 
 func main() {
+	logger.Logln(logger.Release, "Starting the WEB-APP...")
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, os.Kill, syscall.SIGALRM)
 	defer cancel()
 	logger.Initialization(exeDir+"/log/", "[WEB APP] ")
@@ -53,10 +54,10 @@ func main() {
 			AccessToken  string `json:"access_token"`
 			RefreshToken string `json:"refresh_token"`
 		}
-		//if err := c.BindJSON(&tokens); err != nil {
-		//c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
-		//return
-		//}
+		if err := c.BindJSON(&tokens); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
+			return
+		}
 		c.HTML(http.StatusOK, "character.html", gin.H{
 			"access_token":  tokens.AccessToken,
 			"refresh_token": tokens.RefreshToken,
@@ -69,7 +70,6 @@ func main() {
 	go func() {
 		defer cancel()
 		logger.Logln(logger.Debug, "WEB-APP is started on", host)
-		logger.Logln(logger.Error)
 		if err := server.ListenAndServeTLS(certFile, keyFile); err != nil && err != http.ErrServerClosed {
 			logger.Logln(logger.Error, "server error: %v", err)
 		}
@@ -82,5 +82,4 @@ func main() {
 		logger.Logln(logger.Error, "Main()/"+err.Error())
 	}
 	logger.Logln(logger.Debug, "WEB-APP is closed")
-
 }
